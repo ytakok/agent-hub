@@ -1,0 +1,100 @@
+@import (reference) 'tokens';
+@import (reference) 'breakpoints';
+@import (reference) 'mixins';
+
+:host {
+  display: block;
+}
+
+.search {
+  position: relative;
+  inline-size: 100%;
+
+  ah-icon {
+    position: absolute;
+    inset-inline-start: @space-3;
+    inset-block-start: 13px;
+    color: @color-muted;
+  }
+
+  .input {
+    padding-inline-start: 40px;
+  }
+}
+
+.from(@sm, { .search { inline-size: 280px; } });
+
+.filters {
+  display: flex;
+  gap: @space-2;
+  margin-block-end: @space-4;
+  overflow-x: auto;
+}
+
+.list {
+  .card();
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-3 @space-4;
+    border-block-end: 1px solid @color-border;
+
+    &:last-child {
+      border: 0;
+    }
+
+    &.empty {
+      justify-content: center;
+      color: @color-muted;
+      padding-block: @space-6;
+    }
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: 50%;
+  background: @color-primary-soft;
+  color: @color-primary;
+  font-weight: 600;
+}
+
+.main {
+  display: grid;
+  flex: 1;
+  min-inline-size: 0;
+
+  strong,
+  span {
+    .truncate();
+  }
+}
+
+.side {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.muted {
+  color: @color-muted;
+  font-size: @font-xs;
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: @space-3;
+  margin-block-start: @space-4;
+}

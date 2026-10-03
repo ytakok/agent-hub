@@ -1,0 +1,66 @@
+<header class="page-header">
+  <div>
+    <h1>{{ 'dashboard.greeting' | translate: { name: firstName() } }}</h1>
+    <p>
+      {{ 'dashboard.subtitle' | translate }}
+      @if (data(); as d) {
+        · {{ 'dashboard.updated' | translate }} {{ d.generatedAt | relTime: language.intlLocale() }}
+      }
+    </p>
+  </div>
+  <div class="actions">
+    <div class="segmented" role="radiogroup" [attr.aria-label]="'dashboard.range' | translate">
+      @for (r of ranges; track r) {
+        <button type="button" role="radio" [attr.aria-checked]="range() === r" [class.active]="range() === r" (click)="range.set(r)">
+          {{ 'dashboard.ranges.' + r | translate }}
+        </button>
+      }
+    </div>
+    <button type="button" class="btn ghost icon" (click)="summary.reload()" [disabled]="loading()" [attr.aria-label]="'dashboard.refresh' | translate">
+      <ah-icon name="refresh" [class.spin]="loading()" />
+    </button>
+  </div>
+</header>
+
+@if (summary.error()) {
+  <div class="alert error" role="alert">
+    {{ 'dashboard.loadError' | translate }}
+    <button type="button" class="btn ghost" (click)="summary.reload()">{{ 'common.retry' | translate }}</button>
+  </div>
+}
+
+<div class="grid">
+  @for (w of widgets(); track w) {
+    @switch (w) {
+      @case ('kpis') {
+        <ah-kpi-tiles class="span-all" [kpis]="data()?.kpis ?? []" [currency]="currency()" [loading]="loading()" />
+      }
+      @case ('crmPipeline') {
+        <!-- ECharts (~1 MB) loads only when this widget scrolls into view. -->
+        @defer (on viewport) {
+          <ah-crm-pipeline class="span-2 full-md" [block]="data()?.crm" [loading]="loading()" [currency]="currency()" />
+        } @placeholder {
+          <div class="span-2 full-md placeholder"></div>
+        }
+      }
+      @case ('whatsapp') {
+        <ah-message-list class="span-2" channel="whatsapp" [whatsapp]="data()?.whatsapp" [loading]="loading()" />
+      }
+      @case ('gmail') {
+        <ah-message-list class="span-2" channel="gmail" [gmail]="data()?.gmail" [loading]="loading()" />
+      }
+      @case ('renewals') {
+        <ah-renewals class="span-2" [block]="data()?.renewals" [loading]="loading()" [currency]="currency()" />
+      }
+      @case ('sheets') {
+        <ah-sheets-latest class="span-2 full-md" [block]="data()?.sheets" [loading]="loading()" />
+      }
+      @case ('activity') {
+        <ah-activity-feed class="span-2" [items]="data()?.activity ?? []" [loading]="loading()" />
+      }
+      @case ('health') {
+        <ah-integration-health class="span-2" [items]="data()?.health ?? []" [loading]="loading()" />
+      }
+    }
+  }
+</div>

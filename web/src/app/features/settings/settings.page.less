@@ -1,0 +1,130 @@
+@import (reference) 'tokens';
+@import (reference) 'breakpoints';
+@import (reference) 'mixins';
+
+:host {
+  display: block;
+}
+
+.sections {
+  display: grid;
+  gap: @space-4;
+  align-items: start;
+}
+
+.from(@lg, { .sections { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: @space-5; } });
+
+.panel {
+  .card();
+  padding: @space-5 @space-4;
+
+  h2 {
+    font-size: @font-lg;
+    font-weight: 600;
+    margin-block-end: @space-4;
+  }
+}
+
+.from(@sm, { .panel { padding: @space-5; } });
+
+.note {
+  display: flex;
+  align-items: center;
+  gap: @space-2;
+  margin-block-end: @space-4;
+  color: @color-muted;
+  font-size: @font-sm;
+}
+
+.two {
+  display: grid;
+  gap: 0 @space-3;
+}
+
+.from(@sm, { .two { grid-template-columns: 1fr 1fr; } });
+
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 @space-4;
+
+  legend {
+    font-size: @font-sm;
+    font-weight: 500;
+    margin-block-end: @space-2;
+  }
+}
+
+.checks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: @space-2;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    min-block-size: 36px;
+    font-size: @font-sm;
+  }
+
+  input {
+    inline-size: 18px;
+    block-size: 18px;
+    accent-color: @color-primary;
+  }
+}
+
+.flags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: @space-3;
+    min-block-size: 48px;
+    border-block-end: 1px solid @color-border;
+    font-size: @font-sm;
+
+    &:last-child {
+      border: 0;
+    }
+  }
+}
+
+// Accessible toggle built on a native checkbox.
+.switch input {
+  appearance: none;
+  position: relative;
+  inline-size: 44px;
+  block-size: 24px;
+  margin: 0;
+  border-radius: 999px;
+  background: @color-border;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 3px;
+    inset-inline-start: 3px;
+    inline-size: 18px;
+    block-size: 18px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: @shadow-sm;
+    transition: inset-inline-start 0.15s;
+  }
+
+  &:checked {
+    background: @color-primary;
+
+    &::after {
+      inset-inline-start: 23px;
+    }
+  }
+}

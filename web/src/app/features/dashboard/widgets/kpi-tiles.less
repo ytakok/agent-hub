@@ -1,0 +1,66 @@
+@import (reference) 'tokens';
+@import (reference) 'breakpoints';
+@import (reference) 'mixins';
+
+:host {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: @space-3;
+}
+
+.from(@md, { :host { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: @space-4; } });
+.from(@xl, { :host { grid-template-columns: repeat(5, minmax(0, 1fr)); } });
+
+.tile {
+  .card();
+  display: flex;
+  flex-direction: column;
+  gap: @space-1;
+  min-inline-size: 0;
+  padding: @space-4;
+
+  &.skeleton {
+    min-block-size: 108px;
+    background: @color-surface-2;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @space-2;
+  color: @color-muted;
+  font-size: @font-sm;
+
+  span {
+    .truncate();
+  }
+}
+
+strong {
+  font-size: @font-xl;
+  font-weight: 700;
+  .truncate();
+}
+
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: @font-xs;
+  color: @color-muted;
+
+  &.up {
+    color: @color-success;
+  }
+
+  &.down {
+    color: @color-danger;
+  }
+
+  .muted {
+    color: @color-muted;
+    margin-inline-start: @space-1;
+  }
+}

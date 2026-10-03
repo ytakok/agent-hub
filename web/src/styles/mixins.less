@@ -1,0 +1,39 @@
+@import (reference) 'tokens';
+@import (reference) 'breakpoints';
+
+// RTL rule: use logical properties only (margin-inline-start, padding-inline, inset-inline-end,
+// text-align: start). Never left/right — the layout then mirrors automatically with <html dir>.
+
+.card() {
+  background: @color-surface;
+  border: 1px solid @color-border;
+  border-radius: @radius;
+  box-shadow: @shadow-sm;
+}
+
+.focus-ring() {
+  outline: 2px solid @color-primary;
+  outline-offset: 2px;
+}
+
+.truncate() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.visually-hidden() {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+// Directional icons (arrows, chevrons) flip in RTL.
+.mirror-in-rtl() {
+  :host-context([dir='rtl']) & {
+    transform: scaleX(-1);
+  }
+}

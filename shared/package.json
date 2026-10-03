@@ -1,0 +1,8 @@
+{
+  "name": "@agency-hub/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Types and DTO contracts shared by web and api. Types only, import with `import type`.",
+  "types": "./src/index.ts",
+  "exports": { ".": { "types": "./src/index.ts", "default": "./src/index.ts" } }
+}

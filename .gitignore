@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.angular/
+coverage/
+.env
+*.log
+firebase/.emulator-data/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log

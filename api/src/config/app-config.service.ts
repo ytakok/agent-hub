@@ -1,0 +1,21 @@
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import type { Env } from './env.js';
+
+/** Typed accessor over the validated environment. */
+@Injectable()
+export class AppConfig {
+  constructor(private readonly config: ConfigService<Env, true>) {}
+
+  get<K extends keyof Env>(key: K): Env[K] {
+    return this.config.get(key, { infer: true });
+  }
+
+  get isMock(): boolean {
+    return this.get('DATA_MODE') === 'mock';
+  }
+
+  get usingEmulators(): boolean {
+    return Boolean(this.get('FIREBASE_AUTH_EMULATOR_HOST'));
+  }
+}

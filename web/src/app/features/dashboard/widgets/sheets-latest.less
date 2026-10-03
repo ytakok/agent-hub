@@ -1,0 +1,61 @@
+@import (reference) 'tokens';
+@import (reference) 'breakpoints';
+
+:host {
+  display: block;
+}
+
+table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: @font-sm;
+}
+
+// Mobile: each row is a card with "label: value" lines.
+thead {
+  display: none;
+}
+
+tr {
+  display: grid;
+  gap: 2px;
+  padding-block: @space-3;
+  border-block-end: 1px solid @color-border;
+
+  &:last-child {
+    border: 0;
+  }
+}
+
+td {
+  display: flex;
+  justify-content: space-between;
+  gap: @space-3;
+
+  &::before {
+    content: attr(data-label);
+    color: @color-muted;
+    font-size: @font-xs;
+  }
+}
+
+.muted {
+  color: @color-muted;
+  font-size: @font-xs;
+}
+
+.from(@md, {
+  thead { display: table-header-group; }
+  tr { display: table-row; }
+
+  th, td {
+    display: table-cell;
+    padding: @space-2;
+    text-align: start;
+    border-block-end: 1px solid @color-border;
+    &::before { content: none; }
+  }
+
+  th { color: @color-muted; font-weight: 500; font-size: @font-xs; }
+  tbody tr:last-child td { border: 0; }
+});

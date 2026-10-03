@@ -1,0 +1,78 @@
+<a class="skip-link" href="#main">{{ 'nav.skipToContent' | translate }}</a>
+
+<div class="shell" [class.toggled]="navToggled()">
+  <header class="topbar">
+    <button
+      type="button"
+      class="btn ghost icon nav-toggle"
+      (click)="navToggled.set(!navToggled())"
+      [attr.aria-expanded]="navToggled()"
+      [attr.aria-label]="'nav.toggle' | translate"
+    >
+      <ah-icon name="menu" />
+    </button>
+
+    <a class="brand" routerLink="/app/dashboard">
+      @if (theme.logoUrl()) {
+        <img [src]="theme.logoUrl()" alt="" width="32" height="32" />
+      }
+      <span>{{ tenantName() }}</span>
+    </a>
+
+    <span class="spacer"></span>
+
+    <ah-language-switch />
+
+    <div class="user-menu">
+      <button
+        type="button"
+        class="avatar"
+        (click)="menuOpen.set(!menuOpen())"
+        [attr.aria-expanded]="menuOpen()"
+        aria-haspopup="menu"
+        [attr.aria-label]="'nav.account' | translate"
+      >
+        {{ initials() }}
+      </button>
+      @if (menuOpen()) {
+        <div class="dropdown" role="menu">
+          <div class="who">
+            <strong>{{ auth.user()?.displayName }}</strong>
+            <span class="ltr-text">{{ auth.user()?.email }}</span>
+            @if (auth.role(); as role) {
+              <span class="badge primary">{{ 'roles.' + role | translate }}</span>
+            }
+          </div>
+          <a role="menuitem" routerLink="/app/settings"><ah-icon name="settings" [size]="18" />{{ 'nav.settings' | translate }}</a>
+          <button role="menuitem" type="button" (click)="auth.logout()">
+            <ah-icon name="logout" [size]="18" [mirror]="true" />{{ 'nav.logout' | translate }}
+          </button>
+        </div>
+      }
+    </div>
+  </header>
+
+  <nav class="sidenav" [attr.aria-label]="'nav.main' | translate">
+    @for (item of navItems(); track item.path) {
+      <a [routerLink]="item.path" routerLinkActive="active" [attr.title]="item.label | translate">
+        <ah-icon [name]="item.icon" />
+        <span class="label">{{ item.label | translate }}</span>
+      </a>
+    }
+  </nav>
+
+  <div class="scrim" (click)="navToggled.set(false)" aria-hidden="true"></div>
+
+  <main id="main" tabindex="-1">
+    <router-outlet />
+  </main>
+
+  <nav class="bottomnav" [attr.aria-label]="'nav.main' | translate">
+    @for (item of navItems(); track item.path) {
+      <a [routerLink]="item.path" routerLinkActive="active" ariaCurrentWhenActive="page">
+        <ah-icon [name]="item.icon" [size]="22" />
+        <span>{{ item.label | translate }}</span>
+      </a>
+    }
+  </nav>
+</div>

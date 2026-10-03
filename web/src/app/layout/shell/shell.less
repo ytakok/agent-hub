@@ -1,0 +1,288 @@
+@import (reference) 'tokens';
+@import (reference) 'breakpoints';
+@import (reference) 'mixins';
+
+// ---------- Mobile (base) ----------
+
+.shell {
+  display: grid;
+  grid-template-rows: @topbar-height 1fr;
+  grid-template-areas:
+    'top'
+    'main';
+  min-block-size: 100dvh;
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: @space-2;
+  inset-block-start: -100px;
+  z-index: 100;
+  padding: @space-2 @space-3;
+  background: @color-surface;
+  border-radius: @radius-sm;
+
+  &:focus {
+    inset-block-start: @space-2;
+  }
+}
+
+.topbar {
+  grid-area: top;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: @space-2;
+  padding-inline: @space-3;
+  background: @color-surface;
+  border-block-end: 1px solid @color-border;
+}
+
+.nav-toggle {
+  display: none; // mobile uses the bottom bar
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: @space-2;
+  min-inline-size: 0;
+  color: @color-text;
+  font-weight: 600;
+  text-decoration: none;
+
+  img {
+    border-radius: 8px;
+  }
+
+  span {
+    .truncate();
+  }
+}
+
+.spacer {
+  flex: 1;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  inline-size: 40px;
+  block-size: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: @color-primary;
+  color: @color-primary-contrast;
+  font-weight: 600;
+  font-size: @font-sm;
+  cursor: pointer;
+}
+
+.dropdown {
+  .card();
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: calc(100% + @space-2);
+  z-index: 40;
+  min-inline-size: 240px;
+  padding: @space-2;
+  box-shadow: @shadow-md;
+
+  .who {
+    display: grid;
+    gap: 2px;
+    padding: @space-2 @space-3 @space-3;
+    margin-block-end: @space-2;
+    border-block-end: 1px solid @color-border;
+    font-size: @font-sm;
+
+    span:not(.badge) {
+      color: @color-muted;
+      .truncate();
+    }
+
+    .badge {
+      justify-self: start;
+      margin-block-start: @space-1;
+    }
+  }
+
+  a,
+  button {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    inline-size: 100%;
+    min-block-size: 44px;
+    padding-inline: @space-3;
+    border: 0;
+    border-radius: @radius-sm;
+    background: none;
+    color: @color-text;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: @font-sm;
+
+    &:hover {
+      background: @color-surface-2;
+    }
+  }
+}
+
+.sidenav {
+  display: none;
+}
+
+.scrim {
+  display: none;
+}
+
+main {
+  grid-area: main;
+  min-inline-size: 0;
+  padding: @space-4;
+  // Leave room for the bottom bar + iOS home indicator.
+  padding-block-end: calc(@bottomnav-height + @space-4 + env(safe-area-inset-bottom));
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.bottomnav {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 30;
+  display: flex;
+  block-size: calc(@bottomnav-height + env(safe-area-inset-bottom));
+  padding-block-end: env(safe-area-inset-bottom);
+  background: @color-surface;
+  border-block-start: 1px solid @color-border;
+
+  a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: @color-muted;
+    font-size: 0.6875rem;
+    text-decoration: none;
+
+    &.active {
+      color: @color-primary;
+      font-weight: 600;
+    }
+  }
+}
+
+// Shared nav link look (side nav)
+.sidenav a {
+  display: flex;
+  align-items: center;
+  gap: @space-3;
+  min-block-size: 44px;
+  padding-inline: @space-3;
+  border-radius: @radius-sm;
+  color: @color-muted;
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+
+  &:hover {
+    background: @color-surface-2;
+    color: @color-text;
+  }
+
+  &.active {
+    background: @color-primary-soft;
+    color: @color-primary;
+  }
+}
+
+// ---------- Tablet: icon rail, toggle expands as overlay ----------
+
+.from(@md, {
+  .shell {
+    grid-template-columns: @sidenav-rail 1fr;
+    grid-template-areas:
+      'top top'
+      'side main';
+  }
+
+  .nav-toggle { display: inline-flex; }
+  .bottomnav { display: none; }
+
+  .sidenav {
+    grid-area: side;
+    position: sticky;
+    inset-block-start: @topbar-height;
+    z-index: 25;
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+    block-size: calc(100dvh - @topbar-height);
+    inline-size: @sidenav-rail;
+    padding: @space-3;
+    background: @color-surface;
+    border-inline-end: 1px solid @color-border;
+    overflow: hidden auto;
+    transition: inline-size 0.2s ease;
+
+    a { justify-content: center; padding-inline: 0; }
+    .label { display: none; }
+  }
+
+  .toggled {
+    .sidenav {
+      inline-size: @sidenav-full;
+      box-shadow: @shadow-md;
+      a { justify-content: flex-start; padding-inline: @space-3; }
+      .label { display: inline; }
+    }
+
+    .scrim {
+      display: block;
+      position: fixed;
+      inset: @topbar-height 0 0 0;
+      z-index: 20;
+      background: rgb(15 23 42 / 30%);
+    }
+  }
+
+  main {
+    padding: @space-5;
+  }
+});
+
+// ---------- Desktop: full side nav, toggle collapses to rail ----------
+
+.from(@lg, {
+  .shell { grid-template-columns: auto 1fr; }
+
+  .sidenav {
+    inline-size: @sidenav-full;
+    a { justify-content: flex-start; padding-inline: @space-3; }
+    .label { display: inline; }
+  }
+
+  .toggled {
+    .sidenav {
+      inline-size: @sidenav-rail;
+      box-shadow: none;
+      a { justify-content: center; padding-inline: 0; }
+      .label { display: none; }
+    }
+    .scrim { display: none; }
+  }
+
+  main { padding: @space-6; }
+});

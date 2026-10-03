@@ -1,0 +1,203 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "sourceError": "This source is unavailable right now.",
+    "empty": "Nothing here yet.",
+    "pleaseWait": "Please wait…",
+    "retry": "Retry",
+    "search": "Search",
+    "save": "Save",
+    "on": "On",
+    "off": "Off",
+    "pagination": "Pagination",
+    "previous": "Previous page",
+    "next": "Next page"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "customers": "Customers",
+    "messages": "Inbox",
+    "settings": "Settings",
+    "logout": "Sign out",
+    "account": "Account menu",
+    "main": "Main navigation",
+    "toggle": "Toggle navigation",
+    "skipToContent": "Skip to content"
+  },
+  "roles": { "owner": "Owner", "admin": "Admin", "agent": "Agent", "viewer": "Viewer" },
+  "auth": {
+    "or": "or",
+    "togglePassword": "Show or hide password",
+    "backToLogin": "Back to sign in",
+    "fields": {
+      "email": "Email",
+      "emailOrUsername": "Email or username",
+      "password": "Password",
+      "fullName": "Full name",
+      "company": "Agency / company name",
+      "username": "Username",
+      "confirmPassword": "Confirm password",
+      "newPassword": "New password",
+      "inviteCode": "Invitation code (optional)"
+    },
+    "hints": {
+      "username": "3–30 characters: letters, digits, dot, dash or underscore.",
+      "inviteCode": "Got an invitation from your agency? Paste it here instead of a company name.",
+      "password": "At least 10 characters with upper and lower case, a digit and a symbol."
+    },
+    "passwordRules": {
+      "length": "10+ characters",
+      "upper": "Uppercase letter",
+      "lower": "Lowercase letter",
+      "digit": "Digit",
+      "symbol": "Symbol"
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your agency workspace.",
+      "forgot": "Forgot password?",
+      "submit": "Sign in",
+      "google": "Continue with Google",
+      "noAccount": "New here?",
+      "signupLink": "Create an account"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Set up your agency workspace in a minute.",
+      "terms": "I agree to the Terms of Service and Privacy Policy.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in"
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email and we'll send you a reset link.",
+      "sent": "If an account exists for this email, a reset link is on its way. Check your inbox.",
+      "submit": "Send reset link"
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "subtitle": "For {{email}}",
+      "submit": "Update password",
+      "done": "Your password was updated. You can sign in now.",
+      "requestNew": "Request a new link"
+    },
+    "verify": { "done": "Your email is verified.", "continue": "Continue" },
+    "onboarding": {
+      "title": "Finish setting up",
+      "subtitle": "Pick a username and create your agency workspace, or join one with an invitation.",
+      "submit": "Continue",
+      "needCompanyOrInvite": "Enter a company name or an invitation code."
+    },
+    "errors": {
+      "invalidCredentials": "Incorrect username/email or password.",
+      "invalidEmail": "Please enter a valid email address.",
+      "userDisabled": "This account has been disabled.",
+      "tooManyRequests": "Too many attempts. Please wait a minute and try again.",
+      "emailInUse": "An account with this email already exists.",
+      "weakPassword": "Password is too weak.",
+      "popupClosed": "The sign-in window was closed.",
+      "network": "Network error. Check your connection.",
+      "linkExpired": "This link has expired.",
+      "linkInvalid": "This link is invalid or was already used.",
+      "recentLogin": "Please sign in again to do this.",
+      "usernameTaken": "This username is taken.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "validation": {
+    "required": "Required.",
+    "email": "Enter a valid email.",
+    "username": "3–30 letters, digits, dot, dash or underscore.",
+    "mismatch": "Passwords don't match.",
+    "weakPassword": "Password doesn't meet the requirements."
+  },
+  "dashboard": {
+    "greeting": "Hello, {{name}}",
+    "subtitle": "Here's what's happening across your channels",
+    "updated": "updated",
+    "range": "Date range",
+    "ranges": { "7d": "7 days", "30d": "30 days", "90d": "90 days" },
+    "refresh": "Refresh",
+    "loadError": "We couldn't load the dashboard."
+  },
+  "kpi": {
+    "newLeads": "New leads",
+    "openMessages": "Open requests",
+    "renewalsDue": "Renewals due",
+    "pipelineValue": "Open pipeline",
+    "sheetRows": "Sheet rows",
+    "vsPrevious": "vs previous"
+  },
+  "widgets": {
+    "crm": { "title": "CRM pipeline", "chartLabel": "Leads by stage", "recentLeads": "Recent leads", "leads": "Leads" },
+    "whatsapp": { "title": "WhatsApp requests" },
+    "gmail": { "title": "Customer emails" },
+    "messages": { "empty": "All caught up!", "open": "open", "overdue": "overdue", "sla": { "overdue": "SLA overdue", "soon": "Due soon" } },
+    "renewals": {
+      "title": "Upcoming renewals",
+      "empty": "No renewals in this window.",
+      "window": "Next {{days}} days",
+      "overdue": "{{days}}d overdue",
+      "inDays": "in {{days}}d",
+      "more": "+{{count}} more"
+    },
+    "sheets": { "title": "Google Sheets", "synced": "Synced" },
+    "activity": { "title": "Recent activity" },
+    "health": { "title": "Integrations" }
+  },
+  "widgetNames": {
+    "kpis": "KPI tiles",
+    "crmPipeline": "CRM pipeline",
+    "whatsapp": "WhatsApp",
+    "gmail": "Gmail",
+    "renewals": "Renewals",
+    "sheets": "Google Sheets",
+    "activity": "Activity",
+    "health": "Integrations"
+  },
+  "stages": { "new": "New", "contacted": "Contacted", "quoted": "Quoted", "negotiation": "Negotiation", "won": "Won", "lost": "Lost" },
+  "messageStatus": { "new": "New", "assigned": "Assigned", "replied": "Replied", "closed": "Closed" },
+  "policyTypes": { "car": "Car", "home": "Home", "life": "Life", "health": "Health", "business": "Business", "travel": "Travel" },
+  "activity": {
+    "lead_created": "New lead: {{name}}",
+    "message_received": "Message from {{name}}",
+    "policy_renewed": "Policy renewed: {{name}}",
+    "row_added": "New sheet row: {{name}}",
+    "stage_changed": "Stage changed: {{name}}"
+  },
+  "sources": { "crm": "CRM", "sheets": "Google Sheets", "gmail": "Gmail", "whatsapp": "WhatsApp" },
+  "health": { "connected": "Connected", "error": "Error", "disabled": "Off", "mock": "Mock data" },
+  "customers": { "title": "Customers", "count": "{{count}} customers" },
+  "customerStatus": { "lead": "Lead", "active": "Active", "churned": "Churned" },
+  "messages": {
+    "title": "Inbox",
+    "count": "{{count}} messages",
+    "channels": { "all": "All", "whatsapp": "WhatsApp", "gmail": "Email" }
+  },
+  "settings": {
+    "title": "Settings",
+    "saved": "Saved.",
+    "saveError": "Couldn't save. Please try again.",
+    "profile": { "title": "Your profile", "phone": "Phone" },
+    "org": {
+      "title": "Organization",
+      "readOnly": "Only owners and admins can change these settings.",
+      "renewalWindow": "Renewal window (days)",
+      "sla": "Response SLA (hours)",
+      "widgets": "Dashboard widgets"
+    },
+    "features": {
+      "title": "Features",
+      "adminNote": "Platform admin: changes apply to this organization immediately.",
+      "planNote": "Included in your {{plan}} plan. Contact us to change."
+    },
+    "password": { "title": "Change password", "current": "Current password", "submit": "Update password" }
+  },
+  "features": {
+    "integration": { "crm": "CRM", "sheets": "Google Sheets", "gmail": "Gmail", "whatsapp": "WhatsApp" },
+    "dashboard": { "renewals": "Renewals widget", "activity": "Activity feed" },
+    "module": { "customers": "Customers module", "messages": "Inbox module" },
+    "auth": { "usernameLogin": "Username login", "google": "Google sign-in" }
+  }
+}

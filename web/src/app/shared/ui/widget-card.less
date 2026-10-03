@@ -1,0 +1,81 @@
+@import (reference) 'tokens';
+@import (reference) 'mixins';
+
+:host {
+  .card();
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  padding: @space-4;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: @space-2;
+  margin-block-end: @space-3;
+
+  h2 {
+    flex: 1;
+    font-size: @font-md;
+    font-weight: 600;
+    .truncate();
+  }
+}
+
+.icon {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: @radius-sm;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.body {
+  flex: 1;
+  min-block-size: 0;
+}
+
+.state {
+  display: flex;
+  align-items: center;
+  gap: @space-2;
+  padding-block: @space-5;
+  color: @color-muted;
+  font-size: @font-sm;
+  justify-content: center;
+  text-align: center;
+
+  &.error {
+    color: @color-danger;
+  }
+}
+
+.skeleton {
+  display: grid;
+  gap: @space-3;
+
+  span {
+    display: block;
+    block-size: 14px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, @color-surface-2 25%, @color-border 50%, @color-surface-2 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite linear;
+
+    &:nth-child(2) {
+      inline-size: 80%;
+    }
+
+    &:nth-child(3) {
+      inline-size: 60%;
+    }
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}

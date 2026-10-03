@@ -1,0 +1,80 @@
+@import (reference) 'tokens';
+@import (reference) 'breakpoints';
+@import (reference) 'mixins';
+
+:host {
+  display: block;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: @space-2;
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: @radius-sm;
+  background: @color-surface-2;
+  border: 1px solid @color-border;
+
+  button {
+    min-block-size: 38px;
+    padding-inline: @space-3;
+    border: 0;
+    border-radius: calc(var(--radius) / 2 - 2px);
+    background: transparent;
+    color: @color-muted;
+    font-size: @font-sm;
+    font-weight: 500;
+    cursor: pointer;
+
+    &.active {
+      background: @color-surface;
+      color: @color-text;
+      box-shadow: @shadow-sm;
+    }
+  }
+}
+
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @space-3;
+}
+
+// 1 column on phones → 2 on tablet → 4 on wide desktop. Widgets span 2 columns (half width) on desktop.
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: @space-4;
+  align-items: start;
+}
+
+.placeholder {
+  .card();
+  min-block-size: 360px;
+}
+
+.from(@md, {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: @space-5; }
+  .span-all, .full-md { grid-column: 1 / -1; }
+});
+
+.from(@xl, {
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .span-2, .full-md { grid-column: span 2; }
+  .span-all { grid-column: 1 / -1; }
+});

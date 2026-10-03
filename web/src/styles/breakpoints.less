@@ -1,0 +1,12 @@
+// Mobile first: base styles target ~360px; enhance upwards with min-width only.
+@sm: 576px;
+@md: 768px;
+@lg: 1024px;
+@xl: 1280px;
+
+// Usage: .from(@md, { padding: 24px; });
+.from(@bp; @rules) {
+  @media (min-width: @bp) {
+    @rules();
+  }
+}

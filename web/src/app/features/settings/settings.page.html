@@ -1,0 +1,115 @@
+<header class="page-header">
+  <div>
+    <h1>{{ 'settings.title' | translate }}</h1>
+    <p>{{ tenantConfig.tenant()?.name }}</p>
+  </div>
+</header>
+
+@if (message(); as m) {
+  <div class="alert" [class.success]="m.type === 'success'" [class.error]="m.type === 'error'" role="status">{{ m.key | translate }}</div>
+}
+
+<div class="sections">
+  <!-- Profile -->
+  <section class="panel">
+    <h2>{{ 'settings.profile.title' | translate }}</h2>
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+      <div class="field">
+        <label for="displayName">{{ 'auth.fields.fullName' | translate }}</label>
+        <input id="displayName" class="input" formControlName="displayName" />
+      </div>
+      <div class="field">
+        <label for="phone">{{ 'settings.profile.phone' | translate }}</label>
+        <input id="phone" type="tel" class="input" formControlName="phone" autocomplete="tel" />
+      </div>
+      <button class="btn primary" type="submit" [disabled]="profileForm.invalid || busy() === 'profile'">{{ 'common.save' | translate }}</button>
+    </form>
+  </section>
+
+  <!-- Organization -->
+  <section class="panel">
+    <h2>{{ 'settings.org.title' | translate }}</h2>
+    @if (!canEditOrg()) {
+      <p class="note"><ah-icon name="lock" [size]="16" /> {{ 'settings.org.readOnly' | translate }}</p>
+    }
+    <form [formGroup]="orgForm" (ngSubmit)="saveOrg()">
+      <div class="two">
+        <div class="field">
+          <label for="renewalWindowDays">{{ 'settings.org.renewalWindow' | translate }}</label>
+          <input id="renewalWindowDays" type="number" class="input" formControlName="renewalWindowDays" min="1" max="365" />
+        </div>
+        <div class="field">
+          <label for="messageSlaHours">{{ 'settings.org.sla' | translate }}</label>
+          <input id="messageSlaHours" type="number" class="input" formControlName="messageSlaHours" min="1" max="168" />
+        </div>
+      </div>
+      <fieldset [disabled]="!canEditOrg()">
+        <legend>{{ 'settings.org.widgets' | translate }}</legend>
+        <div class="checks">
+          @for (w of widgets; track w) {
+            <label>
+              <input type="checkbox" [checked]="orgForm.controls.dashboardWidgets.value.includes(w)" (change)="toggleWidget(w, $any($event.target).checked)" />
+              {{ 'widgetNames.' + w | translate }}
+            </label>
+          }
+        </div>
+      </fieldset>
+      @if (canEditOrg()) {
+        <button class="btn primary" type="submit" [disabled]="orgForm.invalid || busy() === 'org'">{{ 'common.save' | translate }}</button>
+      }
+    </form>
+  </section>
+
+  <!-- Feature flags -->
+  <section class="panel">
+    <h2>{{ 'settings.features.title' | translate }}</h2>
+    <p class="note">
+      @if (auth.isPlatformAdmin()) {
+        {{ 'settings.features.adminNote' | translate }}
+      } @else {
+        <ah-icon name="lock" [size]="16" /> {{ 'settings.features.planNote' | translate: { plan: tenantConfig.tenant()?.plan } }}
+      }
+    </p>
+    <ul class="flags">
+      @for (f of flags(); track f.key) {
+        <li>
+          <span>{{ 'features.' + f.key | translate }}</span>
+          @if (auth.isPlatformAdmin()) {
+            <label class="switch">
+              <input type="checkbox" role="switch" [checked]="f.on" [disabled]="busy() === 'flags'" (change)="toggleFlag(f.key, $any($event.target).checked)" />
+              <span class="visually-hidden">{{ 'features.' + f.key | translate }}</span>
+            </label>
+          } @else {
+            <span class="badge" [class.success]="f.on">{{ (f.on ? 'common.on' : 'common.off') | translate }}</span>
+          }
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Password -->
+  @if (hasPassword()) {
+    <section class="panel">
+      <h2>{{ 'settings.password.title' | translate }}</h2>
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+        <div class="field">
+          <label for="current">{{ 'settings.password.current' | translate }}</label>
+          <input id="current" type="password" class="input ltr" formControlName="current" autocomplete="current-password" />
+        </div>
+        <div class="field">
+          <label for="newPassword">{{ 'auth.fields.newPassword' | translate }}</label>
+          <input id="newPassword" type="password" class="input ltr" formControlName="password" autocomplete="new-password" />
+          <span class="hint">{{ 'auth.hints.password' | translate }}</span>
+        </div>
+        <div class="field">
+          <label for="confirm">{{ 'auth.fields.confirmPassword' | translate }}</label>
+          <input id="confirm" type="password" class="input ltr" formControlName="confirm" autocomplete="new-password" />
+          @if (passwordForm.controls.confirm.touched && passwordForm.hasError('mismatch')) {
+            <span class="error">{{ 'validation.mismatch' | translate }}</span>
+          }
+        </div>
+        <button class="btn primary" type="submit" [disabled]="busy() === 'password'">{{ 'settings.password.submit' | translate }}</button>
+      </form>
+    </section>
+  }
+</div>

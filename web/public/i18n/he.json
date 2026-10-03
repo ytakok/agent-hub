@@ -1,0 +1,203 @@
+{
+  "common": {
+    "loading": "טוען…",
+    "sourceError": "המקור אינו זמין כרגע.",
+    "empty": "אין כאן עדיין נתונים.",
+    "pleaseWait": "רק רגע…",
+    "retry": "נסו שוב",
+    "search": "חיפוש",
+    "save": "שמירה",
+    "on": "פעיל",
+    "off": "כבוי",
+    "pagination": "דפדוף",
+    "previous": "העמוד הקודם",
+    "next": "העמוד הבא"
+  },
+  "nav": {
+    "dashboard": "לוח בקרה",
+    "customers": "לקוחות",
+    "messages": "תיבת פניות",
+    "settings": "הגדרות",
+    "logout": "התנתקות",
+    "account": "תפריט חשבון",
+    "main": "ניווט ראשי",
+    "toggle": "פתיחה/סגירה של הניווט",
+    "skipToContent": "דילוג לתוכן"
+  },
+  "roles": { "owner": "בעלים", "admin": "מנהל/ת", "agent": "סוכן/ת", "viewer": "צפייה בלבד" },
+  "auth": {
+    "or": "או",
+    "togglePassword": "הצגה או הסתרה של הסיסמה",
+    "backToLogin": "חזרה להתחברות",
+    "fields": {
+      "email": "אימייל",
+      "emailOrUsername": "אימייל או שם משתמש",
+      "password": "סיסמה",
+      "fullName": "שם מלא",
+      "company": "שם הסוכנות / העסק",
+      "username": "שם משתמש",
+      "confirmPassword": "אימות סיסמה",
+      "newPassword": "סיסמה חדשה",
+      "inviteCode": "קוד הזמנה (לא חובה)"
+    },
+    "hints": {
+      "username": "3–30 תווים: אותיות באנגלית, ספרות, נקודה, מקף או קו תחתון.",
+      "inviteCode": "קיבלת הזמנה מהסוכנות? הדביקו אותה כאן במקום שם עסק.",
+      "password": "לפחות 10 תווים, כולל אות גדולה וקטנה באנגלית, ספרה וסימן."
+    },
+    "passwordRules": {
+      "length": "10 תווים לפחות",
+      "upper": "אות גדולה (A-Z)",
+      "lower": "אות קטנה (a-z)",
+      "digit": "ספרה",
+      "symbol": "סימן מיוחד"
+    },
+    "login": {
+      "title": "ברוכים השבים",
+      "subtitle": "התחברו לסביבת העבודה של הסוכנות.",
+      "forgot": "שכחת סיסמה?",
+      "submit": "התחברות",
+      "google": "המשך עם Google",
+      "noAccount": "חדשים כאן?",
+      "signupLink": "יצירת חשבון"
+    },
+    "signup": {
+      "title": "יצירת חשבון",
+      "subtitle": "הקימו את סביבת העבודה של הסוכנות בדקה.",
+      "terms": "אני מסכים/ה לתנאי השימוש ולמדיניות הפרטיות.",
+      "submit": "יצירת חשבון",
+      "haveAccount": "כבר יש לך חשבון?",
+      "loginLink": "התחברות"
+    },
+    "forgot": {
+      "title": "איפוס סיסמה",
+      "subtitle": "הזינו את כתובת האימייל ונשלח קישור לאיפוס.",
+      "sent": "אם קיים חשבון עם האימייל הזה, קישור לאיפוס בדרך אליכם. בדקו את תיבת הדואר.",
+      "submit": "שליחת קישור"
+    },
+    "reset": {
+      "title": "בחירת סיסמה חדשה",
+      "subtitle": "עבור {{email}}",
+      "submit": "עדכון סיסמה",
+      "done": "הסיסמה עודכנה. אפשר להתחבר עכשיו.",
+      "requestNew": "בקשת קישור חדש"
+    },
+    "verify": { "done": "כתובת האימייל אומתה.", "continue": "המשך" },
+    "onboarding": {
+      "title": "השלמת ההרשמה",
+      "subtitle": "בחרו שם משתמש והקימו סביבת עבודה לסוכנות, או הצטרפו לקיימת עם קוד הזמנה.",
+      "submit": "המשך",
+      "needCompanyOrInvite": "הזינו שם עסק או קוד הזמנה."
+    },
+    "errors": {
+      "invalidCredentials": "שם המשתמש/האימייל או הסיסמה שגויים.",
+      "invalidEmail": "יש להזין כתובת אימייל תקינה.",
+      "userDisabled": "החשבון הושבת.",
+      "tooManyRequests": "יותר מדי ניסיונות. המתינו דקה ונסו שוב.",
+      "emailInUse": "כבר קיים חשבון עם האימייל הזה.",
+      "weakPassword": "הסיסמה חלשה מדי.",
+      "popupClosed": "חלון ההתחברות נסגר.",
+      "network": "שגיאת רשת. בדקו את החיבור.",
+      "linkExpired": "תוקף הקישור פג.",
+      "linkInvalid": "הקישור אינו תקין או שכבר נעשה בו שימוש.",
+      "recentLogin": "יש להתחבר מחדש כדי לבצע פעולה זו.",
+      "usernameTaken": "שם המשתמש תפוס.",
+      "generic": "משהו השתבש. נסו שוב."
+    }
+  },
+  "validation": {
+    "required": "שדה חובה.",
+    "email": "יש להזין אימייל תקין.",
+    "username": "3–30 אותיות באנגלית, ספרות, נקודה, מקף או קו תחתון.",
+    "mismatch": "הסיסמאות אינן תואמות.",
+    "weakPassword": "הסיסמה אינה עומדת בדרישות."
+  },
+  "dashboard": {
+    "greeting": "שלום, {{name}}",
+    "subtitle": "תמונת מצב מכל הערוצים שלך",
+    "updated": "עודכן",
+    "range": "טווח תאריכים",
+    "ranges": { "7d": "7 ימים", "30d": "30 יום", "90d": "90 יום" },
+    "refresh": "רענון",
+    "loadError": "לא הצלחנו לטעון את לוח הבקרה."
+  },
+  "kpi": {
+    "newLeads": "לידים חדשים",
+    "openMessages": "פניות פתוחות",
+    "renewalsDue": "חידושים קרובים",
+    "pipelineValue": "צנרת פתוחה",
+    "sheetRows": "שורות בגיליון",
+    "vsPrevious": "מול התקופה הקודמת"
+  },
+  "widgets": {
+    "crm": { "title": "צנרת מכירות (CRM)", "chartLabel": "לידים לפי שלב", "recentLeads": "לידים אחרונים", "leads": "לידים" },
+    "whatsapp": { "title": "פניות בוואטסאפ" },
+    "gmail": { "title": "מיילים מלקוחות" },
+    "messages": { "empty": "אין פניות ממתינות!", "open": "פתוחות", "overdue": "באיחור", "sla": { "overdue": "חריגה מ-SLA", "soon": "מועד קרוב" } },
+    "renewals": {
+      "title": "חידושי פוליסות",
+      "empty": "אין חידושים בטווח הזה.",
+      "window": "ב-{{days}} הימים הקרובים",
+      "overdue": "באיחור של {{days}} ימים",
+      "inDays": "בעוד {{days}} ימים",
+      "more": "ועוד {{count}}"
+    },
+    "sheets": { "title": "Google Sheets", "synced": "סונכרן" },
+    "activity": { "title": "פעילות אחרונה" },
+    "health": { "title": "חיבורים" }
+  },
+  "widgetNames": {
+    "kpis": "מדדים מרכזיים",
+    "crmPipeline": "צנרת CRM",
+    "whatsapp": "וואטסאפ",
+    "gmail": "Gmail",
+    "renewals": "חידושים",
+    "sheets": "Google Sheets",
+    "activity": "פעילות",
+    "health": "חיבורים"
+  },
+  "stages": { "new": "חדש", "contacted": "נוצר קשר", "quoted": "נשלחה הצעה", "negotiation": "משא ומתן", "won": "נסגר", "lost": "אבוד" },
+  "messageStatus": { "new": "חדשה", "assigned": "שויכה", "replied": "נענתה", "closed": "סגורה" },
+  "policyTypes": { "car": "רכב", "home": "דירה", "life": "חיים", "health": "בריאות", "business": "עסק", "travel": "נסיעות" },
+  "activity": {
+    "lead_created": "ליד חדש: {{name}}",
+    "message_received": "הודעה מ{{name}}",
+    "policy_renewed": "פוליסה חודשה: {{name}}",
+    "row_added": "שורה חדשה בגיליון: {{name}}",
+    "stage_changed": "שינוי שלב: {{name}}"
+  },
+  "sources": { "crm": "CRM", "sheets": "Google Sheets", "gmail": "Gmail", "whatsapp": "וואטסאפ" },
+  "health": { "connected": "מחובר", "error": "שגיאה", "disabled": "כבוי", "mock": "נתוני דמו" },
+  "customers": { "title": "לקוחות", "count": "{{count}} לקוחות" },
+  "customerStatus": { "lead": "ליד", "active": "פעיל", "churned": "עזב" },
+  "messages": {
+    "title": "תיבת פניות",
+    "count": "{{count}} הודעות",
+    "channels": { "all": "הכול", "whatsapp": "וואטסאפ", "gmail": "אימייל" }
+  },
+  "settings": {
+    "title": "הגדרות",
+    "saved": "נשמר.",
+    "saveError": "השמירה נכשלה. נסו שוב.",
+    "profile": { "title": "הפרופיל שלי", "phone": "טלפון" },
+    "org": {
+      "title": "הארגון",
+      "readOnly": "רק בעלים ומנהלים יכולים לשנות הגדרות אלה.",
+      "renewalWindow": "חלון חידושים (ימים)",
+      "sla": "זמן מענה (שעות)",
+      "widgets": "רכיבי לוח הבקרה"
+    },
+    "features": {
+      "title": "יכולות",
+      "adminNote": "מנהל/ת פלטפורמה: שינויים חלים על הארגון הזה מיד.",
+      "planNote": "כלול בחבילת {{plan}} שלכם. לשינוי פנו אלינו."
+    },
+    "password": { "title": "שינוי סיסמה", "current": "סיסמה נוכחית", "submit": "עדכון סיסמה" }
+  },
+  "features": {
+    "integration": { "crm": "CRM", "sheets": "Google Sheets", "gmail": "Gmail", "whatsapp": "וואטסאפ" },
+    "dashboard": { "renewals": "רכיב חידושים", "activity": "פיד פעילות" },
+    "module": { "customers": "מודול לקוחות", "messages": "מודול פניות" },
+    "auth": { "usernameLogin": "התחברות עם שם משתמש", "google": "התחברות עם Google" }
+  }
+}

@@ -1,0 +1,104 @@
+@import (reference) 'tokens';
+
+// Shared by all auth pages.
+
+h1 {
+  font-size: @font-xl;
+  font-weight: 600;
+  margin-block-end: @space-1;
+}
+
+.subtitle {
+  color: @color-muted;
+  margin-block-end: @space-5;
+}
+
+.password-wrap {
+  position: relative;
+
+  .input {
+    padding-inline-end: 48px;
+  }
+
+  .reveal {
+    position: absolute;
+    inset-inline-end: 2px;
+    inset-block-start: 2px;
+    display: grid;
+    place-items: center;
+    inline-size: 40px;
+    block-size: 40px;
+    border: 0;
+    background: none;
+    color: @color-muted;
+    cursor: pointer;
+  }
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block: -@space-2 @space-4;
+  font-size: @font-sm;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: @space-3;
+  margin-block: @space-5;
+  color: @color-muted;
+  font-size: @font-sm;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    block-size: 1px;
+    background: @color-border;
+  }
+}
+
+.footer {
+  margin-block-start: @space-5;
+  text-align: center;
+  font-size: @font-sm;
+  color: @color-muted;
+}
+
+.checks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px @space-3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: @font-xs;
+  color: @color-muted;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: @space-1;
+
+    &.ok {
+      color: @color-success;
+    }
+  }
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: @space-2;
+  font-size: @font-sm;
+  margin-block-end: @space-4;
+
+  input {
+    margin-block-start: 4px;
+    inline-size: 18px;
+    block-size: 18px;
+    accent-color: @color-primary;
+  }
+}

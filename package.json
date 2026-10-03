@@ -1,0 +1,27 @@
+{
+  "name": "agency-hub",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "api",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n emu,api,web -c yellow,cyan,magenta \"npm:emulators\" \"npm:start:dev -w api\" \"npm:start -w web\"",
+    "dev:no-emu": "concurrently -k -n api,web -c cyan,magenta \"npm:start:dev -w api\" \"npm:start -w web\"",
+    "emulators": "firebase emulators:start --only auth,firestore --project demo-agency-hub",
+    "seed": "npm run seed -w api",
+    "build": "npm run build -w api && npm run build -w web",
+    "test": "npm test -w api && npm test -w web -- --watch=false",
+    "lint": "npm run lint -w api",
+    "format": "prettier --write \"**/*.{ts,html,less,json,md}\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "firebase-tools": "^15.32.1",
+    "prettier": "^3.8.1"
+  },
+  "overrides": {
+    "vite": "8.3.0"
+  }
+}
