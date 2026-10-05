@@ -1,0 +1,1 @@
+var e={get(t){try{return localStorage.getItem(`ah.${t}`)}catch{return null}},set(t,r){try{localStorage.setItem(`ah.${t}`,r)}catch{}}};export{e as t};

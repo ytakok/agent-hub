@@ -1,0 +1,14 @@
+{
+  "slug": "demo-insurance",
+  "name": { "he": "דמו סוכנות לביטוח", "en": "Demo Insurance Agency" },
+  "tagline": { "he": "כל הלקוחות, הפניות והחידושים במקום אחד", "en": "Every customer, request and renewal in one place" },
+  "locales": { "default": "he", "supported": ["he", "en"] },
+  "auth": { "google": true, "usernameLogin": true, "signup": true },
+  "branding": {
+    "logoUrl": "/tenants/demo-insurance/logo.svg",
+    "faviconUrl": "/tenants/demo-insurance/logo.svg",
+    "colors": { "primary": "#1f5eff", "secondary": "#0f2a5c", "accent": "#14b8a6", "bg": "#f5f7fb", "surface": "#ffffff", "text": "#0f172a" },
+    "font": "'Rubik', system-ui, sans-serif",
+    "radius": "12px"
+  }
+}

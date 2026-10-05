@@ -1,0 +1,14 @@
+{
+  "slug": "acme-agency",
+  "name": { "he": "אקמה סוכנות", "en": "Acme Agency" },
+  "tagline": { "he": "שירות אישי, מהיר ושקוף", "en": "Personal, fast and transparent service" },
+  "locales": { "default": "en", "supported": ["en", "he"] },
+  "auth": { "google": false, "usernameLogin": true, "signup": false },
+  "branding": {
+    "logoUrl": "/tenants/acme-agency/logo.svg",
+    "faviconUrl": "/tenants/acme-agency/logo.svg",
+    "colors": { "primary": "#c2410c", "secondary": "#431407", "accent": "#ca8a04", "bg": "#fffaf5", "surface": "#ffffff", "text": "#1c1917" },
+    "font": "'Assistant', system-ui, sans-serif",
+    "radius": "6px"
+  }
+}

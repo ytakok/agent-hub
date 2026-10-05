@@ -1,0 +1,438 @@
+{
+  "common": {
+    "loading": "Loading…",
+    "sourceError": "This source is unavailable right now.",
+    "empty": "Nothing here yet.",
+    "pleaseWait": "Please wait…",
+    "retry": "Retry",
+    "search": "Search",
+    "save": "Save",
+    "on": "On",
+    "off": "Off",
+    "pagination": "Pagination",
+    "previous": "Previous page",
+    "next": "Next page"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "customers": "Customers",
+    "messages": "Inbox",
+    "settings": "Settings",
+    "logout": "Sign out",
+    "account": "Account menu",
+    "main": "Main navigation",
+    "toggle": "Toggle navigation",
+    "skipToContent": "Skip to content"
+  },
+  "roles": {
+    "owner": "Owner",
+    "admin": "Admin",
+    "agent": "Agent",
+    "viewer": "Viewer"
+  },
+  "auth": {
+    "or": "or",
+    "togglePassword": "Show or hide password",
+    "backToLogin": "Back to sign in",
+    "fields": {
+      "email": "Email",
+      "emailOrUsername": "Email or username",
+      "password": "Password",
+      "fullName": "Full name",
+      "company": "Agency / company name",
+      "username": "Username",
+      "confirmPassword": "Confirm password",
+      "newPassword": "New password",
+      "inviteCode": "Invitation code (optional)"
+    },
+    "hints": {
+      "username": "3–30 characters: letters, digits, dot, dash or underscore.",
+      "inviteCode": "Got an invitation from your agency? Paste it here instead of a company name.",
+      "password": "At least 10 characters with upper and lower case, a digit and a symbol."
+    },
+    "passwordRules": {
+      "length": "10+ characters",
+      "upper": "Uppercase letter",
+      "lower": "Lowercase letter",
+      "digit": "Digit",
+      "symbol": "Symbol"
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your agency workspace.",
+      "forgot": "Forgot password?",
+      "submit": "Sign in",
+      "google": "Continue with Google",
+      "noAccount": "New here?",
+      "signupLink": "Create an account"
+    },
+    "signup": {
+      "title": "Create your account",
+      "subtitle": "Set up your agency workspace in a minute.",
+      "terms": "I agree to the Terms of Service and Privacy Policy.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "loginLink": "Sign in"
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email and we'll send you a reset link.",
+      "sent": "If an account exists for this email, a reset link is on its way. Check your inbox.",
+      "submit": "Send reset link"
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "subtitle": "For {{email}}",
+      "submit": "Update password",
+      "done": "Your password was updated. You can sign in now.",
+      "requestNew": "Request a new link"
+    },
+    "verify": {
+      "done": "Your email is verified.",
+      "continue": "Continue"
+    },
+    "onboarding": {
+      "title": "Finish setting up",
+      "subtitle": "Pick a username and create your agency workspace, or join one with an invitation.",
+      "submit": "Continue",
+      "needCompanyOrInvite": "Enter a company name or an invitation code."
+    },
+    "errors": {
+      "invalidCredentials": "Incorrect username/email or password.",
+      "invalidEmail": "Please enter a valid email address.",
+      "userDisabled": "This account has been disabled.",
+      "tooManyRequests": "Too many attempts. Please wait a minute and try again.",
+      "emailInUse": "An account with this email already exists.",
+      "weakPassword": "Password is too weak.",
+      "popupClosed": "The sign-in window was closed.",
+      "network": "Network error. Check your connection.",
+      "linkExpired": "This link has expired.",
+      "linkInvalid": "This link is invalid or was already used.",
+      "recentLogin": "Please sign in again to do this.",
+      "usernameTaken": "This username is taken.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "validation": {
+    "required": "Required.",
+    "email": "Enter a valid email.",
+    "username": "3–30 letters, digits, dot, dash or underscore.",
+    "mismatch": "Passwords don't match.",
+    "weakPassword": "Password doesn't meet the requirements."
+  },
+  "dashboard": {
+    "greeting": "Hello, {{name}}",
+    "subtitle": "Here's what's happening across your channels",
+    "updated": "updated",
+    "range": "Date range",
+    "ranges": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days"
+    },
+    "refresh": "Refresh",
+    "loadError": "We couldn't load the dashboard."
+  },
+  "kpi": {
+    "newLeads": "New leads",
+    "openMessages": "Open requests",
+    "renewalsDue": "Renewals due",
+    "pipelineValue": "Open pipeline",
+    "sheetRows": "Sheet rows",
+    "vsPrevious": "vs previous"
+  },
+  "widgets": {
+    "crm": {
+      "title": "CRM pipeline",
+      "chartLabel": "Leads by stage",
+      "recentLeads": "Recent leads",
+      "leads": "Leads"
+    },
+    "whatsapp": {
+      "title": "WhatsApp requests"
+    },
+    "gmail": {
+      "title": "Customer emails"
+    },
+    "messages": {
+      "empty": "All caught up!",
+      "open": "open",
+      "overdue": "overdue",
+      "sla": {
+        "overdue": "SLA overdue",
+        "soon": "Due soon"
+      }
+    },
+    "renewals": {
+      "title": "Upcoming renewals",
+      "empty": "No renewals in this window.",
+      "window": "Next {{days}} days",
+      "overdue": "{{days}}d overdue",
+      "inDays": "in {{days}}d",
+      "more": "+{{count}} more"
+    },
+    "sheets": {
+      "title": "Google Sheets",
+      "synced": "Synced"
+    },
+    "activity": {
+      "title": "Recent activity"
+    },
+    "health": {
+      "title": "Integrations"
+    }
+  },
+  "widgetNames": {
+    "kpis": "KPI tiles",
+    "crmPipeline": "CRM pipeline",
+    "whatsapp": "WhatsApp",
+    "gmail": "Gmail",
+    "renewals": "Renewals",
+    "sheets": "Google Sheets",
+    "activity": "Activity",
+    "health": "Integrations"
+  },
+  "stages": {
+    "new": "New",
+    "contacted": "Contacted",
+    "quoted": "Quoted",
+    "negotiation": "Negotiation",
+    "won": "Won",
+    "lost": "Lost"
+  },
+  "messageStatus": {
+    "new": "New",
+    "assigned": "Assigned",
+    "replied": "Replied",
+    "closed": "Closed"
+  },
+  "policyTypes": {
+    "car": "Car",
+    "home": "Home",
+    "life": "Life",
+    "health": "Health",
+    "business": "Business",
+    "travel": "Travel",
+    "disability": "Disability",
+    "personal_accident": "Personal accident"
+  },
+  "activity": {
+    "lead_created": "New lead: {{name}}",
+    "message_received": "Message from {{name}}",
+    "policy_renewed": "Policy renewed: {{name}}",
+    "row_added": "New sheet row: {{name}}",
+    "stage_changed": "Stage changed: {{name}}"
+  },
+  "sources": {
+    "crm": "CRM",
+    "sheets": "Google Sheets",
+    "gmail": "Gmail",
+    "whatsapp": "WhatsApp"
+  },
+  "health": {
+    "connected": "Connected",
+    "error": "Error",
+    "disabled": "Off",
+    "mock": "Mock data"
+  },
+  "customers": {
+    "title": "Customers",
+    "count": "{{count}} customers"
+  },
+  "customerStatus": {
+    "lead": "Lead",
+    "active": "Active",
+    "churned": "Churned"
+  },
+  "messages": {
+    "title": "Inbox",
+    "count": "{{count}} messages",
+    "channels": {
+      "all": "All",
+      "whatsapp": "WhatsApp",
+      "gmail": "Email"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "saved": "Saved.",
+    "saveError": "Couldn't save. Please try again.",
+    "profile": {
+      "title": "Your profile",
+      "phone": "Phone"
+    },
+    "org": {
+      "title": "Organization",
+      "readOnly": "Only owners and admins can change these settings.",
+      "renewalWindow": "Renewal window (days)",
+      "sla": "Response SLA (hours)",
+      "widgets": "Dashboard widgets"
+    },
+    "features": {
+      "title": "Features",
+      "adminNote": "Platform admin: changes apply to this organization immediately.",
+      "planNote": "Included in your {{plan}} plan. Contact us to change."
+    },
+    "password": {
+      "title": "Change password",
+      "current": "Current password",
+      "submit": "Update password"
+    }
+  },
+  "features": {
+    "integration": {
+      "crm": "CRM",
+      "sheets": "Google Sheets",
+      "gmail": "Gmail",
+      "whatsapp": "WhatsApp"
+    },
+    "dashboard": {
+      "renewals": "Renewals widget",
+      "activity": "Activity feed"
+    },
+    "module": {
+      "customers": "Customers module",
+      "messages": "Inbox module"
+    },
+    "auth": {
+      "usernameLogin": "Username login",
+      "google": "Google sign-in"
+    },
+    "search": {
+      "customer360": "Customer search & 360° profile"
+    }
+  },
+  "search": {
+    "open": "Search customers",
+    "placeholder": "Search by name, ID, phone or policy number",
+    "clear": "Clear search",
+    "close": "Close search",
+    "hint": "Type at least 2 characters — ID, phone, policy number or name",
+    "error": "Search is unavailable right now.",
+    "noResults": "No customer found for “{{q}}”",
+    "results": "Customers found",
+    "viaFamily": "Family member: {{name}}",
+    "matchedOn": {
+      "nationalId": "ID",
+      "phone": "Phone",
+      "policyNumber": "Policy",
+      "name": "Name"
+    },
+    "activePolicies": "{{count}} active policies"
+  },
+  "customer360": {
+    "back": "Back",
+    "notFound": "Customer not found",
+    "loadError": "We couldn't load this customer.",
+    "idShort": "ID",
+    "showId": "Show ID number",
+    "hideId": "Hide ID number",
+    "age": "age {{age}}",
+    "since": "customer since {{year}}",
+    "agent": "handled by {{name}}",
+    "call": "Call",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "consent": "Marketing consent",
+    "consentYes": "Approved",
+    "consentNo": "Not approved",
+    "attention": "Needs attention",
+    "today": "Today",
+    "source": "Source: {{system}}",
+    "policies": {
+      "active": "Active policies",
+      "all": "All policies",
+      "summary": "{{count}} policies",
+      "total": "total",
+      "perYear": "per year",
+      "product": "Product",
+      "carrier": "Company",
+      "annualPremium": "Annual premium",
+      "renewal": "Renewal",
+      "none": "No policies.",
+      "showAll": "Show all ({{count}} inactive)",
+      "showActive": "Show active only"
+    },
+    "claims": {
+      "title": "Claims",
+      "summary": "{{open}} open · {{closed}} closed",
+      "claim": "Claim",
+      "missing": "Missing: {{docs}}.",
+      "openedAgo": "Opened",
+      "none": "No claims."
+    },
+    "family": {
+      "title": "Family",
+      "ownPolicies": "Customer — own policies",
+      "noCover": "No health cover",
+      "none": "No family members recorded."
+    },
+    "gaps": {
+      "title": "Coverage gaps"
+    },
+    "tasks": {
+      "title": "Open tasks",
+      "today": "Today",
+      "thisWeek": "This week",
+      "none": "No open tasks."
+    },
+    "documents": {
+      "title": "Documents"
+    },
+    "timeline": {
+      "title": "Timeline",
+      "none": "No activity yet.",
+      "interaction": {
+        "phone": "Phone call: {{summary}}",
+        "whatsapp": "WhatsApp: {{summary}}",
+        "email": "Email: {{summary}}",
+        "meeting": "Meeting: {{summary}}",
+        "sms": "SMS: {{summary}}"
+      },
+      "document": "Document uploaded: {{name}}",
+      "claimOpened": "Claim {{claim}} opened",
+      "claimClosed": "Claim {{claim}} closed"
+    },
+    "alerts": {
+      "payment_overdue": "Payment failed or overdue on policy {{policyNumber}} ({{days}} days)",
+      "renewal_due": "Policy {{policyNumber}} renews in {{days}} days",
+      "policy_expired": "Policy {{policyNumber}} expired {{days}} days ago",
+      "claim_open_long": "Claim {{claimNumber}} has been open for {{days}} days",
+      "family_uninsured_health": "{{name}} has no health insurance",
+      "consent_missing": "No marketing consent on record",
+      "task_overdue": "Overdue task: {{title}}",
+      "coverage_gap_disability": "No loss-of-work-capacity (disability) insurance — relevant for working-age customers",
+      "coverage_gap_child_accident": "Children without personal accident insurance ({{count}})"
+    }
+  },
+  "policyStatus": {
+    "active": "Active",
+    "pending_renewal": "Renewal pending",
+    "expired": "Expired",
+    "cancelled": "Cancelled",
+    "suspended": "Suspended"
+  },
+  "paymentStatus": {
+    "paid": "Paid",
+    "due": "Due",
+    "overdue": "Payment overdue",
+    "failed": "Payment failed"
+  },
+  "claimStatus": {
+    "open": "Open",
+    "awaiting_documents": "Awaiting documents",
+    "in_review": "In review",
+    "approved": "Approved",
+    "paid": "Paid",
+    "rejected": "Rejected",
+    "closed": "Closed"
+  },
+  "relations": {
+    "spouse": "Spouse",
+    "child": "Child",
+    "parent": "Parent",
+    "sibling": "Sibling",
+    "other": "Other"
+  }
+}
