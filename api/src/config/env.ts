@@ -22,6 +22,11 @@ export const envSchema = z.object({
   FIRESTORE_EMULATOR_HOST: z.string().optional(),
   /** Service-account key file, needed whenever Auth or Firestore is the real Firebase (not the emulator). */
   GOOGLE_APPLICATION_CREDENTIALS: z.string().optional(),
+  /**
+   * The same service-account key as JSON text — for hosts that inject secrets as env vars
+   * (Cloud Run + Secret Manager). Takes precedence over GOOGLE_APPLICATION_CREDENTIALS.
+   */
+  FIREBASE_SERVICE_ACCOUNT_JSON: z.string().optional(),
   CORS_ORIGINS: csv.pipe(z.array(z.url())).default(['http://localhost:4200']),
   N8N_SECRET: z.string().min(32).optional(),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),

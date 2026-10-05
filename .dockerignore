@@ -1,0 +1,22 @@
+# Docker build context: same allow-list as .gcloudignore (only what the API image needs).
+/*
+!/Dockerfile
+!/package.json
+!/package-lock.json
+!/shared/
+!/api/
+!/web/
+/web/*
+!/web/package.json
+
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+*.log
+*.tsbuildinfo
+*firebase-adminsdk*.json
+*service-account*.json
+*.pem
+*.key

@@ -30,15 +30,19 @@ export const FIRESTORE = Symbol('FIRESTORE');
         if (authEmulator && firestoreEmulator) return initializeApp({ projectId });
 
         // Any real service needs a service account (token revocation checks, custom claims, custom tokens).
-        if (!config.get('GOOGLE_APPLICATION_CREDENTIALS')) {
-          logger.error(
-            'Real Firebase is in use but GOOGLE_APPLICATION_CREDENTIALS is not set. ' +
-              'Download a key (Firebase console → Project settings → Service accounts) and point the variable at it in api/.env.',
-          );
-        }
         // cert() signs custom tokens locally with the key; applicationDefault() would need the IAM signBlob API enabled.
+        const keyJson = config.get('FIREBASE_SERVICE_ACCOUNT_JSON');
         const keyFile = config.get('GOOGLE_APPLICATION_CREDENTIALS');
-        return initializeApp({ projectId, credential: keyFile ? cert(keyFile) : applicationDefault() });
+        if (keyJson) {
+          logger.log('Credentials: service account from FIREBASE_SERVICE_ACCOUNT_JSON');
+          return initializeApp({ projectId, credential: cert(JSON.parse(keyJson) as object) });
+        }
+        if (keyFile) return initializeApp({ projectId, credential: cert(keyFile) });
+        logger.error(
+          'Real Firebase is in use but no service account is configured. Set GOOGLE_APPLICATION_CREDENTIALS (key file path) ' +
+            'or FIREBASE_SERVICE_ACCOUNT_JSON (key JSON). Firebase console → Project settings → Service accounts.',
+        );
+        return initializeApp({ projectId, credential: applicationDefault() });
       },
     },
     { provide: FIREBASE_AUTH, inject: [FIREBASE_APP], useFactory: (app: App) => getAuth(app) },
