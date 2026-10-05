@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:live-auth": "ng serve --configuration development-live-auth",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "start:emulators": "ng serve --configuration development"
   },
   "private": true,
   "packageManager": "npm@11.12.1",

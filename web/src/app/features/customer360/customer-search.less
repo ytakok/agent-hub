@@ -1,0 +1,208 @@
+@import (reference) 'tokens';
+@import (reference) 'breakpoints';
+@import (reference) 'mixins';
+
+// Mobile: only the trigger is visible; .open turns the box into a full-width bar over the top bar.
+:host {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-inline-start: auto;
+}
+
+.box {
+  display: none;
+  align-items: center;
+  gap: @space-2;
+  block-size: 42px;
+  padding-inline: @space-3;
+  border: 1px solid @color-border;
+  border-radius: @radius;
+  background: @color-surface;
+
+  &:focus-within {
+    border-color: @color-primary;
+    box-shadow: 0 0 0 3px @color-primary-soft;
+  }
+
+  .lead {
+    color: @color-muted;
+  }
+
+  input {
+    flex: 1;
+    min-inline-size: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font-size: @font-sm;
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+}
+
+.clear {
+  display: grid;
+  place-items: center;
+  inline-size: 28px;
+  block-size: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: @color-muted;
+  cursor: pointer;
+
+  &:hover {
+    background: @color-surface-2;
+  }
+}
+
+.hint {
+  display: none;
+  padding: 2px 6px;
+  border: 1px solid @color-border;
+  border-radius: 4px;
+  color: @color-muted;
+  font: 500 0.6875rem/1.4 @font-family;
+  direction: ltr;
+}
+
+.close-mobile {
+  min-inline-size: 36px;
+  min-block-size: 36px;
+}
+
+:host(.open) {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-start: 0;
+  z-index: 50;
+  block-size: @topbar-height;
+  padding-inline: @space-2;
+  background: @color-surface;
+  border-block-end: 1px solid @color-border;
+
+  .trigger {
+    display: none;
+  }
+
+  .box {
+    display: flex;
+    flex: 1;
+  }
+}
+
+.panel {
+  .card();
+  position: absolute;
+  inset-block-start: calc(100% + @space-1);
+  inset-inline: 0;
+  z-index: 60;
+  max-block-size: min(70dvh, 480px);
+  overflow-y: auto;
+  padding: @space-1;
+  box-shadow: @shadow-md;
+}
+
+:host(.open) .panel {
+  inset-inline: @space-2;
+}
+
+.state {
+  padding: @space-4 @space-3;
+  color: @color-muted;
+  font-size: @font-sm;
+  text-align: center;
+
+  &.error {
+    color: @color-danger;
+  }
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: @space-3;
+  padding: @space-2 @space-3;
+  border-radius: @radius-sm;
+  cursor: pointer;
+
+  &.active {
+    background: @color-primary-soft;
+  }
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  inline-size: 36px;
+  block-size: 36px;
+  border-radius: 50%;
+  background: @color-primary-soft;
+  color: @color-primary;
+  font-weight: 600;
+}
+
+.main {
+  display: grid;
+  flex: 1;
+  min-inline-size: 0;
+  font-size: @font-sm;
+
+  strong,
+  .meta {
+    .truncate();
+  }
+
+  .meta,
+  .note {
+    color: @color-muted;
+    font-size: @font-xs;
+  }
+}
+
+.side {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  flex-shrink: 0;
+
+  .muted {
+    color: @color-muted;
+    font-size: @font-xs;
+  }
+}
+
+// ---------- Tablet and up: inline combobox ----------
+.from(@md, {
+  :host {
+    flex: 1;
+    max-inline-size: 480px;
+    margin-inline: @space-4;
+  }
+
+  .trigger, .close-mobile { display: none; }
+  .box { display: flex; flex: 1; }
+  .hint { display: inline-block; }
+
+  :host(.open) {
+    position: relative;
+    inset: auto;
+    block-size: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  :host(.open) .panel { inset-inline: 0; }
+  .panel { min-inline-size: 420px; }
+});

@@ -23,7 +23,7 @@ const TEXT = {
     sheetName: 'לידים מהאתר',
     columns: ['שם', 'טלפון', 'מוצר', 'הערות'],
     notes: ['לחזור אחרי 16:00', 'מעוניין בהצעה משולבת', 'יש פוליסה בחברה אחרת', 'דחוף'],
-    products: { car: 'ביטוח רכב', home: 'ביטוח דירה', life: 'ביטוח חיים', health: 'ביטוח בריאות', business: 'ביטוח עסק', travel: 'ביטוח נסיעות' },
+    products: { car: 'ביטוח רכב', home: 'ביטוח דירה', life: 'ביטוח חיים', health: 'ביטוח בריאות', business: 'ביטוח עסק', travel: 'ביטוח נסיעות', disability: 'אובדן כושר עבודה', personal_accident: 'תאונות אישיות' },
     subjects: ['בקשה לחידוש פוליסה', 'שאלה לגבי תביעה', 'עדכון פרטי רכב', 'בקשה להצעת מחיר', 'אישור קבלת מסמכים', 'שינוי אמצעי תשלום'],
     snippets: [
       'שלום, רציתי לברר מתי מסתיימת הפוליסה שלי ומה העלות לחידוש.',
@@ -40,7 +40,7 @@ const TEXT = {
     sheetName: 'Website leads',
     columns: ['Name', 'Phone', 'Product', 'Notes'],
     notes: ['Call back after 4pm', 'Wants a bundle quote', 'Has a policy elsewhere', 'Urgent'],
-    products: { car: 'Car insurance', home: 'Home insurance', life: 'Life insurance', health: 'Health insurance', business: 'Business insurance', travel: 'Travel insurance' },
+    products: { car: 'Car insurance', home: 'Home insurance', life: 'Life insurance', health: 'Health insurance', business: 'Business insurance', travel: 'Travel insurance', disability: 'Disability insurance', personal_accident: 'Personal accident' },
     subjects: ['Policy renewal request', 'Question about my claim', 'Vehicle details update', 'Quote request', 'Documents received?', 'Change payment method'],
     snippets: [
       'Hi, when does my policy end and what will the renewal cost?',

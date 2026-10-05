@@ -22,6 +22,7 @@ export const DEFAULT_FLAG_DEFINITIONS: readonly FeatureFlagDefinition[] = [
   { key: 'module.messages', description: 'Unified inbox module', defaultEnabled: true, plans: ['pro', 'enterprise'] },
   { key: 'auth.usernameLogin', description: 'Login with username', defaultEnabled: true },
   { key: 'auth.google', description: 'Sign in with Google', defaultEnabled: true },
+  { key: 'search.customer360', description: 'Global customer search + 360° profile', defaultEnabled: true },
 ];
 
 export const FEATURE_KEYS: readonly FeatureKey[] = DEFAULT_FLAG_DEFINITIONS.map((d) => d.key);

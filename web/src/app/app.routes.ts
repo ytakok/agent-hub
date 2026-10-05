@@ -25,6 +25,12 @@ export const routes: Routes = [
         loadComponent: () => import('./features/customers/customers.page').then((m) => m.CustomersPage),
       },
       {
+        path: 'customers/:id',
+        title: 'Customer',
+        canMatch: [featureGuard('search.customer360')],
+        loadComponent: () => import('./features/customer360/customer-360.page').then((m) => m.Customer360Page),
+      },
+      {
         path: 'messages',
         title: 'Messages',
         canMatch: [featureGuard('module.messages')],

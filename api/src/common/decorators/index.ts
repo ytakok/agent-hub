@@ -26,3 +26,8 @@ export const PlatformAdminOnly = () => SetMetadata(PLATFORM_ADMIN, true);
 export const CurrentUser = createParamDecorator((_: unknown, ctx: ExecutionContext): RequestUser | undefined => {
   return ctx.switchToHttp().getRequest<AuthedRequest>().user;
 });
+
+export const SKIP_AUDIT = 'skipAudit';
+
+/** Excludes a mutating-verb route that doesn't change data (e.g. POST search) from the audit log. */
+export const NoAudit = () => SetMetadata(SKIP_AUDIT, true);

@@ -1,5 +1,5 @@
 import { Global, Logger, Module } from '@nestjs/common';
-import { applicationDefault, getApps, initializeApp, type App } from 'firebase-admin/app';
+import { applicationDefault, cert, getApps, initializeApp, type App } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { AppConfig } from '../config/app-config.service.js';
@@ -17,13 +17,28 @@ export const FIRESTORE = Symbol('FIRESTORE');
       useFactory: (config: AppConfig): App => {
         const existing = getApps()[0];
         if (existing) return existing;
+        const logger = new Logger('Firebase');
         const projectId = config.get('FIREBASE_PROJECT_ID');
-        // With *_EMULATOR_HOST set, the Admin SDK talks to the local emulators and needs no credentials.
-        if (config.usingEmulators) {
-          new Logger('Firebase').warn(`Using Firebase emulators for project "${projectId}"`);
-          return initializeApp({ projectId });
+        const authEmulator = Boolean(config.get('FIREBASE_AUTH_EMULATOR_HOST'));
+        const firestoreEmulator = Boolean(config.get('FIRESTORE_EMULATOR_HOST'));
+        // The web app must sign in to the same Auth (emulator vs real) and project, or every token is rejected (401).
+        logger.log(
+          `Project "${projectId}" · Auth: ${authEmulator ? 'emulator' : 'REAL Firebase'} · Firestore: ${firestoreEmulator ? 'emulator' : 'REAL Firebase'}`,
+        );
+
+        // Fully on emulators: no credentials needed.
+        if (authEmulator && firestoreEmulator) return initializeApp({ projectId });
+
+        // Any real service needs a service account (token revocation checks, custom claims, custom tokens).
+        if (!config.get('GOOGLE_APPLICATION_CREDENTIALS')) {
+          logger.error(
+            'Real Firebase is in use but GOOGLE_APPLICATION_CREDENTIALS is not set. ' +
+              'Download a key (Firebase console → Project settings → Service accounts) and point the variable at it in api/.env.',
+          );
         }
-        return initializeApp({ projectId, credential: applicationDefault() });
+        // cert() signs custom tokens locally with the key; applicationDefault() would need the IAM signBlob API enabled.
+        const keyFile = config.get('GOOGLE_APPLICATION_CREDENTIALS');
+        return initializeApp({ projectId, credential: keyFile ? cert(keyFile) : applicationDefault() });
       },
     },
     { provide: FIREBASE_AUTH, inject: [FIREBASE_APP], useFactory: (app: App) => getAuth(app) },

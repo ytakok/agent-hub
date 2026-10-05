@@ -1,0 +1,370 @@
+<button type="button" class="back" (click)="back()">
+  <!-- ‹ is bidi-mirrored, so it points the right way in RTL -->
+  <span aria-hidden="true">‹</span> {{ 'customer360.back' | translate }}
+</button>
+
+@if (profile.isLoading() && !v()) {
+  <div class="skeleton" aria-busy="true">
+    <div class="card header"></div>
+    <div class="layout">
+      <div class="card tall"></div>
+      <div class="card"></div>
+    </div>
+    <span class="visually-hidden" role="status">{{ 'common.loading' | translate }}</span>
+  </div>
+} @else if (profile.error()) {
+  <div class="card empty" role="alert">
+    <h1>{{ (notFound() ? 'customer360.notFound' : 'customer360.loadError') | translate }}</h1>
+    @if (!notFound()) {
+      <button type="button" class="btn ghost" (click)="profile.reload()">{{ 'common.retry' | translate }}</button>
+    }
+  </div>
+} @else if (v(); as v) {
+  @let cust = v.customer;
+
+  <!-- ================= Header ================= -->
+  <section class="card header" [attr.aria-label]="cust.fullName">
+    <div class="identity">
+      <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+      <div class="who">
+        <h1>{{ cust.fullName }}</h1>
+        <p class="meta">
+          <span>
+            {{ 'customer360.idShort' | translate }}
+            <span class="ltr-text">{{ displayId() }}</span>
+            @if (!cust.nationalIdMasked) {
+              <button
+                type="button"
+                class="reveal"
+                (click)="revealId.set(!revealId())"
+                [attr.aria-label]="(revealId() ? 'customer360.hideId' : 'customer360.showId') | translate"
+                [attr.aria-pressed]="revealId()"
+              >
+                <ah-icon [name]="revealId() ? 'eyeOff' : 'eye'" [size]="14" />
+              </button>
+            }
+          </span>
+          @if (age() !== undefined) {
+            <span>· {{ 'customer360.age' | translate: { age: age() } }}</span>
+          }
+          @if (cust.customerSince) {
+            <span>· {{ 'customer360.since' | translate: { year: cust.customerSince.slice(0, 4) } }}</span>
+          }
+          @if (cust.assignedAgent) {
+            <span>· {{ 'customer360.agent' | translate: { name: cust.assignedAgent } }}</span>
+          }
+        </p>
+      </div>
+      <div class="tags">
+        @if (cust.status !== 'active') {
+          <span class="badge" [class.primary]="cust.status === 'lead'">{{ 'customerStatus.' + cust.status | translate }}</span>
+        }
+        @for (t of cust.tags; track t) {
+          <span class="badge success">{{ t }}</span>
+        }
+      </div>
+      <div class="actions">
+        @if (tel(); as tel) {
+          <a class="btn ghost" [href]="tel"><ah-icon name="phone" [size]="18" />{{ 'customer360.call' | translate }}</a>
+        }
+        @if (whatsapp(); as wa) {
+          <a class="btn ghost" [href]="wa" target="_blank" rel="noopener noreferrer"><ah-icon name="whatsapp" [size]="18" />WhatsApp</a>
+        }
+      </div>
+    </div>
+
+    <dl class="facts">
+      <div>
+        <dt>{{ 'customer360.phone' | translate }}</dt>
+        <dd>
+          @for (p of cust.phones; track p) {
+            <a class="ltr-text" [href]="'tel:' + p">{{ p }}</a>
+          } @empty {
+            —
+          }
+        </dd>
+      </div>
+      <div>
+        <dt>{{ 'customer360.email' | translate }}</dt>
+        <dd>
+          @for (e of cust.emails; track e) {
+            <a class="ltr-text" [href]="'mailto:' + e">{{ e }}</a>
+          } @empty {
+            —
+          }
+        </dd>
+      </div>
+      <div>
+        <dt>{{ 'customer360.address' | translate }}</dt>
+        <dd>
+          @if (cust.address; as a) {
+            {{ a.street }}{{ a.street && a.city ? ', ' : '' }}{{ a.city }}
+          } @else {
+            —
+          }
+        </dd>
+      </div>
+      <div>
+        <dt>{{ 'customer360.consent' | translate }}</dt>
+        <dd [class.ok]="cust.consent.marketing" [class.muted]="!cust.consent.marketing">
+          {{ (cust.consent.marketing ? 'customer360.consentYes' : 'customer360.consentNo') | translate }}
+          @if (cust.consent.updatedAt) {
+            · <bdi>{{ monthYear(cust.consent.updatedAt) }}</bdi>
+          }
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- Operational alerts (payments, renewals, long claims, tasks) -->
+  @if (attention().length) {
+    <ul class="attention" [attr.aria-label]="'customer360.attention' | translate">
+      @for (a of attention(); track $index) {
+        <li [class]="a.severity">
+          <ah-icon name="alert" [size]="16" />
+          <span>{{ 'customer360.alerts.' + a.kind | translate: a.params }}</span>
+        </li>
+      }
+    </ul>
+  }
+
+  <div class="layout">
+    <!-- ================= Main column ================= -->
+    <div class="col main">
+      <section class="card">
+        <header class="section-head">
+          <h2>{{ (showAllPolicies() ? 'customer360.policies.all' : 'customer360.policies.active') | translate }}</h2>
+          <span class="muted">
+            {{ 'customer360.policies.summary' | translate: { count: v.summary.activePolicies } }}
+            · {{ 'customer360.policies.total' | translate }}
+            <bdi>{{ v.summary.annualPremium | money: language.intlLocale() : v.summary.currency }}</bdi>
+            {{ 'customer360.policies.perYear' | translate }}
+          </span>
+        </header>
+
+        @if (policies().length) {
+          <table class="policies">
+            <thead>
+              <tr>
+                <th scope="col">{{ 'customer360.policies.product' | translate }}</th>
+                <th scope="col">{{ 'customer360.policies.carrier' | translate }}</th>
+                <th scope="col" class="num">{{ 'customer360.policies.annualPremium' | translate }}</th>
+                <th scope="col">{{ 'customer360.policies.renewal' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of policies(); track p.id) {
+                <tr [class.inactive]="!p.isActive">
+                  <td [attr.data-label]="'customer360.policies.product' | translate">
+                    <span class="product">
+                      <strong>{{ p.productName }}</strong>
+                      <span class="muted">
+                        {{ 'policyTypes.' + p.type | translate }} · <span class="ltr-text">{{ p.policyNumber }}</span>
+                        @if (p.vehicle) {
+                          · <span class="ltr-text">{{ p.vehicle.plate }}</span>
+                        }
+                      </span>
+                      @if (!p.isActive || p.status === 'pending_renewal' || p.paymentProblem) {
+                        <span class="flags">
+                          @if (!p.isActive || p.status === 'pending_renewal') {
+                            <span class="badge" [class.warning]="p.status === 'pending_renewal'">{{ 'policyStatus.' + p.status | translate }}</span>
+                          }
+                          @if (p.paymentProblem) {
+                            <span class="badge danger">{{ 'paymentStatus.' + p.payment.status | translate }}</span>
+                          }
+                        </span>
+                      }
+                    </span>
+                  </td>
+                  <td [attr.data-label]="'customer360.policies.carrier' | translate">{{ p.carrier }}</td>
+                  <td class="num" [attr.data-label]="'customer360.policies.annualPremium' | translate">
+                    <bdi>{{ p.annual | money: language.intlLocale() : p.premium.currency }}</bdi>
+                  </td>
+                  <td [attr.data-label]="'customer360.policies.renewal' | translate">
+                    @if (!p.isActive) {
+                      <span class="muted">{{ monthYear(p.endDate) }}</span>
+                    } @else if (p.renewalSoon && p.renewalDate) {
+                      <span class="soon" [class.urgent]="(p.renewalDays ?? 99) <= 14">{{ p.renewalDate | relTime: language.intlLocale() }}</span>
+                    } @else {
+                      {{ monthYear(p.renewalDate ?? p.endDate) }}
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
+          <p class="empty-line">{{ 'customer360.policies.none' | translate }}</p>
+        }
+
+        @if (inactiveCount()) {
+          <button type="button" class="link" (click)="showAllPolicies.set(!showAllPolicies())">
+            {{ (showAllPolicies() ? 'customer360.policies.showActive' : 'customer360.policies.showAll') | translate: { count: inactiveCount() } }}
+          </button>
+        }
+      </section>
+
+      <section class="card">
+        <header class="section-head">
+          <h2>{{ 'customer360.claims.title' | translate }}</h2>
+          <span class="muted">{{ 'customer360.claims.summary' | translate: { open: v.summary.openClaims, closed: v.summary.closedClaims } }}</span>
+        </header>
+        @for (cl of openClaims(); track cl.id) {
+          <article class="claim open">
+            <div class="claim-head">
+              <strong>
+                {{ 'customer360.claims.claim' | translate }} <bdi class="ltr-text">#{{ cl.claimNumber }}</bdi> ·
+                {{ 'policyTypes.' + cl.type | translate }}
+              </strong>
+              <span class="badge warning">{{ 'claimStatus.' + cl.status | translate }}</span>
+            </div>
+            <p>{{ cl.description }}</p>
+            <p class="muted">
+              @if (cl.missingDocuments?.length) {
+                {{ 'customer360.claims.missing' | translate: { docs: cl.missingDocuments!.join(', ') } }}
+              }
+              {{ 'customer360.claims.openedAgo' | translate }} {{ cl.openedAt | relTime: language.intlLocale() }} ·
+              <bdi>{{ cl.amountClaimed | money: language.intlLocale() : cl.currency }}</bdi>
+              @if (cl.handler) {
+                · {{ cl.handler }}
+              }
+            </p>
+          </article>
+        }
+        @for (cl of closedClaims(); track cl.id) {
+          <article class="claim">
+            <div class="claim-head">
+              <span>
+                {{ 'customer360.claims.claim' | translate }} <bdi class="ltr-text">#{{ cl.claimNumber }}</bdi> ·
+                {{ 'policyTypes.' + cl.type | translate }}, <bdi>{{ cl.description }}</bdi>
+              </span>
+              <span class="muted nowrap">
+                {{ 'claimStatus.' + cl.status | translate }}
+                @if (cl.closedAt) {
+                  · {{ monthYear(cl.closedAt) }}
+                }
+                @if (cl.amountPaid !== undefined) {
+                  · <bdi>{{ cl.amountPaid | money: language.intlLocale() : cl.currency }}</bdi>
+                }
+              </span>
+            </div>
+          </article>
+        } @empty {
+          @if (!openClaims().length) {
+            <p class="empty-line">{{ 'customer360.claims.none' | translate }}</p>
+          }
+        }
+      </section>
+    </div>
+
+    <!-- ================= Side column ================= -->
+    <div class="col side">
+      <section class="card">
+        <header class="section-head"><h2>{{ 'customer360.family.title' | translate }}</h2></header>
+        <ul class="rows">
+          @for (m of family(); track m.id) {
+            <li>
+              <span>
+                @if (m.customerId) {
+                  <a [routerLink]="['/app/customers', m.customerId]">{{ m.fullName }}</a>
+                } @else {
+                  {{ m.fullName }}
+                }
+                · {{ 'relations.' + m.relation | translate }}
+                @if (m.age !== undefined) {
+                  <span class="muted">({{ m.age }})</span>
+                }
+              </span>
+              <span [class.muted]="!m.coverage.length" [class.missing]="!m.coverage.length && !m.customerId">
+                {{ m.coverage.length ? m.coverage.join(', ') : ((m.customerId ? 'customer360.family.ownPolicies' : 'customer360.family.noCover') | translate) }}
+              </span>
+            </li>
+          } @empty {
+            <li class="muted">{{ 'customer360.family.none' | translate }}</li>
+          }
+        </ul>
+      </section>
+
+      @if (gaps().length) {
+        <section class="card">
+          <header class="section-head"><h2>{{ 'customer360.gaps.title' | translate }}</h2></header>
+          <ul class="gaps">
+            @for (g of gaps(); track g.kind + $index) {
+              <li [class.warn]="g.severity !== 'low'" [class.info]="g.severity === 'low'">
+                {{ 'customer360.alerts.' + g.kind | translate: g.params }}
+              </li>
+            }
+          </ul>
+        </section>
+      }
+
+      <section class="card">
+        <header class="section-head"><h2>{{ 'customer360.tasks.title' | translate }}</h2></header>
+        <ul class="rows tasks">
+          @for (t of openTasks(); track t.id) {
+            <li>
+              <label>
+                <!-- Read-only until task updates are wired to the CRM -->
+                <input type="checkbox" disabled [attr.aria-label]="t.title" />
+                <span>{{ t.title }}</span>
+              </label>
+              @if (t.dueAt) {
+                <span class="due" [class.overdue]="t.due === 'overdue'">
+                  @switch (t.due) {
+                    @case ('today') { {{ 'customer360.tasks.today' | translate }} }
+                    @case ('week') { {{ 'customer360.tasks.thisWeek' | translate }} }
+                    @case ('overdue') { {{ t.dueAt | relTime: language.intlLocale() }} }
+                    @default { {{ t.dueAt | shortDate: language.intlLocale() }} }
+                  }
+                </span>
+              }
+            </li>
+          } @empty {
+            <li class="muted">{{ 'customer360.tasks.none' | translate }}</li>
+          }
+        </ul>
+      </section>
+
+      @if (v.documents.length) {
+        <section class="card">
+          <header class="section-head"><h2>{{ 'customer360.documents.title' | translate }}</h2></header>
+          <ul class="rows">
+            @for (d of v.documents; track d.id) {
+              <li>
+                <span class="doc"><ah-icon name="file" [size]="16" /> <bdi>{{ d.name }}</bdi></span>
+                <span class="muted nowrap">{{ d.uploadedAt | shortDate: language.intlLocale() }}</span>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </div>
+  </div>
+
+  <!-- ================= Timeline ================= -->
+  <section class="card timeline">
+    <header class="section-head"><h2>{{ 'customer360.timeline.title' | translate }}</h2></header>
+    <ol>
+      @for (e of timeline(); track e.id) {
+        <li [class]="e.tone">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="text">{{ 'customer360.timeline.' + e.key | translate: e.params }}</span>
+          <time [attr.datetime]="e.at">
+            @if (isToday(e.at)) {
+              {{ 'customer360.today' | translate }}, {{ time(e.at) }}
+            } @else {
+              {{ e.at | relTime: language.intlLocale() }}
+            }
+          </time>
+        </li>
+      } @empty {
+        <li class="muted">{{ 'customer360.timeline.none' | translate }}</li>
+      }
+    </ol>
+  </section>
+
+  <p class="source muted">
+    {{ 'customer360.source' | translate: { system: v.source.system } }}
+    · {{ v.source.fetchedAt | relTime: language.intlLocale() }}
+  </p>
+}

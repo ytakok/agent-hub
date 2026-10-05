@@ -5,6 +5,7 @@ export const environment: Environment = {
   production: false,
   apiBaseUrl: '/api',
   useEmulators: true,
+  useLiveAuth: false,
   defaultTenant: 'demo-insurance',
   firebase: {
     apiKey: 'demo-key',

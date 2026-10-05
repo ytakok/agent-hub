@@ -24,7 +24,12 @@
     "toggle": "Toggle navigation",
     "skipToContent": "Skip to content"
   },
-  "roles": { "owner": "Owner", "admin": "Admin", "agent": "Agent", "viewer": "Viewer" },
+  "roles": {
+    "owner": "Owner",
+    "admin": "Admin",
+    "agent": "Agent",
+    "viewer": "Viewer"
+  },
   "auth": {
     "or": "or",
     "togglePassword": "Show or hide password",
@@ -82,7 +87,10 @@
       "done": "Your password was updated. You can sign in now.",
       "requestNew": "Request a new link"
     },
-    "verify": { "done": "Your email is verified.", "continue": "Continue" },
+    "verify": {
+      "done": "Your email is verified.",
+      "continue": "Continue"
+    },
     "onboarding": {
       "title": "Finish setting up",
       "subtitle": "Pick a username and create your agency workspace, or join one with an invitation.",
@@ -117,7 +125,11 @@
     "subtitle": "Here's what's happening across your channels",
     "updated": "updated",
     "range": "Date range",
-    "ranges": { "7d": "7 days", "30d": "30 days", "90d": "90 days" },
+    "ranges": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days"
+    },
     "refresh": "Refresh",
     "loadError": "We couldn't load the dashboard."
   },
@@ -130,10 +142,27 @@
     "vsPrevious": "vs previous"
   },
   "widgets": {
-    "crm": { "title": "CRM pipeline", "chartLabel": "Leads by stage", "recentLeads": "Recent leads", "leads": "Leads" },
-    "whatsapp": { "title": "WhatsApp requests" },
-    "gmail": { "title": "Customer emails" },
-    "messages": { "empty": "All caught up!", "open": "open", "overdue": "overdue", "sla": { "overdue": "SLA overdue", "soon": "Due soon" } },
+    "crm": {
+      "title": "CRM pipeline",
+      "chartLabel": "Leads by stage",
+      "recentLeads": "Recent leads",
+      "leads": "Leads"
+    },
+    "whatsapp": {
+      "title": "WhatsApp requests"
+    },
+    "gmail": {
+      "title": "Customer emails"
+    },
+    "messages": {
+      "empty": "All caught up!",
+      "open": "open",
+      "overdue": "overdue",
+      "sla": {
+        "overdue": "SLA overdue",
+        "soon": "Due soon"
+      }
+    },
     "renewals": {
       "title": "Upcoming renewals",
       "empty": "No renewals in this window.",
@@ -142,9 +171,16 @@
       "inDays": "in {{days}}d",
       "more": "+{{count}} more"
     },
-    "sheets": { "title": "Google Sheets", "synced": "Synced" },
-    "activity": { "title": "Recent activity" },
-    "health": { "title": "Integrations" }
+    "sheets": {
+      "title": "Google Sheets",
+      "synced": "Synced"
+    },
+    "activity": {
+      "title": "Recent activity"
+    },
+    "health": {
+      "title": "Integrations"
+    }
   },
   "widgetNames": {
     "kpis": "KPI tiles",
@@ -156,9 +192,30 @@
     "activity": "Activity",
     "health": "Integrations"
   },
-  "stages": { "new": "New", "contacted": "Contacted", "quoted": "Quoted", "negotiation": "Negotiation", "won": "Won", "lost": "Lost" },
-  "messageStatus": { "new": "New", "assigned": "Assigned", "replied": "Replied", "closed": "Closed" },
-  "policyTypes": { "car": "Car", "home": "Home", "life": "Life", "health": "Health", "business": "Business", "travel": "Travel" },
+  "stages": {
+    "new": "New",
+    "contacted": "Contacted",
+    "quoted": "Quoted",
+    "negotiation": "Negotiation",
+    "won": "Won",
+    "lost": "Lost"
+  },
+  "messageStatus": {
+    "new": "New",
+    "assigned": "Assigned",
+    "replied": "Replied",
+    "closed": "Closed"
+  },
+  "policyTypes": {
+    "car": "Car",
+    "home": "Home",
+    "life": "Life",
+    "health": "Health",
+    "business": "Business",
+    "travel": "Travel",
+    "disability": "Disability",
+    "personal_accident": "Personal accident"
+  },
   "activity": {
     "lead_created": "New lead: {{name}}",
     "message_received": "Message from {{name}}",
@@ -166,20 +223,44 @@
     "row_added": "New sheet row: {{name}}",
     "stage_changed": "Stage changed: {{name}}"
   },
-  "sources": { "crm": "CRM", "sheets": "Google Sheets", "gmail": "Gmail", "whatsapp": "WhatsApp" },
-  "health": { "connected": "Connected", "error": "Error", "disabled": "Off", "mock": "Mock data" },
-  "customers": { "title": "Customers", "count": "{{count}} customers" },
-  "customerStatus": { "lead": "Lead", "active": "Active", "churned": "Churned" },
+  "sources": {
+    "crm": "CRM",
+    "sheets": "Google Sheets",
+    "gmail": "Gmail",
+    "whatsapp": "WhatsApp"
+  },
+  "health": {
+    "connected": "Connected",
+    "error": "Error",
+    "disabled": "Off",
+    "mock": "Mock data"
+  },
+  "customers": {
+    "title": "Customers",
+    "count": "{{count}} customers"
+  },
+  "customerStatus": {
+    "lead": "Lead",
+    "active": "Active",
+    "churned": "Churned"
+  },
   "messages": {
     "title": "Inbox",
     "count": "{{count}} messages",
-    "channels": { "all": "All", "whatsapp": "WhatsApp", "gmail": "Email" }
+    "channels": {
+      "all": "All",
+      "whatsapp": "WhatsApp",
+      "gmail": "Email"
+    }
   },
   "settings": {
     "title": "Settings",
     "saved": "Saved.",
     "saveError": "Couldn't save. Please try again.",
-    "profile": { "title": "Your profile", "phone": "Phone" },
+    "profile": {
+      "title": "Your profile",
+      "phone": "Phone"
+    },
     "org": {
       "title": "Organization",
       "readOnly": "Only owners and admins can change these settings.",
@@ -192,12 +273,166 @@
       "adminNote": "Platform admin: changes apply to this organization immediately.",
       "planNote": "Included in your {{plan}} plan. Contact us to change."
     },
-    "password": { "title": "Change password", "current": "Current password", "submit": "Update password" }
+    "password": {
+      "title": "Change password",
+      "current": "Current password",
+      "submit": "Update password"
+    }
   },
   "features": {
-    "integration": { "crm": "CRM", "sheets": "Google Sheets", "gmail": "Gmail", "whatsapp": "WhatsApp" },
-    "dashboard": { "renewals": "Renewals widget", "activity": "Activity feed" },
-    "module": { "customers": "Customers module", "messages": "Inbox module" },
-    "auth": { "usernameLogin": "Username login", "google": "Google sign-in" }
+    "integration": {
+      "crm": "CRM",
+      "sheets": "Google Sheets",
+      "gmail": "Gmail",
+      "whatsapp": "WhatsApp"
+    },
+    "dashboard": {
+      "renewals": "Renewals widget",
+      "activity": "Activity feed"
+    },
+    "module": {
+      "customers": "Customers module",
+      "messages": "Inbox module"
+    },
+    "auth": {
+      "usernameLogin": "Username login",
+      "google": "Google sign-in"
+    },
+    "search": {
+      "customer360": "Customer search & 360° profile"
+    }
+  },
+  "search": {
+    "open": "Search customers",
+    "placeholder": "Search by name, ID, phone or policy number",
+    "clear": "Clear search",
+    "close": "Close search",
+    "hint": "Type at least 2 characters — ID, phone, policy number or name",
+    "error": "Search is unavailable right now.",
+    "noResults": "No customer found for “{{q}}”",
+    "results": "Customers found",
+    "viaFamily": "Family member: {{name}}",
+    "matchedOn": {
+      "nationalId": "ID",
+      "phone": "Phone",
+      "policyNumber": "Policy",
+      "name": "Name"
+    },
+    "activePolicies": "{{count}} active policies"
+  },
+  "customer360": {
+    "back": "Back",
+    "notFound": "Customer not found",
+    "loadError": "We couldn't load this customer.",
+    "idShort": "ID",
+    "showId": "Show ID number",
+    "hideId": "Hide ID number",
+    "age": "age {{age}}",
+    "since": "customer since {{year}}",
+    "agent": "handled by {{name}}",
+    "call": "Call",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "consent": "Marketing consent",
+    "consentYes": "Approved",
+    "consentNo": "Not approved",
+    "attention": "Needs attention",
+    "today": "Today",
+    "source": "Source: {{system}}",
+    "policies": {
+      "active": "Active policies",
+      "all": "All policies",
+      "summary": "{{count}} policies",
+      "total": "total",
+      "perYear": "per year",
+      "product": "Product",
+      "carrier": "Company",
+      "annualPremium": "Annual premium",
+      "renewal": "Renewal",
+      "none": "No policies.",
+      "showAll": "Show all ({{count}} inactive)",
+      "showActive": "Show active only"
+    },
+    "claims": {
+      "title": "Claims",
+      "summary": "{{open}} open · {{closed}} closed",
+      "claim": "Claim",
+      "missing": "Missing: {{docs}}.",
+      "openedAgo": "Opened",
+      "none": "No claims."
+    },
+    "family": {
+      "title": "Family",
+      "ownPolicies": "Customer — own policies",
+      "noCover": "No health cover",
+      "none": "No family members recorded."
+    },
+    "gaps": {
+      "title": "Coverage gaps"
+    },
+    "tasks": {
+      "title": "Open tasks",
+      "today": "Today",
+      "thisWeek": "This week",
+      "none": "No open tasks."
+    },
+    "documents": {
+      "title": "Documents"
+    },
+    "timeline": {
+      "title": "Timeline",
+      "none": "No activity yet.",
+      "interaction": {
+        "phone": "Phone call: {{summary}}",
+        "whatsapp": "WhatsApp: {{summary}}",
+        "email": "Email: {{summary}}",
+        "meeting": "Meeting: {{summary}}",
+        "sms": "SMS: {{summary}}"
+      },
+      "document": "Document uploaded: {{name}}",
+      "claimOpened": "Claim {{claim}} opened",
+      "claimClosed": "Claim {{claim}} closed"
+    },
+    "alerts": {
+      "payment_overdue": "Payment failed or overdue on policy {{policyNumber}} ({{days}} days)",
+      "renewal_due": "Policy {{policyNumber}} renews in {{days}} days",
+      "policy_expired": "Policy {{policyNumber}} expired {{days}} days ago",
+      "claim_open_long": "Claim {{claimNumber}} has been open for {{days}} days",
+      "family_uninsured_health": "{{name}} has no health insurance",
+      "consent_missing": "No marketing consent on record",
+      "task_overdue": "Overdue task: {{title}}",
+      "coverage_gap_disability": "No loss-of-work-capacity (disability) insurance — relevant for working-age customers",
+      "coverage_gap_child_accident": "Children without personal accident insurance ({{count}})"
+    }
+  },
+  "policyStatus": {
+    "active": "Active",
+    "pending_renewal": "Renewal pending",
+    "expired": "Expired",
+    "cancelled": "Cancelled",
+    "suspended": "Suspended"
+  },
+  "paymentStatus": {
+    "paid": "Paid",
+    "due": "Due",
+    "overdue": "Payment overdue",
+    "failed": "Payment failed"
+  },
+  "claimStatus": {
+    "open": "Open",
+    "awaiting_documents": "Awaiting documents",
+    "in_review": "In review",
+    "approved": "Approved",
+    "paid": "Paid",
+    "rejected": "Rejected",
+    "closed": "Closed"
+  },
+  "relations": {
+    "spouse": "Spouse",
+    "child": "Child",
+    "parent": "Parent",
+    "sibling": "Sibling",
+    "other": "Other"
   }
 }

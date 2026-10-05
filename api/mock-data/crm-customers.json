@@ -1,0 +1,1019 @@
+{
+  "_readme": "Mock CRM / agency-management data used when DATA_MODE=mock. Dates may be absolute (2024-05-01) or relative to today: '+18d' = 18 days from now, '-45d' = 45 days ago. Family member id 'self' means the customer. Edit freely; restart the API to reload.",
+  "system": "Mock CRM (api/mock-data/crm-customers.json)",
+  "customers": [
+    {
+      "id": "crm-1001",
+      "nationalId": "031256787",
+      "fullName": "דנה לוי",
+      "birthDate": "1984-03-12",
+      "gender": "female",
+      "phones": [
+        "+972-52-441-8821"
+      ],
+      "emails": [
+        "dana.levi@example.com"
+      ],
+      "address": {
+        "street": "אבן גבירול 112",
+        "city": "תל אביב",
+        "zip": "6203823"
+      },
+      "status": "active",
+      "tags": [
+        "VIP",
+        "משפחה"
+      ],
+      "assignedAgent": "יוסי לוי",
+      "preferredChannel": "whatsapp",
+      "consent": {
+        "marketing": true,
+        "updatedAt": "-200d"
+      },
+      "customerSince": "2015-06-01",
+      "family": [
+        {
+          "id": "fm-1001-1",
+          "relation": "spouse",
+          "fullName": "אבי לוי",
+          "nationalId": "204567895",
+          "birthDate": "1982-11-02",
+          "customerId": "crm-1002"
+        },
+        {
+          "id": "fm-1001-2",
+          "relation": "child",
+          "fullName": "נועה לוי",
+          "nationalId": "334567898",
+          "birthDate": "2012-07-19"
+        },
+        {
+          "id": "fm-1001-3",
+          "relation": "child",
+          "fullName": "איתי לוי",
+          "nationalId": "041239872",
+          "birthDate": "2016-01-30"
+        }
+      ]
+    },
+    {
+      "id": "crm-1002",
+      "nationalId": "204567895",
+      "fullName": "אבי לוי",
+      "birthDate": "1982-11-02",
+      "gender": "male",
+      "phones": [
+        "054-771-2093"
+      ],
+      "emails": [
+        "avi.levi@example.com"
+      ],
+      "address": {
+        "street": "אבן גבירול 112",
+        "city": "תל אביב",
+        "zip": "6203823"
+      },
+      "status": "active",
+      "tags": [
+        "משפחה"
+      ],
+      "assignedAgent": "יוסי לוי",
+      "preferredChannel": "phone",
+      "consent": {
+        "marketing": true,
+        "updatedAt": "-200d"
+      },
+      "customerSince": "2015-06-01",
+      "family": [
+        {
+          "id": "fm-1002-1",
+          "relation": "spouse",
+          "fullName": "דנה לוי",
+          "nationalId": "031256787",
+          "birthDate": "1984-03-12",
+          "customerId": "crm-1001"
+        },
+        {
+          "id": "fm-1002-2",
+          "relation": "child",
+          "fullName": "נועה לוי",
+          "nationalId": "334567898",
+          "birthDate": "2012-07-19"
+        },
+        {
+          "id": "fm-1002-3",
+          "relation": "child",
+          "fullName": "איתי לוי",
+          "nationalId": "041239872",
+          "birthDate": "2016-01-30"
+        }
+      ]
+    },
+    {
+      "id": "crm-1003",
+      "nationalId": "309876548",
+      "fullName": "מיכל כהן",
+      "birthDate": "1990-09-05",
+      "gender": "female",
+      "phones": [
+        "0503398112"
+      ],
+      "emails": [
+        "michal.cohen@example.com"
+      ],
+      "address": {
+        "street": "מוריה 45",
+        "city": "חיפה",
+        "zip": "3457201"
+      },
+      "status": "active",
+      "tags": [],
+      "assignedAgent": "דנה כהן",
+      "preferredChannel": "email",
+      "consent": {
+        "marketing": false
+      },
+      "customerSince": "2021-02-14",
+      "family": [
+        {
+          "id": "fm-1003-1",
+          "relation": "child",
+          "fullName": "רון כהן",
+          "nationalId": "321098766",
+          "birthDate": "2019-04-22"
+        }
+      ]
+    },
+    {
+      "id": "crm-1004",
+      "nationalId": "055432108",
+      "fullName": "יוסף מזרחי",
+      "birthDate": "1971-12-20",
+      "gender": "male",
+      "phones": [
+        "+972 2 624 5530",
+        "052-880-1177"
+      ],
+      "emails": [
+        "yosef@mizrahi-bakery.example.com"
+      ],
+      "address": {
+        "street": "יפו 210",
+        "city": "ירושלים",
+        "zip": "9438325"
+      },
+      "status": "active",
+      "tags": [
+        "עסק"
+      ],
+      "assignedAgent": "דנה כהן",
+      "preferredChannel": "phone",
+      "consent": {
+        "marketing": true,
+        "updatedAt": "-30d"
+      },
+      "customerSince": "2010-09-01",
+      "family": []
+    },
+    {
+      "id": "crm-1005",
+      "nationalId": "312345671",
+      "fullName": "Sarah Goldberg",
+      "birthDate": "1979-06-14",
+      "gender": "female",
+      "phones": [
+        "+972-58-612-4490"
+      ],
+      "emails": [
+        "sarah.goldberg@example.com"
+      ],
+      "address": {
+        "street": "Ahuza 98",
+        "city": "Ra'anana",
+        "zip": "4321014"
+      },
+      "status": "active",
+      "tags": [
+        "English speaker"
+      ],
+      "assignedAgent": "יוסי לוי",
+      "preferredChannel": "email",
+      "consent": {
+        "marketing": true,
+        "updatedAt": "-400d"
+      },
+      "customerSince": "2019-03-03",
+      "family": [
+        {
+          "id": "fm-1005-1",
+          "relation": "spouse",
+          "fullName": "David Goldberg",
+          "nationalId": "345678122",
+          "birthDate": "1977-02-08"
+        },
+        {
+          "id": "fm-1005-2",
+          "relation": "child",
+          "fullName": "Maya Goldberg",
+          "nationalId": "223456716",
+          "birthDate": "2010-10-10"
+        },
+        {
+          "id": "fm-1005-3",
+          "relation": "parent",
+          "fullName": "Ruth Klein",
+          "nationalId": "356781237",
+          "birthDate": "1950-05-01"
+        }
+      ]
+    },
+    {
+      "id": "crm-1006",
+      "nationalId": "207654328",
+      "fullName": "אחמד חאג'",
+      "birthDate": "1987-01-25",
+      "gender": "male",
+      "phones": [
+        "052-6650-391"
+      ],
+      "emails": [],
+      "address": {
+        "street": "פאולוס השישי 30",
+        "city": "נצרת",
+        "zip": "1600030"
+      },
+      "status": "active",
+      "tags": [],
+      "assignedAgent": "יוסי לוי",
+      "preferredChannel": "whatsapp",
+      "consent": {
+        "marketing": true,
+        "updatedAt": "-90d"
+      },
+      "customerSince": "2022-08-11",
+      "family": [
+        {
+          "id": "fm-1006-1",
+          "relation": "spouse",
+          "fullName": "לילא חאג'",
+          "nationalId": "234567121",
+          "birthDate": "1990-03-03"
+        }
+      ]
+    },
+    {
+      "id": "crm-1007",
+      "nationalId": "367812344",
+      "fullName": "רותם אברהם",
+      "birthDate": "1996-08-08",
+      "gender": "other",
+      "phones": [
+        "053-221-7740"
+      ],
+      "emails": [
+        "rotem.a@example.com"
+      ],
+      "address": {
+        "city": "רמת גן"
+      },
+      "status": "lead",
+      "tags": [
+        "ליד מהאתר"
+      ],
+      "assignedAgent": "דנה כהן",
+      "preferredChannel": "whatsapp",
+      "consent": {
+        "marketing": true,
+        "updatedAt": "-3d"
+      },
+      "family": []
+    },
+    {
+      "id": "crm-1008",
+      "nationalId": "219876547",
+      "fullName": "גלית פרץ",
+      "birthDate": "1968-04-17",
+      "gender": "female",
+      "phones": [
+        "08-627-3381"
+      ],
+      "emails": [
+        "galit.peretz@example.com"
+      ],
+      "address": {
+        "street": "רגר 60",
+        "city": "באר שבע",
+        "zip": "8489323"
+      },
+      "status": "churned",
+      "tags": [],
+      "assignedAgent": "יוסי לוי",
+      "consent": {
+        "marketing": false
+      },
+      "customerSince": "2012-01-01",
+      "family": []
+    }
+  ],
+  "policies": [
+    {
+      "id": "pol-1",
+      "customerId": "crm-1001",
+      "policyNumber": "HR-HLT-458821",
+      "type": "health",
+      "carrier": "הראל",
+      "productName": "בריאות משפחתי פלטינום",
+      "status": "active",
+      "startDate": "-700d",
+      "endDate": "+30d",
+      "renewalDate": "+30d",
+      "premium": {
+        "amount": 642,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "coverageSummary": "ניתוחים בחו\"ל, השתלות, תרופות מחוץ לסל, רופא מומחה",
+      "insuredMemberIds": [
+        "self",
+        "fm-1001-1",
+        "fm-1001-2",
+        "fm-1001-3"
+      ],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-5d",
+        "nextDueAt": "+25d"
+      }
+    },
+    {
+      "id": "pol-2",
+      "customerId": "crm-1001",
+      "policyNumber": "CL-CAR-773410",
+      "type": "car",
+      "carrier": "כלל",
+      "productName": "מקיף רכב פרטי",
+      "status": "pending_renewal",
+      "startDate": "-347d",
+      "endDate": "+18d",
+      "renewalDate": "+18d",
+      "premium": {
+        "amount": 4280,
+        "currency": "ILS",
+        "frequency": "yearly"
+      },
+      "insuredMemberIds": [],
+      "payment": {
+        "method": "bank_debit",
+        "status": "overdue",
+        "lastPaidAt": "-380d",
+        "nextDueAt": "-12d"
+      },
+      "vehicle": {
+        "plate": "12-345-67",
+        "model": "Toyota Corolla",
+        "year": 2021
+      }
+    },
+    {
+      "id": "pol-3",
+      "customerId": "crm-1001",
+      "policyNumber": "MG-HOME-220019",
+      "type": "home",
+      "carrier": "מגדל",
+      "productName": "מבנה ותכולה",
+      "status": "active",
+      "startDate": "-150d",
+      "endDate": "+215d",
+      "renewalDate": "+215d",
+      "premium": {
+        "amount": 118,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "insuredMemberIds": [],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-5d",
+        "nextDueAt": "+25d"
+      },
+      "property": {
+        "address": "אבן גבירול 112, תל אביב"
+      }
+    },
+    {
+      "id": "pol-4",
+      "customerId": "crm-1001",
+      "policyNumber": "100245678",
+      "type": "life",
+      "carrier": "מנורה",
+      "productName": "ריסק למשכנתא",
+      "status": "active",
+      "startDate": "2019-08-01",
+      "endDate": "2044-08-01",
+      "premium": {
+        "amount": 96,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "insuredMemberIds": [
+        "self"
+      ],
+      "payment": {
+        "method": "bank_debit",
+        "status": "paid",
+        "lastPaidAt": "-10d",
+        "nextDueAt": "+20d"
+      }
+    },
+    {
+      "id": "pol-5",
+      "customerId": "crm-1002",
+      "policyNumber": "PH-CAR-339120",
+      "type": "car",
+      "carrier": "הפניקס",
+      "productName": "חובה + צד ג'",
+      "status": "active",
+      "startDate": "-90d",
+      "endDate": "+275d",
+      "renewalDate": "+275d",
+      "premium": {
+        "amount": 2950,
+        "currency": "ILS",
+        "frequency": "yearly"
+      },
+      "insuredMemberIds": [],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-90d"
+      },
+      "vehicle": {
+        "plate": "88-912-34",
+        "model": "Kia Sportage",
+        "year": 2019
+      }
+    },
+    {
+      "id": "pol-6",
+      "customerId": "crm-1003",
+      "policyNumber": "MN-HLT-901233",
+      "type": "health",
+      "carrier": "מנורה",
+      "productName": "בריאות פרט",
+      "status": "active",
+      "startDate": "-500d",
+      "endDate": "+230d",
+      "renewalDate": "+230d",
+      "premium": {
+        "amount": 189,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "coverageSummary": "ניתוחים בישראל, תרופות מחוץ לסל",
+      "insuredMemberIds": [
+        "self"
+      ],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-3d",
+        "nextDueAt": "+27d"
+      }
+    },
+    {
+      "id": "pol-7",
+      "customerId": "crm-1003",
+      "policyNumber": "AY-TRV-55120",
+      "type": "travel",
+      "carrier": "איילון",
+      "productName": "נסיעות לחו\"ל — אירופה",
+      "status": "expired",
+      "startDate": "-80d",
+      "endDate": "-66d",
+      "premium": {
+        "amount": 210,
+        "currency": "ILS",
+        "frequency": "yearly"
+      },
+      "insuredMemberIds": [
+        "self",
+        "fm-1003-1"
+      ],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-80d"
+      }
+    },
+    {
+      "id": "pol-8",
+      "customerId": "crm-1004",
+      "policyNumber": "CL-BIZ-118843",
+      "type": "business",
+      "carrier": "כלל",
+      "productName": "ביטוח עסק — מאפייה",
+      "status": "active",
+      "startDate": "-200d",
+      "endDate": "+165d",
+      "renewalDate": "+165d",
+      "premium": {
+        "amount": 1450,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "coverageSummary": "רכוש, אובדן הכנסות, צד ג', חבות מעבידים",
+      "insuredMemberIds": [],
+      "payment": {
+        "method": "bank_debit",
+        "status": "due",
+        "lastPaidAt": "-28d",
+        "nextDueAt": "+2d"
+      },
+      "property": {
+        "address": "יפו 210, ירושלים"
+      }
+    },
+    {
+      "id": "pol-9",
+      "customerId": "crm-1004",
+      "policyNumber": "HR-CAR-641008",
+      "type": "car",
+      "carrier": "הראל",
+      "productName": "מקיף רכב מסחרי",
+      "status": "active",
+      "startDate": "-20d",
+      "endDate": "+345d",
+      "renewalDate": "+345d",
+      "premium": {
+        "amount": 6100,
+        "currency": "ILS",
+        "frequency": "yearly"
+      },
+      "insuredMemberIds": [],
+      "payment": {
+        "method": "check",
+        "status": "paid",
+        "lastPaidAt": "-20d"
+      },
+      "vehicle": {
+        "plate": "54-221-80",
+        "model": "Ford Transit",
+        "year": 2022
+      }
+    },
+    {
+      "id": "pol-10",
+      "customerId": "crm-1005",
+      "policyNumber": "PH-HLT-772301",
+      "type": "health",
+      "carrier": "הפניקס",
+      "productName": "Health Family Plus",
+      "status": "active",
+      "startDate": "-1000d",
+      "endDate": "+95d",
+      "renewalDate": "+95d",
+      "premium": {
+        "amount": 455,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "coverageSummary": "Surgery abroad, transplants, specialist visits",
+      "insuredMemberIds": [
+        "self",
+        "fm-1005-1",
+        "fm-1005-2"
+      ],
+      "payment": {
+        "method": "credit_card",
+        "status": "failed",
+        "lastPaidAt": "-35d",
+        "nextDueAt": "-5d"
+      }
+    },
+    {
+      "id": "pol-11",
+      "customerId": "crm-1005",
+      "policyNumber": "MG-LIFE-310977",
+      "type": "life",
+      "carrier": "מגדל",
+      "productName": "Term life",
+      "status": "active",
+      "startDate": "2019-03-03",
+      "endDate": "2049-03-03",
+      "premium": {
+        "amount": 140,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "insuredMemberIds": [
+        "self"
+      ],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-6d",
+        "nextDueAt": "+24d"
+      }
+    },
+    {
+      "id": "pol-12",
+      "customerId": "crm-1006",
+      "policyNumber": "AY-CAR-118205",
+      "type": "car",
+      "carrier": "איילון",
+      "productName": "מקיף רכב פרטי",
+      "status": "active",
+      "startDate": "-300d",
+      "endDate": "+65d",
+      "renewalDate": "+65d",
+      "premium": {
+        "amount": 3890,
+        "currency": "ILS",
+        "frequency": "yearly"
+      },
+      "insuredMemberIds": [],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-300d"
+      },
+      "vehicle": {
+        "plate": "77-430-12",
+        "model": "Hyundai Tucson",
+        "year": 2023
+      }
+    },
+    {
+      "id": "pol-13",
+      "customerId": "crm-1006",
+      "policyNumber": "HR-HOME-552910",
+      "type": "home",
+      "carrier": "הראל",
+      "productName": "תכולה",
+      "status": "active",
+      "startDate": "-120d",
+      "endDate": "+245d",
+      "renewalDate": "+245d",
+      "premium": {
+        "amount": 74,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "insuredMemberIds": [],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-4d",
+        "nextDueAt": "+26d"
+      },
+      "property": {
+        "address": "פאולוס השישי 30, נצרת"
+      }
+    },
+    {
+      "id": "pol-14",
+      "customerId": "crm-1008",
+      "policyNumber": "CL-HLT-030318",
+      "type": "health",
+      "carrier": "כלל",
+      "productName": "בריאות פרט",
+      "status": "cancelled",
+      "startDate": "2012-01-01",
+      "endDate": "-150d",
+      "premium": {
+        "amount": 210,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "insuredMemberIds": [
+        "self"
+      ],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-180d"
+      }
+    },
+    {
+      "id": "pol-15",
+      "customerId": "crm-1005",
+      "policyNumber": "HR-DIS-207714",
+      "type": "disability",
+      "carrier": "הראל",
+      "productName": "Loss of work capacity",
+      "status": "active",
+      "startDate": "2020-01-01",
+      "endDate": "2045-01-01",
+      "premium": {
+        "amount": 210,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "coverageSummary": "75% of salary, 90-day waiting period",
+      "insuredMemberIds": [
+        "self"
+      ],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-6d",
+        "nextDueAt": "+24d"
+      }
+    },
+    {
+      "id": "pol-16",
+      "customerId": "crm-1005",
+      "policyNumber": "MG-PA-118520",
+      "type": "personal_accident",
+      "carrier": "מגדל",
+      "productName": "Kids personal accident",
+      "status": "active",
+      "startDate": "-200d",
+      "endDate": "+165d",
+      "renewalDate": "+165d",
+      "premium": {
+        "amount": 39,
+        "currency": "ILS",
+        "frequency": "monthly"
+      },
+      "insuredMemberIds": [
+        "fm-1005-2"
+      ],
+      "payment": {
+        "method": "credit_card",
+        "status": "paid",
+        "lastPaidAt": "-6d",
+        "nextDueAt": "+24d"
+      }
+    }
+  ],
+  "claims": [
+    {
+      "id": "clm-1",
+      "customerId": "crm-1001",
+      "policyId": "pol-2",
+      "claimNumber": "CL-CLM-2026-08812",
+      "status": "awaiting_documents",
+      "openedAt": "-36d",
+      "amountClaimed": 18400,
+      "currency": "ILS",
+      "description": "תאונה בחניון — נזק לפגוש קדמי ולפנס",
+      "handler": "שמאי: רוני ברק",
+      "missingDocuments": [
+        "דוח שמאי מעודכן"
+      ]
+    },
+    {
+      "id": "clm-2",
+      "customerId": "crm-1001",
+      "policyId": "pol-1",
+      "claimNumber": "HR-CLM-2026-01377",
+      "status": "paid",
+      "openedAt": "-130d",
+      "closedAt": "-118d",
+      "amountClaimed": 9600,
+      "amountPaid": 9600,
+      "currency": "ILS",
+      "description": "ניתוח פרטי — נועה (שקדים)"
+    },
+    {
+      "id": "clm-3",
+      "customerId": "crm-1002",
+      "policyId": "pol-5",
+      "claimNumber": "PH-CLM-2025-55102",
+      "status": "rejected",
+      "openedAt": "-260d",
+      "closedAt": "-230d",
+      "amountClaimed": 3200,
+      "amountPaid": 0,
+      "currency": "ILS",
+      "description": "שבר שמשה — מחוץ לכיסוי (חובה + צד ג')"
+    },
+    {
+      "id": "clm-4",
+      "customerId": "crm-1004",
+      "policyId": "pol-8",
+      "claimNumber": "CL-CLM-2026-09920",
+      "status": "open",
+      "openedAt": "-10d",
+      "amountClaimed": 42000,
+      "currency": "ILS",
+      "description": "נזקי מים במאפייה — צנרת שהתפוצצה, השבתה של 3 ימים",
+      "handler": "מחלקת תביעות עסקים"
+    },
+    {
+      "id": "clm-5",
+      "customerId": "crm-1004",
+      "policyId": "pol-8",
+      "claimNumber": "CL-CLM-2025-04411",
+      "status": "closed",
+      "openedAt": "-420d",
+      "closedAt": "-380d",
+      "amountClaimed": 7800,
+      "amountPaid": 6500,
+      "currency": "ILS",
+      "description": "פריצה וגניבת ציוד"
+    },
+    {
+      "id": "clm-6",
+      "customerId": "crm-1005",
+      "policyId": "pol-10",
+      "claimNumber": "PH-CLM-2026-31840",
+      "status": "approved",
+      "openedAt": "-20d",
+      "amountClaimed": 12500,
+      "currency": "ILS",
+      "description": "MRI and specialist consultation — Ruth (not insured) / Maya (insured)",
+      "handler": "Health claims desk"
+    },
+    {
+      "id": "clm-7",
+      "customerId": "crm-1006",
+      "policyId": "pol-12",
+      "claimNumber": "AY-CLM-2026-11230",
+      "status": "open",
+      "openedAt": "-38d",
+      "amountClaimed": 6100,
+      "currency": "ILS",
+      "description": "פגיעה מאחור ברמזור — צד ג' מבוטח בחברה אחרת"
+    },
+    {
+      "id": "clm-8",
+      "customerId": "crm-1008",
+      "policyId": "pol-14",
+      "claimNumber": "CL-CLM-2024-00918",
+      "status": "closed",
+      "openedAt": "-700d",
+      "closedAt": "-690d",
+      "amountClaimed": 2400,
+      "amountPaid": 2400,
+      "currency": "ILS",
+      "description": "החזר תרופות"
+    }
+  ],
+  "interactions": [
+    {
+      "id": "int-1",
+      "customerId": "crm-1001",
+      "channel": "whatsapp",
+      "direction": "in",
+      "summary": "שאלה על מועד חידוש ביטוח הרכב ועל החיוב שנכשל",
+      "at": "-1d"
+    },
+    {
+      "id": "int-2",
+      "customerId": "crm-1001",
+      "channel": "phone",
+      "direction": "out",
+      "summary": "עדכון סטטוס תביעת הרכב — ממתינים לשמאי",
+      "at": "-6d",
+      "by": "יוסי לוי"
+    },
+    {
+      "id": "int-3",
+      "customerId": "crm-1001",
+      "channel": "email",
+      "direction": "out",
+      "summary": "נשלחה הצעת חידוש למקיף רכב",
+      "at": "-9d",
+      "by": "יוסי לוי"
+    },
+    {
+      "id": "int-4",
+      "customerId": "crm-1003",
+      "channel": "email",
+      "direction": "in",
+      "summary": "מבקשת הצעה לביטוח בריאות לבן (רון)",
+      "at": "-4d"
+    },
+    {
+      "id": "int-5",
+      "customerId": "crm-1004",
+      "channel": "phone",
+      "direction": "in",
+      "summary": "דיווח על נזקי מים במאפייה",
+      "at": "-10d"
+    },
+    {
+      "id": "int-6",
+      "customerId": "crm-1004",
+      "channel": "meeting",
+      "direction": "out",
+      "summary": "פגישה עם שמאי במאפייה",
+      "at": "-7d",
+      "by": "דנה כהן"
+    },
+    {
+      "id": "int-7",
+      "customerId": "crm-1005",
+      "channel": "email",
+      "direction": "in",
+      "summary": "Credit card replaced — payment failed, asks to update details",
+      "at": "-2d"
+    },
+    {
+      "id": "int-8",
+      "customerId": "crm-1006",
+      "channel": "whatsapp",
+      "direction": "in",
+      "summary": "שלח תמונות מהתאונה ודו\"ח משטרה",
+      "at": "-36d"
+    },
+    {
+      "id": "int-9",
+      "customerId": "crm-1007",
+      "channel": "whatsapp",
+      "direction": "in",
+      "summary": "מתעניין/ת בביטוח דירה ורכב — ליד מהאתר",
+      "at": "-3d"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "customerId": "crm-1001",
+      "name": "פוליסת בריאות משפחתי.pdf",
+      "kind": "policy",
+      "uploadedAt": "-700d"
+    },
+    {
+      "id": "doc-2",
+      "customerId": "crm-1001",
+      "name": "רישיון רכב 12-345-67.jpg",
+      "kind": "license",
+      "uploadedAt": "-347d"
+    },
+    {
+      "id": "doc-3",
+      "customerId": "crm-1001",
+      "name": "דו\"ח שמאי — תביעה 08812.pdf",
+      "kind": "claim",
+      "uploadedAt": "-20d"
+    },
+    {
+      "id": "doc-4",
+      "customerId": "crm-1004",
+      "name": "תמונות נזק מים.zip",
+      "kind": "claim",
+      "uploadedAt": "-9d"
+    },
+    {
+      "id": "doc-5",
+      "customerId": "crm-1005",
+      "name": "ID - Sarah Goldberg.pdf",
+      "kind": "id",
+      "uploadedAt": "-1000d"
+    },
+    {
+      "id": "doc-6",
+      "customerId": "crm-1006",
+      "name": "דו\"ח משטרה.pdf",
+      "kind": "claim",
+      "uploadedAt": "-36d"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "tsk-1",
+      "customerId": "crm-1001",
+      "title": "לחדש מקיף רכב ולעדכן אמצעי תשלום",
+      "dueAt": "+5d",
+      "status": "open",
+      "assignee": "יוסי לוי"
+    },
+    {
+      "id": "tsk-2",
+      "customerId": "crm-1001",
+      "title": "מעקב מול שמאי — תביעת רכב",
+      "dueAt": "-2d",
+      "status": "open",
+      "assignee": "יוסי לוי"
+    },
+    {
+      "id": "tsk-3",
+      "customerId": "crm-1003",
+      "title": "להכין הצעת בריאות לרון",
+      "dueAt": "+3d",
+      "status": "open",
+      "assignee": "דנה כהן"
+    },
+    {
+      "id": "tsk-4",
+      "customerId": "crm-1005",
+      "title": "Update credit card for health policy",
+      "dueAt": "+1d",
+      "status": "open",
+      "assignee": "יוסי לוי"
+    },
+    {
+      "id": "tsk-5",
+      "customerId": "crm-1004",
+      "title": "לשלוח מסמכי תביעה לחברה",
+      "dueAt": "-12d",
+      "status": "done",
+      "assignee": "דנה כהן"
+    }
+  ]
+}

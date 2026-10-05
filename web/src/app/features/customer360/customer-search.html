@@ -1,0 +1,88 @@
+<!-- Mobile trigger (hidden from md up) -->
+<button type="button" class="btn ghost icon trigger" (click)="openMobile()" [attr.aria-label]="'search.open' | translate">
+  <ah-icon name="search" />
+</button>
+
+<div class="box">
+  <ah-icon name="search" [size]="18" class="lead" />
+  <input
+    #input
+    type="search"
+    role="combobox"
+    autocomplete="off"
+    spellcheck="false"
+    [placeholder]="'search.placeholder' | translate"
+    [attr.aria-label]="'search.placeholder' | translate"
+    aria-autocomplete="list"
+    aria-controls="cs-list"
+    [attr.aria-expanded]="showPanel()"
+    [attr.aria-activedescendant]="active() >= 0 ? optionId(active()) : null"
+    [value]="term()"
+    (input)="onInput($any($event.target).value)"
+    (keydown)="onKey($event)"
+    (focus)="focused.set(true)"
+  />
+  @if (term()) {
+    <button type="button" class="clear" (click)="onInput(''); input.focus()" [attr.aria-label]="'search.clear' | translate">
+      <ah-icon name="close" [size]="16" />
+    </button>
+  } @else {
+    <kbd class="hint" aria-hidden="true">Ctrl K</kbd>
+  }
+  <button type="button" class="btn ghost icon close-mobile" (click)="close(true)" [attr.aria-label]="'search.close' | translate">
+    <ah-icon name="close" />
+  </button>
+</div>
+
+@if (showPanel()) {
+  <div class="panel">
+    @if (tooShort()) {
+      <p class="state">{{ 'search.hint' | translate }}</p>
+    } @else if (loading() && !hits().length) {
+      <p class="state" role="status">{{ 'common.loading' | translate }}</p>
+    } @else if (results.error()) {
+      <p class="state error" role="alert">{{ 'search.error' | translate }}</p>
+    } @else if (!hits().length) {
+      <p class="state" role="status">{{ 'search.noResults' | translate: { q: term().trim() } }}</p>
+    }
+    <ul id="cs-list" role="listbox" [attr.aria-label]="'search.results' | translate">
+      @for (hit of hits(); track hit.customerId; let i = $index) {
+        <li
+          role="option"
+          [id]="optionId(i)"
+          [attr.aria-selected]="i === active()"
+          [class.active]="i === active()"
+          (mousedown)="$event.preventDefault()"
+          (click)="select(hit)"
+          (mouseenter)="active.set(i)"
+        >
+          <span class="avatar" aria-hidden="true">{{ hit.fullName.charAt(0) }}</span>
+          <span class="main">
+            <strong>{{ hit.fullName }}</strong>
+            <span class="meta">
+              <span class="ltr-text">{{ hit.nationalIdMasked }}</span>
+              @if (hit.phone) {
+                · <span class="ltr-text">{{ hit.phone }}</span>
+              }
+              @if (hit.city) {
+                · {{ hit.city }}
+              }
+            </span>
+            @if (hit.matchedFamilyMember) {
+              <span class="note">{{ 'search.viaFamily' | translate: { name: hit.matchedFamilyMember } }}</span>
+            }
+          </span>
+          <span class="side">
+            <span class="badge primary">
+              {{ 'search.matchedOn.' + hit.matchedOn | translate }}
+              @if (hit.matchedPolicyNumber) {
+                <span class="ltr-text">{{ hit.matchedPolicyNumber }}</span>
+              }
+            </span>
+            <span class="muted">{{ 'search.activePolicies' | translate: { count: hit.activePolicies } }}</span>
+          </span>
+        </li>
+      }
+    </ul>
+  </div>
+}

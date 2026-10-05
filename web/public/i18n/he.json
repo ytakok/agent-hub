@@ -24,7 +24,12 @@
     "toggle": "פתיחה/סגירה של הניווט",
     "skipToContent": "דילוג לתוכן"
   },
-  "roles": { "owner": "בעלים", "admin": "מנהל/ת", "agent": "סוכן/ת", "viewer": "צפייה בלבד" },
+  "roles": {
+    "owner": "בעלים",
+    "admin": "מנהל/ת",
+    "agent": "סוכן/ת",
+    "viewer": "צפייה בלבד"
+  },
   "auth": {
     "or": "או",
     "togglePassword": "הצגה או הסתרה של הסיסמה",
@@ -82,7 +87,10 @@
       "done": "הסיסמה עודכנה. אפשר להתחבר עכשיו.",
       "requestNew": "בקשת קישור חדש"
     },
-    "verify": { "done": "כתובת האימייל אומתה.", "continue": "המשך" },
+    "verify": {
+      "done": "כתובת האימייל אומתה.",
+      "continue": "המשך"
+    },
     "onboarding": {
       "title": "השלמת ההרשמה",
       "subtitle": "בחרו שם משתמש והקימו סביבת עבודה לסוכנות, או הצטרפו לקיימת עם קוד הזמנה.",
@@ -117,7 +125,11 @@
     "subtitle": "תמונת מצב מכל הערוצים שלך",
     "updated": "עודכן",
     "range": "טווח תאריכים",
-    "ranges": { "7d": "7 ימים", "30d": "30 יום", "90d": "90 יום" },
+    "ranges": {
+      "7d": "7 ימים",
+      "30d": "30 יום",
+      "90d": "90 יום"
+    },
     "refresh": "רענון",
     "loadError": "לא הצלחנו לטעון את לוח הבקרה."
   },
@@ -125,15 +137,32 @@
     "newLeads": "לידים חדשים",
     "openMessages": "פניות פתוחות",
     "renewalsDue": "חידושים קרובים",
-    "pipelineValue": "צנרת פתוחה",
+    "pipelineValue": "שווי כספי פתוח",
     "sheetRows": "שורות בגיליון",
     "vsPrevious": "מול התקופה הקודמת"
   },
   "widgets": {
-    "crm": { "title": "צנרת מכירות (CRM)", "chartLabel": "לידים לפי שלב", "recentLeads": "לידים אחרונים", "leads": "לידים" },
-    "whatsapp": { "title": "פניות בוואטסאפ" },
-    "gmail": { "title": "מיילים מלקוחות" },
-    "messages": { "empty": "אין פניות ממתינות!", "open": "פתוחות", "overdue": "באיחור", "sla": { "overdue": "חריגה מ-SLA", "soon": "מועד קרוב" } },
+    "crm": {
+      "title": "צנרת מכירות (CRM)",
+      "chartLabel": "לידים לפי שלב",
+      "recentLeads": "לידים אחרונים",
+      "leads": "לידים"
+    },
+    "whatsapp": {
+      "title": "פניות בוואטסאפ"
+    },
+    "gmail": {
+      "title": "מיילים מלקוחות"
+    },
+    "messages": {
+      "empty": "אין פניות ממתינות!",
+      "open": "פתוחות",
+      "overdue": "באיחור",
+      "sla": {
+        "overdue": "חריגה מ-SLA",
+        "soon": "מועד קרוב"
+      }
+    },
     "renewals": {
       "title": "חידושי פוליסות",
       "empty": "אין חידושים בטווח הזה.",
@@ -142,9 +171,16 @@
       "inDays": "בעוד {{days}} ימים",
       "more": "ועוד {{count}}"
     },
-    "sheets": { "title": "Google Sheets", "synced": "סונכרן" },
-    "activity": { "title": "פעילות אחרונה" },
-    "health": { "title": "חיבורים" }
+    "sheets": {
+      "title": "Google Sheets",
+      "synced": "סונכרן"
+    },
+    "activity": {
+      "title": "פעילות אחרונה"
+    },
+    "health": {
+      "title": "חיבורים"
+    }
   },
   "widgetNames": {
     "kpis": "מדדים מרכזיים",
@@ -156,9 +192,30 @@
     "activity": "פעילות",
     "health": "חיבורים"
   },
-  "stages": { "new": "חדש", "contacted": "נוצר קשר", "quoted": "נשלחה הצעה", "negotiation": "משא ומתן", "won": "נסגר", "lost": "אבוד" },
-  "messageStatus": { "new": "חדשה", "assigned": "שויכה", "replied": "נענתה", "closed": "סגורה" },
-  "policyTypes": { "car": "רכב", "home": "דירה", "life": "חיים", "health": "בריאות", "business": "עסק", "travel": "נסיעות" },
+  "stages": {
+    "new": "חדש",
+    "contacted": "נוצר קשר",
+    "quoted": "נשלחה הצעה",
+    "negotiation": "משא ומתן",
+    "won": "נסגר",
+    "lost": "אבוד"
+  },
+  "messageStatus": {
+    "new": "חדשה",
+    "assigned": "שויכה",
+    "replied": "נענתה",
+    "closed": "סגורה"
+  },
+  "policyTypes": {
+    "car": "רכב",
+    "home": "דירה",
+    "life": "חיים",
+    "health": "בריאות",
+    "business": "עסק",
+    "travel": "נסיעות",
+    "disability": "אובדן כושר עבודה",
+    "personal_accident": "תאונות אישיות"
+  },
   "activity": {
     "lead_created": "ליד חדש: {{name}}",
     "message_received": "הודעה מ{{name}}",
@@ -166,20 +223,44 @@
     "row_added": "שורה חדשה בגיליון: {{name}}",
     "stage_changed": "שינוי שלב: {{name}}"
   },
-  "sources": { "crm": "CRM", "sheets": "Google Sheets", "gmail": "Gmail", "whatsapp": "וואטסאפ" },
-  "health": { "connected": "מחובר", "error": "שגיאה", "disabled": "כבוי", "mock": "נתוני דמו" },
-  "customers": { "title": "לקוחות", "count": "{{count}} לקוחות" },
-  "customerStatus": { "lead": "ליד", "active": "פעיל", "churned": "עזב" },
+  "sources": {
+    "crm": "CRM",
+    "sheets": "Google Sheets",
+    "gmail": "Gmail",
+    "whatsapp": "וואטסאפ"
+  },
+  "health": {
+    "connected": "מחובר",
+    "error": "שגיאה",
+    "disabled": "כבוי",
+    "mock": "נתוני דמו"
+  },
+  "customers": {
+    "title": "לקוחות",
+    "count": "{{count}} לקוחות"
+  },
+  "customerStatus": {
+    "lead": "ליד",
+    "active": "פעיל",
+    "churned": "עזב"
+  },
   "messages": {
     "title": "תיבת פניות",
     "count": "{{count}} הודעות",
-    "channels": { "all": "הכול", "whatsapp": "וואטסאפ", "gmail": "אימייל" }
+    "channels": {
+      "all": "הכול",
+      "whatsapp": "וואטסאפ",
+      "gmail": "אימייל"
+    }
   },
   "settings": {
     "title": "הגדרות",
     "saved": "נשמר.",
     "saveError": "השמירה נכשלה. נסו שוב.",
-    "profile": { "title": "הפרופיל שלי", "phone": "טלפון" },
+    "profile": {
+      "title": "הפרופיל שלי",
+      "phone": "טלפון"
+    },
     "org": {
       "title": "הארגון",
       "readOnly": "רק בעלים ומנהלים יכולים לשנות הגדרות אלה.",
@@ -192,12 +273,166 @@
       "adminNote": "מנהל/ת פלטפורמה: שינויים חלים על הארגון הזה מיד.",
       "planNote": "כלול בחבילת {{plan}} שלכם. לשינוי פנו אלינו."
     },
-    "password": { "title": "שינוי סיסמה", "current": "סיסמה נוכחית", "submit": "עדכון סיסמה" }
+    "password": {
+      "title": "שינוי סיסמה",
+      "current": "סיסמה נוכחית",
+      "submit": "עדכון סיסמה"
+    }
   },
   "features": {
-    "integration": { "crm": "CRM", "sheets": "Google Sheets", "gmail": "Gmail", "whatsapp": "וואטסאפ" },
-    "dashboard": { "renewals": "רכיב חידושים", "activity": "פיד פעילות" },
-    "module": { "customers": "מודול לקוחות", "messages": "מודול פניות" },
-    "auth": { "usernameLogin": "התחברות עם שם משתמש", "google": "התחברות עם Google" }
+    "integration": {
+      "crm": "CRM",
+      "sheets": "Google Sheets",
+      "gmail": "Gmail",
+      "whatsapp": "וואטסאפ"
+    },
+    "dashboard": {
+      "renewals": "רכיב חידושים",
+      "activity": "פיד פעילות"
+    },
+    "module": {
+      "customers": "מודול לקוחות",
+      "messages": "מודול פניות"
+    },
+    "auth": {
+      "usernameLogin": "התחברות עם שם משתמש",
+      "google": "התחברות עם Google"
+    },
+    "search": {
+      "customer360": "חיפוש לקוחות ותצוגת 360°"
+    }
+  },
+  "search": {
+    "open": "חיפוש לקוחות",
+    "placeholder": "חיפוש לפי שם, ת.ז., טלפון או מספר פוליסה",
+    "clear": "ניקוי החיפוש",
+    "close": "סגירת החיפוש",
+    "hint": "הקלידו לפחות 2 תווים — ת.ז., טלפון, מספר פוליסה או שם",
+    "error": "החיפוש אינו זמין כרגע.",
+    "noResults": "לא נמצא לקוח עבור \"{{q}}\"",
+    "results": "לקוחות שנמצאו",
+    "viaFamily": "בן/בת משפחה: {{name}}",
+    "matchedOn": {
+      "nationalId": "ת.ז.",
+      "phone": "טלפון",
+      "policyNumber": "פוליסה",
+      "name": "שם"
+    },
+    "activePolicies": "{{count}} פוליסות פעילות"
+  },
+  "customer360": {
+    "back": "חזרה",
+    "notFound": "הלקוח לא נמצא",
+    "loadError": "לא הצלחנו לטעון את פרטי הלקוח.",
+    "idShort": "ת.ז.",
+    "showId": "הצגת מספר ת.ז.",
+    "hideId": "הסתרת מספר ת.ז.",
+    "age": "גיל {{age}}",
+    "since": "לקוח מאז {{year}}",
+    "agent": "מטפל: {{name}}",
+    "call": "התקשר",
+    "phone": "טלפון",
+    "email": "דוא\"ל",
+    "address": "כתובת",
+    "consent": "הסכמה לדיוור",
+    "consentYes": "מאושרת",
+    "consentNo": "לא אושרה",
+    "attention": "דורש טיפול",
+    "today": "היום",
+    "source": "מקור: {{system}}",
+    "policies": {
+      "active": "פוליסות פעילות",
+      "all": "כל הפוליסות",
+      "summary": "{{count}} פוליסות",
+      "total": "סה\"כ",
+      "perYear": "לשנה",
+      "product": "מוצר",
+      "carrier": "חברה",
+      "annualPremium": "פרמיה שנתית",
+      "renewal": "חידוש",
+      "none": "אין פוליסות.",
+      "showAll": "הצג הכל ({{count}} לא פעילות)",
+      "showActive": "הצג פעילות בלבד"
+    },
+    "claims": {
+      "title": "תביעות",
+      "summary": "{{open}} פתוחות · {{closed}} סגורות",
+      "claim": "תביעה",
+      "missing": "חסר: {{docs}}.",
+      "openedAgo": "נפתחה",
+      "none": "אין תביעות."
+    },
+    "family": {
+      "title": "משפחה",
+      "ownPolicies": "לקוח — פוליסות משלו",
+      "noCover": "אין ביטוח",
+      "none": "לא נרשמו בני משפחה."
+    },
+    "gaps": {
+      "title": "פערי כיסוי"
+    },
+    "tasks": {
+      "title": "משימות פתוחות",
+      "today": "היום",
+      "thisWeek": "השבוע",
+      "none": "אין משימות פתוחות."
+    },
+    "documents": {
+      "title": "מסמכים"
+    },
+    "timeline": {
+      "title": "ציר זמן",
+      "none": "אין פעילות עדיין.",
+      "interaction": {
+        "phone": "שיחת טלפון: {{summary}}",
+        "whatsapp": "וואטסאפ: {{summary}}",
+        "email": "אימייל: {{summary}}",
+        "meeting": "פגישה: {{summary}}",
+        "sms": "SMS: {{summary}}"
+      },
+      "document": "הועלה מסמך: {{name}}",
+      "claimOpened": "נפתחה תביעה {{claim}}",
+      "claimClosed": "נסגרה תביעה {{claim}}"
+    },
+    "alerts": {
+      "payment_overdue": "תשלום נכשל או באיחור בפוליסה {{policyNumber}} ({{days}} ימים)",
+      "renewal_due": "פוליסה {{policyNumber}} מתחדשת בעוד {{days}} ימים",
+      "policy_expired": "פוליסה {{policyNumber}} פגה לפני {{days}} ימים",
+      "claim_open_long": "תביעה {{claimNumber}} פתוחה כבר {{days}} ימים",
+      "family_uninsured_health": "ל{{name}} אין ביטוח בריאות",
+      "consent_missing": "לא קיימת הסכמה לדיוור",
+      "task_overdue": "משימה באיחור: {{title}}",
+      "coverage_gap_disability": "אין ביטוח אובדן כושר עבודה, והוא רלוונטי לפי פרופיל ההכנסה",
+      "coverage_gap_child_accident": "ילדים ללא ביטוח תאונות אישיות ({{count}})"
+    }
+  },
+  "policyStatus": {
+    "active": "פעילה",
+    "pending_renewal": "ממתינה לחידוש",
+    "expired": "פגה",
+    "cancelled": "בוטלה",
+    "suspended": "מושהית"
+  },
+  "paymentStatus": {
+    "paid": "שולם",
+    "due": "לתשלום",
+    "overdue": "תשלום באיחור",
+    "failed": "תשלום נכשל"
+  },
+  "claimStatus": {
+    "open": "פתוחה",
+    "awaiting_documents": "ממתין למסמכים",
+    "in_review": "בבדיקה",
+    "approved": "אושרה",
+    "paid": "שולמה",
+    "rejected": "נדחתה",
+    "closed": "נסגרה"
+  },
+  "relations": {
+    "spouse": "בן/בת זוג",
+    "child": "ילד/ה",
+    "parent": "הורה",
+    "sibling": "אח/ות",
+    "other": "אחר"
   }
 }

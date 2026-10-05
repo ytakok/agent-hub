@@ -19,7 +19,9 @@
       <span>{{ tenantName() }}</span>
     </a>
 
-    <span class="spacer"></span>
+    <!-- Global customer search (every page); falls back to a spacer when the feature is off -->
+    <ah-customer-search *ahFeature="'search.customer360'; else spacer" />
+    <ng-template #spacer><span class="spacer"></span></ng-template>
 
     <ah-language-switch />
 

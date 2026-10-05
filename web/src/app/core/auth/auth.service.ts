@@ -133,12 +133,13 @@ export class AuthService {
     return profile;
   }
 
-  /** Always resolves, whether or not the email exists — the UI must not reveal account existence. */
+  /** Hides missing accounts but propagates delivery and configuration failures. */
   async forgotPassword(email: string): Promise<void> {
     try {
       await sendPasswordResetEmail(this.firebase.auth, email.trim(), { url: `${location.origin}/auth/login` });
     } catch (e) {
-      if (e instanceof FirebaseError && e.code === 'auth/too-many-requests') throw e;
+      if (e instanceof FirebaseError && e.code === 'auth/user-not-found') return;
+      throw e;
     }
   }
 

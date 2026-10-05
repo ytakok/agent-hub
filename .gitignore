@@ -3,8 +3,27 @@ dist/
 .angular/
 coverage/
 .env
+**/.env.local
 *.log
 firebase/.emulator-data/
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
+
+# ---- Secrets: never commit ----
+# Local Firebase web config (template: web/src/environments/firebase.config.example.ts)
+web/src/environments/firebase.config.ts
+# Service-account / private keys (keep them outside the repo entirely)
+*firebase-adminsdk*.json
+*service-account*.json
+*serviceAccount*.json
+*.pem
+*.p12
+*.key
+# Env files (only the .example templates are committed)
+.env.*
+!.env.example
+
+# ---- Build / local artifacts ----
+*.tsbuildinfo
+firebase/*.bak

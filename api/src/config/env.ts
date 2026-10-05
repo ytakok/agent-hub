@@ -15,11 +15,13 @@ export const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
   /** `mock` serves generated data for every integration; `live` calls the real providers. */
   DATA_MODE: z.enum(['mock', 'live']).default('mock'),
-  FIREBASE_PROJECT_ID: z.string().min(1).default('demo-agency-hub'),
+  FIREBASE_PROJECT_ID: z.string().min(1).default('sample-app-5fff2'),
   /** Web API key, used only for username login (Identity Toolkit). Any value works against the emulator. */
   FIREBASE_WEB_API_KEY: z.string().default('demo-key'),
   FIREBASE_AUTH_EMULATOR_HOST: z.string().optional(),
   FIRESTORE_EMULATOR_HOST: z.string().optional(),
+  /** Service-account key file, needed whenever Auth or Firestore is the real Firebase (not the emulator). */
+  GOOGLE_APPLICATION_CREDENTIALS: z.string().optional(),
   CORS_ORIGINS: csv.pipe(z.array(z.url())).default(['http://localhost:4200']),
   N8N_SECRET: z.string().min(32).optional(),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),

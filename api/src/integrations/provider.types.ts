@@ -1,4 +1,12 @@
 import type {
+  Claim,
+  CustomerDocument,
+  CustomerInteraction,
+  CustomerProfile,
+  CustomerSearchField,
+  CustomerTask,
+  FamilyMember,
+  PolicyDetail,
   Customer,
   DataSource,
   IntegrationHealth,
@@ -54,3 +62,47 @@ export const CRM_PROVIDER = Symbol('CRM_PROVIDER');
 export const SHEETS_PROVIDER = Symbol('SHEETS_PROVIDER');
 export const GMAIL_PROVIDER = Symbol('GMAIL_PROVIDER');
 export const WHATSAPP_PROVIDER = Symbol('WHATSAPP_PROVIDER');
+
+// ---------- Customer records (CRM / agency-management system) ----------
+
+/** Normalized search criteria; any field set is OR-ed. Values are already normalized (see customer-search.util). */
+export interface CustomerCriteria {
+  nationalId?: string;
+  phone?: string;
+  policyNumber?: string;
+  name?: string;
+}
+
+export type CustomerRecord = Omit<CustomerProfile, 'nationalIdMasked'> & {
+  family: Omit<FamilyMember, 'coveredByPolicyNumbers'>[];
+};
+
+export interface CustomerMatch {
+  customer: CustomerRecord;
+  matchedOn: CustomerSearchField;
+  matchedPolicyNumber?: string;
+  /** Set when the ID matched a family member rather than the policyholder. */
+  matchedFamilyMember?: string;
+  activePolicies: number;
+}
+
+export interface CustomerBundle {
+  customer: CustomerRecord;
+  policies: PolicyDetail[];
+  claims: Omit<Claim, 'isOpen' | 'policyNumber' | 'type'>[];
+  interactions: CustomerInteraction[];
+  documents: CustomerDocument[];
+  tasks: CustomerTask[];
+}
+
+/**
+ * Source of truth for customers, policies and claims — the agency's CRM / management system.
+ * Live implementations call that system's API (or read records n8n synced into Firestore).
+ */
+export interface CustomerRecordsProvider {
+  readonly system: string;
+  findCustomers(ctx: ProviderContext, criteria: CustomerCriteria, limit: number): Promise<CustomerMatch[]>;
+  getCustomerBundle(ctx: ProviderContext, customerId: string): Promise<CustomerBundle | null>;
+}
+
+export const CUSTOMER_RECORDS_PROVIDER = Symbol('CUSTOMER_RECORDS_PROVIDER');

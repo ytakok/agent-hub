@@ -9,6 +9,7 @@ import { RolesGuard } from './common/guards/roles.guard.js';
 import { TenantGuard } from './common/guards/tenant.guard.js';
 import { AuditInterceptor } from './common/interceptors/audit.interceptor.js';
 import { AppConfigModule } from './config/config.module.js';
+import { Customer360Module } from './customer-360/customer-360.controller.js';
 import { CustomersModule } from './customers/customers.controller.js';
 import { DashboardModule } from './dashboard/dashboard.module.js';
 import { FeatureGuard } from './feature-flags/feature.guard.js';
@@ -47,6 +48,7 @@ import { UsersModule } from './users/users.module.js';
     TenantsModule,
     DashboardModule,
     CustomersModule,
+    Customer360Module,
     MessagesModule,
   ],
   providers: [

@@ -1,10 +1,8 @@
 import type { Environment } from './environment.model';
 import { firebaseConfig } from './firebase.config';
 
-// Production. Fill from Firebase console → Project settings → Your apps (these values are public by design;
-// access is enforced by Firebase Auth, App Check, security rules and the API).
 export const environment: Environment = {
-  production: true,
+  production: false,
   apiBaseUrl: '/api',
   useEmulators: false,
   useLiveAuth: true,

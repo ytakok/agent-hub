@@ -1,6 +1,13 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
 import type { DataSource, IntegrationHealth } from '@agency-hub/shared';
-import type { CrmProvider, GmailProvider, ProviderContext, SheetsProvider, WhatsAppProvider } from '../provider.types.js';
+import type {
+  CrmProvider,
+  CustomerRecordsProvider,
+  GmailProvider,
+  ProviderContext,
+  SheetsProvider,
+  WhatsAppProvider,
+} from '../provider.types.js';
 
 /*
  * Live providers — implement one at a time and switch DATA_MODE=live.
@@ -56,4 +63,19 @@ export class LiveGmailProvider extends NotConnected implements GmailProvider {
 export class LiveWhatsAppProvider extends NotConnected implements WhatsAppProvider {
   readonly source = 'whatsapp' as const;
   listRequests(): never { return this.todo(); }
+}
+
+/**
+ * TODO: the agency's CRM / management system (e.g. a carrier portal API, Salesforce, Monday, or records
+ * synced into Firestore by n8n). Normalize identifiers with customer-search.util before comparing.
+ */
+@Injectable()
+export class LiveCustomerRecordsProvider implements CustomerRecordsProvider {
+  readonly system = 'CRM (not connected)';
+  findCustomers(): never {
+    throw new NotImplementedException('Customer records live provider is not implemented yet');
+  }
+  getCustomerBundle(): never {
+    throw new NotImplementedException('Customer records live provider is not implemented yet');
+  }
 }

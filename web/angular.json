@@ -64,6 +64,17 @@
                   "with": "src/environments/environment.development.ts"
                 }
               ]
+            },
+            "development-live-auth": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.live.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -76,9 +87,12 @@
             },
             "development": {
               "buildTarget": "web:build:development"
+            },
+            "development-live-auth": {
+              "buildTarget": "web:build:development-live-auth"
             }
           },
-          "defaultConfiguration": "development",
+          "defaultConfiguration": "development-live-auth",
           "options": {
             "proxyConfig": "proxy.conf.json"
           }

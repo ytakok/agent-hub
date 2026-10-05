@@ -10,6 +10,8 @@ import { TenantConfigService } from '../../core/tenant/tenant-config.service';
 import { ThemeService } from '../../core/theme/theme.service';
 import { Icon, type IconName } from '../../shared/ui/icon';
 import { LanguageSwitch } from '../../shared/ui/language-switch';
+import { FeatureDirective } from '../../core/tenant/feature.directive';
+import { CustomerSearch } from '../../features/customer360/customer-search';
 
 interface NavItem {
   path: string;
@@ -32,7 +34,7 @@ const NAV: NavItem[] = [
 @Component({
   selector: 'ah-shell',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslatePipe, Icon, LanguageSwitch],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, TranslatePipe, Icon, LanguageSwitch, FeatureDirective, CustomerSearch],
   templateUrl: './shell.html',
   styleUrl: './shell.less',
   host: { '(document:click)': 'onDocumentClick($event)', '(document:keydown.escape)': 'menuOpen.set(false)' },

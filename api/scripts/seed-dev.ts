@@ -23,7 +23,7 @@ if (!process.env['FIREBASE_AUTH_EMULATOR_HOST'] || !process.env['FIRESTORE_EMULA
 }
 
 const PASSWORD = 'Passw0rd!demo';
-const projectId = process.env['FIREBASE_PROJECT_ID'] ?? 'demo-agency-hub';
+const projectId = process.env['FIREBASE_PROJECT_ID'] ?? 'sample-app-5fff2';
 const app = initializeApp({ projectId });
 const auth = getAuth(app);
 const db = getFirestore(app);

@@ -10,6 +10,19 @@ A white-label, multi-tenant dashboard for insurance agencies and similar small b
 | Integrations | Mock providers today; live providers or n8n later |
 | Shared | `@agency-hub/shared`: types/DTO contracts used by both apps |
 
+**Developers:** start with the [Developer Guide](docs/developer-guide.md). It covers the architecture, every core service, styling and RTL rules, and step-by-step recipes for adding pages, widgets, flags, tenants and languages.
+
+## Two ways to run: the web app and the API must agree
+
+| Mode | Web | API (`api/.env`) | Users / emails |
+|---|---|---|---|
+| **Real Firebase** (default) | `npm start -w web` (= `start:live-auth`) | no `*_EMULATOR_HOST` lines, `GOOGLE_APPLICATION_CREDENTIALS` set | Your real accounts; reset emails are really sent |
+| **Emulators** (offline) | `npm run start:emulators -w web` | both `*_EMULATOR_HOST` lines on, `FIREBASE_PROJECT_ID=demo-agency-hub` | Seeded demo users; emails only appear in the Emulator UI |
+
+**Real Firebase setup (once per machine):** copy `web/src/environments/firebase.config.example.ts` to `firebase.config.ts` in the same folder and fill in your web app config. Then set your values in `api/.env`. Both files are git-ignored. Keep the service-account JSON **outside** the repo.
+
+Mixing them breaks login: real accounts don't exist in the emulator, reset emails never leave it, and the API rejects tokens from the other side (401). The API logs its mode at startup (`Auth: REAL Firebase` / `emulator`).
+
 ## Quick start (mock mode, fully offline)
 
 **Prerequisites**
@@ -48,6 +61,13 @@ The Auth emulator doesn't send email. It prints the links in the emulator termin
 To test this app's pages, copy the `oobCode` from a link and open:
 - http://localhost:4200/auth/action?mode=resetPassword&oobCode=CODE
 - http://localhost:4200/auth/action?mode=verifyEmail&oobCode=CODE
+
+To send a real reset email from your own Firebase project:
+1. Configure the Firebase Web App values in `web/src/environments/firebase.config.ts` (Firebase client config is public and is included in browser bundles; it is not a place for secrets).
+2. In Firebase Authentication, enable Email/Password, add `localhost` as an authorized domain, and set the email template action URL to `http://localhost:4200/auth/action`.
+3. Start the web app with `npm run start:live-auth -w web`, then submit the address on `/auth/forgot-password`.
+
+The normal `npm run dev` flow remains emulator-only. Keep `.env.local` files out of Git, restrict the Firebase API key to the app's domains and only the APIs it needs, and rely on Firebase Authentication settings, Firestore Security Rules, and API authorization for access control. For deployed environments, configure the Firebase email template action URL to your app's `/auth/action` route and add the app's domain to Firebase Authentication's authorized domains.
 
 ## Scripts
 

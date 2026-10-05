@@ -7,9 +7,9 @@
     "web"
   ],
   "scripts": {
-    "dev": "concurrently -k -n emu,api,web -c yellow,cyan,magenta \"npm:emulators\" \"npm:start:dev -w api\" \"npm:start -w web\"",
+    "dev": "concurrently -k -n emu,api,web -c yellow,cyan,magenta \"npm:emulators\" \"npm:start:dev -w api\" \"npm:start:emulators -w web\"",
     "dev:no-emu": "concurrently -k -n api,web -c cyan,magenta \"npm:start:dev -w api\" \"npm:start -w web\"",
-    "emulators": "firebase emulators:start --only auth,firestore --project demo-agency-hub",
+    "emulators": "firebase emulators:start --only auth,firestore --project sample-app-5fff2",
     "seed": "npm run seed -w api",
     "build": "npm run build -w api && npm run build -w web",
     "test": "npm test -w api && npm test -w web -- --watch=false",
