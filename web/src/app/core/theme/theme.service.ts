@@ -4,6 +4,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import type { Locale, TenantBranding } from '@agency-hub/shared';
 import { environment } from '../../../environments/environment';
+import { assetUrl } from '../app-url';
 import { safeStorage } from '../storage';
 
 /** Public, pre-login per-company config: `public/tenants/{slug}/theme.config.json`. */
@@ -18,6 +19,8 @@ export interface TenantTheme {
 
 const SLUG = /^[a-z0-9-]{2,40}$/;
 const RESERVED_SUBDOMAINS = new Set(['www', 'app', 'localhost', '127']);
+/** Shared hosting domains: the subdomain is the account, not a tenant (ytakok.github.io, my-app.web.app…). */
+const SHARED_HOSTS = ['.github.io', '.web.app', '.firebaseapp.com', '.pages.dev', '.netlify.app', '.vercel.app'];
 
 /**
  * White-label theming. Loads the tenant theme before first render and writes it to CSS custom
@@ -55,16 +58,18 @@ export class ThemeService {
     root.setProperty('--color-text', c.text);
     root.setProperty('--font-family', b.font);
     root.setProperty('--radius', b.radius);
-    this.logoUrl.set(b.logoUrl);
+    // Stored branding may use root paths ("/tenants/…"); make them base-relative for sub-path hosting.
+    this.logoUrl.set(assetUrl(b.logoUrl));
     this.document.querySelector('meta[name="theme-color"]')?.setAttribute('content', c.primary);
-    if (b.faviconUrl) this.document.querySelector('link[rel="icon"]')?.setAttribute('href', b.faviconUrl);
+    if (b.faviconUrl) this.document.querySelector('link[rel="icon"]')?.setAttribute('href', assetUrl(b.faviconUrl));
   }
 
   /** Subdomain (acme.yourapp.com) → `?tenant=` (dev) → last used → default. */
   private resolveSlug(): string {
     const host = this.document.location.hostname;
     const sub = host.split('.')[0] ?? '';
-    const fromHost = host.split('.').length > 2 && !RESERVED_SUBDOMAINS.has(sub) ? sub : null;
+    const shared = SHARED_HOSTS.some((h) => host.endsWith(h));
+    const fromHost = !shared && host.split('.').length > 2 && !RESERVED_SUBDOMAINS.has(sub) ? sub : null;
     const fromQuery = new URLSearchParams(this.document.location.search).get('tenant');
     const candidate = fromHost ?? fromQuery ?? safeStorage.get('tenant') ?? environment.defaultTenant;
     return SLUG.test(candidate) ? candidate : environment.defaultTenant;
@@ -72,7 +77,7 @@ export class ThemeService {
 
   private async fetchTheme(slug: string): Promise<TenantTheme | null> {
     try {
-      return await firstValueFrom(this.http.get<TenantTheme>(`/tenants/${slug}/theme.config.json`));
+      return await firstValueFrom(this.http.get<TenantTheme>(`tenants/${slug}/theme.config.json`));
     } catch {
       return null;
     }

@@ -15,7 +15,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding(), withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideTranslateService({
-      loader: provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' }),
+      // Relative to <base href>, so translations load at / and under a sub-path (GitHub Pages /agent-hub/).
+      loader: provideTranslateHttpLoader({ prefix: 'i18n/', suffix: '.json' }),
       fallbackLang: 'he',
     }),
     // ECharts is loaded lazily, only when a chart widget scrolls into view.

@@ -17,7 +17,7 @@ describe('ThemeService.applyBranding', () => {
   it('writes the tenant branding to CSS variables on :root', () => {
     const service = TestBed.inject(ThemeService);
     service.applyBranding({
-      logoUrl: '/tenants/acme/logo.svg',
+      logoUrl: '/tenants/acme/logo.svg', // root path as stored in Firestore
       colors: { primary: '#c2410c', secondary: '#431407', accent: '#ca8a04', bg: '#fffaf5', surface: '#ffffff', text: '#1c1917' },
       font: 'Assistant',
       radius: '6px',
@@ -25,6 +25,6 @@ describe('ThemeService.applyBranding', () => {
     const style = document.documentElement.style;
     expect(style.getPropertyValue('--color-primary')).toBe('#c2410c');
     expect(style.getPropertyValue('--radius')).toBe('6px');
-    expect(service.logoUrl()).toBe('/tenants/acme/logo.svg');
+    expect(service.logoUrl()).toBe('tenants/acme/logo.svg'); // made base-relative
   });
 });

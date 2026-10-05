@@ -32,6 +32,7 @@ import type {
   UsernameLoginResponse,
 } from '@agency-hub/shared';
 import { environment } from '../../../environments/environment';
+import { appUrl } from '../app-url';
 import { FirebaseService } from '../firebase/firebase.service';
 
 export interface SignupInput {
@@ -115,7 +116,7 @@ export class AuthService {
   async signup(input: SignupInput): Promise<void> {
     const { user } = await createUserWithEmailAndPassword(this.firebase.auth, input.email.trim(), input.password);
     await updateProfile(user, { displayName: input.displayName });
-    await sendEmailVerification(user, { url: `${location.origin}/auth/login` });
+    await sendEmailVerification(user, { url: appUrl('auth/login') });
     await this.bootstrap({
       username: input.username,
       displayName: input.displayName,
@@ -136,7 +137,7 @@ export class AuthService {
   /** Hides missing accounts but propagates delivery and configuration failures. */
   async forgotPassword(email: string): Promise<void> {
     try {
-      await sendPasswordResetEmail(this.firebase.auth, email.trim(), { url: `${location.origin}/auth/login` });
+      await sendPasswordResetEmail(this.firebase.auth, email.trim(), { url: appUrl('auth/login') });
     } catch (e) {
       if (e instanceof FirebaseError && e.code === 'auth/user-not-found') return;
       throw e;
@@ -166,7 +167,7 @@ export class AuthService {
 
   async resendVerification(): Promise<void> {
     const user = this.firebase.auth.currentUser;
-    if (user && !user.emailVerified) await sendEmailVerification(user, { url: `${location.origin}/app/dashboard` });
+    if (user && !user.emailVerified) await sendEmailVerification(user, { url: appUrl('app/dashboard') });
   }
 
   async logout(): Promise<void> {
