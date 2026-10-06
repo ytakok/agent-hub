@@ -1,0 +1,1 @@
+import{F as K,it as Q,tr as so,w as H,yr as y}from"./chunk-BPy_FRLW.js";function d(t,l){let n=Q(K(t)),e;return y(H).onDestroy(()=>clearTimeout(e)),so(()=>{let m=t();clearTimeout(e),e=setTimeout(()=>n.set(m),l)}),n.asReadonly()}export{d as t};
