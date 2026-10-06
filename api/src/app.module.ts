@@ -15,6 +15,7 @@ import { DashboardModule } from './dashboard/dashboard.module.js';
 import { FeatureGuard } from './feature-flags/feature.guard.js';
 import { FeatureFlagsModule } from './feature-flags/feature-flags.module.js';
 import { FirebaseModule } from './firebase/firebase.module.js';
+import { HealthModule } from './health/health.controller.js';
 import { IntegrationsModule } from './integrations/integrations.module.js';
 import { MessagesModule } from './messages/messages.controller.js';
 import { TenantsModule } from './tenants/tenants.module.js';
@@ -50,6 +51,7 @@ import { UsersModule } from './users/users.module.js';
     CustomersModule,
     Customer360Module,
     MessagesModule,
+    HealthModule,
   ],
   providers: [
     // Order matters: rate limit → authenticate → tenant → role → feature flag.
