@@ -29,6 +29,13 @@
   </div>
 }
 
+@if (noWidgets()) {
+  <div class="alert info no-widgets" role="status">
+    {{ 'dashboard.noWidgets' | translate }}
+    <a routerLink="/app/settings">{{ 'dashboard.chooseWidgets' | translate }}</a>
+  </div>
+}
+
 <div class="grid">
   @for (w of widgets(); track w) {
     @switch (w) {

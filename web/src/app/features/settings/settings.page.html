@@ -6,7 +6,12 @@
 </header>
 
 @if (message(); as m) {
-  <div class="alert" [class.success]="m.type === 'success'" [class.error]="m.type === 'error'" role="status">{{ m.key | translate }}</div>
+  <div class="alert" [class.success]="m.type === 'success'" [class.error]="m.type === 'error'" role="status">
+    {{ m.key | translate }}
+    @if (m.type === 'success' && m.section === 'org') {
+      <a routerLink="/app/dashboard">{{ 'settings.org.viewDashboard' | translate }}</a>
+    }
+  </div>
 }
 
 <div class="sections">
@@ -45,11 +50,23 @@
       </div>
       <fieldset [disabled]="!canEditOrg()">
         <legend>{{ 'settings.org.widgets' | translate }}</legend>
+        <p class="hint">{{ 'settings.org.widgetsHint' | translate }}</p>
         <div class="checks">
-          @for (w of widgets; track w) {
-            <label>
-              <input type="checkbox" [checked]="orgForm.controls.dashboardWidgets.value.includes(w)" (change)="toggleWidget(w, $any($event.target).checked)" />
-              {{ 'widgetNames.' + w | translate }}
+          @for (w of widgetOptions(); track w.key) {
+            <label [class.unavailable]="!w.available">
+              <!-- Plan-locked widgets can't be shown even if selected, so they are not toggleable here. -->
+              <input
+                type="checkbox"
+                [checked]="w.available && orgForm.controls.dashboardWidgets.value.includes(w.key)"
+                [disabled]="!w.available || !canEditOrg()"
+                (change)="toggleWidget(w.key, $any($event.target).checked)"
+              />
+              <span>
+                {{ 'widgetNames.' + w.key | translate }}
+                @if (!w.available) {
+                  <small>{{ 'settings.org.notInPlan' | translate }}</small>
+                }
+              </span>
             </label>
           }
         </div>

@@ -131,7 +131,9 @@
       "90d": "90 days"
     },
     "refresh": "Refresh",
-    "loadError": "We couldn't load the dashboard."
+    "loadError": "We couldn't load the dashboard.",
+    "noWidgets": "No widgets are selected for this dashboard.",
+    "chooseWidgets": "Choose widgets in Settings"
   },
   "kpi": {
     "newLeads": "New leads",
@@ -266,7 +268,10 @@
       "readOnly": "Only owners and admins can change these settings.",
       "renewalWindow": "Renewal window (days)",
       "sla": "Response SLA (hours)",
-      "widgets": "Dashboard widgets"
+      "widgets": "Dashboard widgets",
+      "widgetsHint": "Checked widgets appear on the dashboard for everyone in the organization, after you save.",
+      "notInPlan": "Not included in your plan",
+      "viewDashboard": "View dashboard"
     },
     "features": {
       "title": "Features",

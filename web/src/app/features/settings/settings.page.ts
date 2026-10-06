@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import type { DashboardWidgetKey, FeatureKey, TenantRuntimeConfig, UserProfile } from '@agency-hub/shared';
@@ -9,13 +10,12 @@ import { AuthService, authErrorKey } from '../../core/auth/auth.service';
 import { TenantConfigService } from '../../core/tenant/tenant-config.service';
 import { Icon } from '../../shared/ui/icon';
 import { matchFields, strongPassword } from '../auth/password';
-
-const WIDGETS: DashboardWidgetKey[] = ['kpis', 'crmPipeline', 'whatsapp', 'gmail', 'renewals', 'sheets', 'activity', 'health'];
+import { DASHBOARD_WIDGETS, isWidgetAvailable } from '../dashboard/widget-registry';
 
 @Component({
   selector: 'ah-settings-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, TranslatePipe, Icon],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, Icon],
   templateUrl: './settings.page.html',
   styleUrl: './settings.page.less',
 })
@@ -26,14 +26,17 @@ export class SettingsPage {
   protected readonly tenantConfig = inject(TenantConfigService);
   private readonly api = environment.apiBaseUrl;
 
-  protected readonly widgets = WIDGETS;
+  /** Same registry the dashboard renders from; unavailable = the plan does not include the widget's feature. */
+  protected readonly widgetOptions = computed(() =>
+    DASHBOARD_WIDGETS.map((key) => ({ key, available: isWidgetAvailable(key, this.tenantConfig.features()) })),
+  );
   protected readonly canEditOrg = computed(() => ['owner', 'admin'].includes(this.auth.role() ?? ''));
   protected readonly hasPassword = computed(() => this.auth.user()?.providerData.some((p) => p.providerId === 'password') ?? false);
   protected readonly flags = computed(() =>
     Object.entries(this.tenantConfig.features() ?? {}).map(([key, on]) => ({ key: key as FeatureKey, on })),
   );
 
-  protected readonly message = signal<{ type: 'success' | 'error'; key: string } | null>(null);
+  protected readonly message = signal<{ type: 'success' | 'error'; key: string; section: string } | null>(null);
   protected readonly busy = signal<string | null>(null);
 
   protected readonly profileForm = this.fb.group({
@@ -67,7 +70,7 @@ export class SettingsPage {
 
   protected toggleWidget(w: DashboardWidgetKey, checked: boolean): void {
     const current = this.orgForm.controls.dashboardWidgets.value;
-    this.orgForm.controls.dashboardWidgets.setValue(checked ? WIDGETS.filter((x) => x === w || current.includes(x)) : current.filter((x) => x !== w));
+    this.orgForm.controls.dashboardWidgets.setValue(checked ? DASHBOARD_WIDGETS.filter((x) => x === w || current.includes(x)) : current.filter((x) => x !== w));
     this.orgForm.markAsDirty();
   }
 
@@ -114,9 +117,9 @@ export class SettingsPage {
     this.message.set(null);
     try {
       await action();
-      this.message.set({ type: 'success', key: 'settings.saved' });
+      this.message.set({ type: 'success', key: 'settings.saved', section });
     } catch (e) {
-      this.message.set({ type: 'error', key: section === 'password' ? authErrorKey(e) : 'settings.saveError' });
+      this.message.set({ type: 'error', key: section === 'password' ? authErrorKey(e) : 'settings.saveError', section });
     } finally {
       this.busy.set(null);
     }
