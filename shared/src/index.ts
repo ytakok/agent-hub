@@ -445,3 +445,63 @@ export interface Customer360 {
   tasks: CustomerTask[];
   source: { system: string; fetchedAt: IsoDate };
 }
+
+// ---------- Google Sheets integration ----------
+
+/** Why a sheet couldn't be read. Mapped to user-facing messages in the UI. */
+export type SheetsErrorCode =
+  | 'credentials_missing'
+  | 'api_disabled'
+  | 'not_shared'
+  | 'not_found'
+  | 'tab_not_found'
+  | 'empty'
+  | 'rate_limited'
+  | 'unknown';
+
+/** Stored at `tenants/{tid}/integrations/sheets`. No secrets: the service-account key is platform-wide. */
+export interface SheetsIntegrationDoc {
+  status: 'connected' | 'error';
+  spreadsheetId: string;
+  /** Tab to read; empty = first tab. */
+  sheetName?: string;
+  /** 1-based row holding the column headers. */
+  headerRow: number;
+  spreadsheetTitle?: string;
+  rowCount?: number;
+  lastSyncAt?: IsoDate;
+  lastError?: SheetsErrorCode;
+  connectedAt: IsoDate;
+  connectedBy: string;
+}
+
+/** What Settings shows for the Google Sheets connection. */
+export interface SheetsIntegrationStatus {
+  /** live = this tenant reads its own sheet; mock = demo data; not_connected = live mode without a sheet. */
+  mode: 'live' | 'mock' | 'not_connected';
+  /** Share the sheet with this address (Viewer). Null when the platform has no Sheets credentials yet. */
+  serviceAccountEmail: string | null;
+  spreadsheetId?: string;
+  spreadsheetUrl?: string;
+  spreadsheetTitle?: string;
+  sheetName?: string;
+  rowCount?: number;
+  lastSyncAt?: IsoDate;
+  lastError?: SheetsErrorCode;
+}
+
+export interface SheetsTestResult {
+  ok: boolean;
+  error?: SheetsErrorCode;
+  spreadsheetTitle?: string;
+  sheetName?: string;
+  columns?: string[];
+  rowCount?: number;
+}
+
+export interface ConnectSheetRequest {
+  /** Spreadsheet URL or ID. */
+  spreadsheet: string;
+  sheetName?: string;
+  headerRow?: number;
+}

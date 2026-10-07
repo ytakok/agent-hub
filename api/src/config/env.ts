@@ -27,6 +27,14 @@ export const envSchema = z.object({
    * (Cloud Run + Secret Manager). Takes precedence over GOOGLE_APPLICATION_CREDENTIALS.
    */
   FIREBASE_SERVICE_ACCOUNT_JSON: z.string().optional(),
+  /**
+   * Google Sheets reader: a dedicated service account with NO project roles — it can only read sheets that
+   * agencies share with its email. JSON text (hosted) or a file path (local). Keep it separate from the Firebase key.
+   */
+  SHEETS_SERVICE_ACCOUNT_JSON: z.string().optional(),
+  SHEETS_SERVICE_ACCOUNT_FILE: z.string().optional(),
+  /** How long fetched sheet rows are reused before calling Google again. */
+  SHEETS_CACHE_SECONDS: z.coerce.number().int().min(0).max(3600).default(300),
   CORS_ORIGINS: csv.pipe(z.array(z.url())).default(['http://localhost:4200']),
   N8N_SECRET: z.string().min(32).optional(),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),

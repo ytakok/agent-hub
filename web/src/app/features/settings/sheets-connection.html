@@ -1,0 +1,112 @@
+<section class="panel">
+  <h2><ah-icon name="sheet" [size]="20" /> {{ 'sheets.title' | translate }}</h2>
+
+  @if (status.isLoading() && !s()) {
+    <p class="muted" role="status">{{ 'common.loading' | translate }}</p>
+  } @else if (status.error()) {
+    <div class="alert error" role="alert">{{ 'sheets.loadError' | translate }}</div>
+  } @else if (s(); as s) {
+    <!-- Status -->
+    <p class="state">
+      @switch (s.mode) {
+        @case ('live') {
+          @if (s.lastError) {
+            <span class="badge danger">{{ 'sheets.mode.error' | translate }}</span>
+          } @else {
+            <span class="badge success">{{ 'sheets.mode.live' | translate }}</span>
+          }
+        }
+        @case ('mock') {
+          <span class="badge primary">{{ 'sheets.mode.mock' | translate }}</span>
+        }
+        @default {
+          <span class="badge">{{ 'sheets.mode.notConnected' | translate }}</span>
+        }
+      }
+    </p>
+
+    @if (s.mode === 'live') {
+      <dl class="facts">
+        <div>
+          <dt>{{ 'sheets.sheet' | translate }}</dt>
+          <dd>
+            <a [href]="s.spreadsheetUrl" target="_blank" rel="noopener noreferrer"><bdi>{{ s.spreadsheetTitle || s.spreadsheetId }}</bdi></a>
+            @if (s.sheetName) {
+              · <bdi>{{ s.sheetName }}</bdi>
+            }
+          </dd>
+        </div>
+        <div>
+          <dt>{{ 'sheets.rows' | translate }}</dt>
+          <dd>{{ s.rowCount ?? '—' }}</dd>
+        </div>
+        <div>
+          <dt>{{ 'sheets.lastSync' | translate }}</dt>
+          <dd>{{ s.lastSyncAt ? (s.lastSyncAt | relTime: language.intlLocale()) : '—' }}</dd>
+        </div>
+      </dl>
+      @if (s.lastError) {
+        <div class="alert error" role="alert">{{ 'sheets.errors.' + s.lastError | translate: { email: s.serviceAccountEmail } }}</div>
+      }
+    }
+
+    <!-- How to share -->
+    @if (s.serviceAccountEmail) {
+      <div class="share">
+        <p>{{ 'sheets.shareHint' | translate }}</p>
+        <div class="email">
+          <code class="ltr-text">{{ s.serviceAccountEmail }}</code>
+          <button type="button" class="btn ghost" (click)="copyEmail(s.serviceAccountEmail)">
+            {{ (copied() ? 'sheets.copied' : 'sheets.copy') | translate }}
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="alert info">{{ 'sheets.errors.credentials_missing' | translate }}</div>
+    }
+
+    <!-- Actions -->
+    @if (s.mode === 'live') {
+      <div class="actions">
+        <button type="button" class="btn ghost" (click)="test()" [disabled]="busy() !== null">
+          {{ (busy() === 'test' ? 'common.pleaseWait' : 'sheets.test') | translate }}
+        </button>
+        @if (auth.isPlatformAdmin()) {
+          <button type="button" class="btn ghost danger" (click)="disconnect()" [disabled]="busy() !== null">{{ 'sheets.disconnect' | translate }}</button>
+        }
+      </div>
+    }
+
+    @if (result(); as r) {
+      @if (r.ok) {
+        <div class="alert success" role="status">
+          {{ 'sheets.testOk' | translate: { rows: r.rowCount ?? 0, title: r.spreadsheetTitle ?? '' } }}
+          @if (r.columns?.length) {
+            <br /><small>{{ 'sheets.columns' | translate }}: <bdi>{{ r.columns!.join(', ') }}</bdi></small>
+          }
+        </div>
+      } @else if (r.error) {
+        <div class="alert error" role="alert">{{ 'sheets.errors.' + r.error | translate: { email: s.serviceAccountEmail } }}</div>
+      }
+    }
+
+    <!-- Platform admin: connect a sheet to this organization -->
+    @if (auth.isPlatformAdmin() && s.serviceAccountEmail) {
+      <form class="connect" [formGroup]="form" (ngSubmit)="connect()">
+        <h3>{{ (s.mode === 'live' ? 'sheets.replace' : 'sheets.connect') | translate }}</h3>
+        <div class="field">
+          <label for="sheetUrl">{{ 'sheets.urlLabel' | translate }}</label>
+          <input id="sheetUrl" class="input ltr" formControlName="spreadsheet" placeholder="https://docs.google.com/spreadsheets/d/…" />
+        </div>
+        <div class="field">
+          <label for="sheetTab">{{ 'sheets.tabLabel' | translate }}</label>
+          <input id="sheetTab" class="input" formControlName="sheetName" />
+          <span class="hint">{{ 'sheets.tabHint' | translate }}</span>
+        </div>
+        <button class="btn primary" type="submit" [disabled]="busy() !== null">
+          {{ (busy() === 'connect' ? 'common.pleaseWait' : 'sheets.connectButton') | translate }}
+        </button>
+      </form>
+    }
+  }
+</section>

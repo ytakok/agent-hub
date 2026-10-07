@@ -11,11 +11,13 @@ import { TenantConfigService } from '../../core/tenant/tenant-config.service';
 import { Icon } from '../../shared/ui/icon';
 import { matchFields, strongPassword } from '../auth/password';
 import { DASHBOARD_WIDGETS, isWidgetAvailable } from '../dashboard/widget-registry';
+import { FeatureDirective } from '../../core/tenant/feature.directive';
+import { SheetsConnection } from './sheets-connection';
 
 @Component({
   selector: 'ah-settings-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, Icon],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, Icon, FeatureDirective, SheetsConnection],
   templateUrl: './settings.page.html',
   styleUrl: './settings.page.less',
 })

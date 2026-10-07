@@ -77,6 +77,11 @@
     </form>
   </section>
 
+  <!-- Google Sheets source (owners/admins; connecting is platform-admin only) -->
+  @if (canEditOrg()) {
+    <ah-sheets-connection *ahFeature="'integration.sheets'" />
+  }
+
   <!-- Feature flags -->
   <section class="panel">
     <h2>{{ 'settings.features.title' | translate }}</h2>

@@ -439,5 +439,41 @@
     "parent": "Parent",
     "sibling": "Sibling",
     "other": "Other"
+  },
+  "sheets": {
+    "title": "Google Sheets",
+    "loadError": "Couldn't load the Google Sheets connection.",
+    "mode": {
+      "live": "Connected",
+      "error": "Connection problem",
+      "mock": "Demo data",
+      "notConnected": "Not connected"
+    },
+    "sheet": "Sheet",
+    "rows": "Rows",
+    "lastSync": "Last sync",
+    "shareHint": "To connect a sheet, share it with this address as Viewer. The app can only read sheets shared with it.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "test": "Test connection",
+    "testOk": "Read {{rows}} rows from \"{{title}}\".",
+    "columns": "Columns",
+    "disconnect": "Disconnect",
+    "connect": "Connect a sheet",
+    "replace": "Connect a different sheet",
+    "urlLabel": "Google Sheets link or ID",
+    "tabLabel": "Tab (optional)",
+    "tabHint": "Leave empty to use the first tab. Row 1 must hold the column headers.",
+    "connectButton": "Check and connect",
+    "errors": {
+      "credentials_missing": "The platform's Google Sheets account isn't set up yet.",
+      "api_disabled": "The Google Sheets API is turned off in the Google Cloud project.",
+      "not_shared": "The sheet isn't shared with {{email}}. Share it as Viewer and test again.",
+      "not_found": "Sheet not found. Check the link.",
+      "tab_not_found": "That tab doesn't exist in the sheet.",
+      "empty": "The sheet has no column headers in the first row.",
+      "rate_limited": "Google is limiting requests. Try again in a minute.",
+      "unknown": "Couldn't read the sheet. Try again."
+    }
   }
 }
