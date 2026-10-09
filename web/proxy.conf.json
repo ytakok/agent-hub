@@ -1,3 +1,15 @@
 {
-  "/api": { "target": "http://localhost:3000", "secure": false, "changeOrigin": false }
+  "/api": {
+    "target": "http://localhost:3000",
+    "secure": false,
+    "changeOrigin": false
+  },
+  "/assistant-chat": {
+    "target": "https://inteliaiconsultancy.app.n8n.cloud",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/assistant-chat": "/webhook/446e48f9-570a-416a-be34-394c3c540779/chat"
+    }
+  }
 }

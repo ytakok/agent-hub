@@ -56,7 +56,8 @@ export class AssistantChatService {
         webhookUrl: environment.assistantChatUrl,
         mode: 'window',
         defaultLanguage: 'en',
-        loadPreviousSession: true,
+        // true hides the input box until a previous session loads (needs "Load Previous Session: From Memory" in n8n).
+        loadPreviousSession: false,
         showWelcomeScreen: false,
         initialMessages: [t('greeting')],
         i18n: {
