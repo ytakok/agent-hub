@@ -5,6 +5,7 @@ import type { Auth } from 'firebase-admin/auth';
 import { Public } from '../common/decorators/index.js';
 import { AppConfig } from '../config/app-config.service.js';
 import { FIREBASE_AUTH } from '../firebase/firebase.module.js';
+import { GoogleSheetsClient } from '../integrations/google-sheets/google-sheets.client.js';
 
 /**
  * Liveness + configuration self-check for hosting platforms (Render/Cloud Run health checks) and debugging.
@@ -16,6 +17,7 @@ export class HealthController {
   constructor(
     private readonly config: AppConfig,
     @Inject(FIREBASE_AUTH) private readonly auth: Auth,
+    private readonly sheets: GoogleSheetsClient,
   ) {}
 
   @Get()
@@ -49,6 +51,10 @@ export class HealthController {
       firestore: this.config.get('FIRESTORE_EMULATOR_HOST') ? 'emulator' : 'firebase',
       credentials,
       firebaseAdmin,
+      // Google Sheets reader key: json|file = loaded; none = not set; not_json / missing_fields = wrong value pasted.
+      sheetsCredentials: this.sheets.credentialState,
+      sheetsCredentialsLength: this.sheets.credentialLength,
+      sheetsReader: this.sheets.serviceAccountEmail,
     };
   }
 }

@@ -40,11 +40,17 @@ interface ServiceAccountKey {
 export class GoogleSheetsClient {
   private readonly logger = new Logger(GoogleSheetsClient.name);
   private readonly key: ServiceAccountKey | null;
+  /** What was found in SHEETS_SERVICE_ACCOUNT_JSON / _FILE (shape and length only). */
+  readonly credentialState: SheetsCredentialState;
+  readonly credentialLength: number;
   private jwt: JWT | null = null;
 
   constructor(config: AppConfig) {
-    this.key = loadKey(config.get('SHEETS_SERVICE_ACCOUNT_JSON'), config.get('SHEETS_SERVICE_ACCOUNT_FILE'));
-    if (!this.key) this.logger.warn('Google Sheets: no service account configured (SHEETS_SERVICE_ACCOUNT_JSON / _FILE).');
+    const loaded = loadKey(config.get('SHEETS_SERVICE_ACCOUNT_JSON'), config.get('SHEETS_SERVICE_ACCOUNT_FILE'));
+    this.key = loaded.key;
+    this.credentialState = loaded.state;
+    this.credentialLength = loaded.length;
+    if (!this.key) this.logger.warn(`Google Sheets: service account not usable (${loaded.state}, ${loaded.length} chars). Expected the full key JSON file.`);
   }
 
   get serviceAccountEmail(): string | null {
@@ -108,13 +114,28 @@ export function parseSpreadsheetId(input: string): string | null {
   return /^[A-Za-z0-9_-]{20,100}$/.test(id) ? id : null;
 }
 
-function loadKey(json?: string, file?: string): ServiceAccountKey | null {
-  try {
-    const raw = json || (file ? readFileSync(file, 'utf8') : '');
-    if (!raw) return null;
-    const k = JSON.parse(raw) as Partial<ServiceAccountKey>;
-    return k.client_email && k.private_key ? { client_email: k.client_email, private_key: k.private_key } : null;
-  } catch {
-    return null;
+/** Shape of the configured key, for /api/health. Never includes the key itself. */
+export type SheetsCredentialState = 'json' | 'file' | 'none' | 'not_json' | 'missing_fields' | 'file_unreadable';
+
+function loadKey(json?: string, file?: string): { key: ServiceAccountKey | null; state: SheetsCredentialState; length: number } {
+  let raw = '';
+  let source: 'json' | 'file' = 'json';
+  if (json?.trim()) raw = json.trim();
+  else if (file) {
+    source = 'file';
+    try {
+      raw = readFileSync(file, 'utf8');
+    } catch {
+      return { key: null, state: 'file_unreadable', length: 0 };
+    }
   }
+  if (!raw) return { key: null, state: 'none', length: 0 };
+  let k: Partial<ServiceAccountKey>;
+  try {
+    k = JSON.parse(raw) as Partial<ServiceAccountKey>;
+  } catch {
+    return { key: null, state: 'not_json', length: raw.length };
+  }
+  if (!k.client_email || !k.private_key) return { key: null, state: 'missing_fields', length: raw.length };
+  return { key: { client_email: k.client_email, private_key: k.private_key }, state: source, length: raw.length };
 }

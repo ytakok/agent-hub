@@ -53,6 +53,6 @@ const implementations = [
     selectProvider(WHATSAPP_PROVIDER, MockWhatsAppProvider, LiveWhatsAppProvider),
     selectProvider(CUSTOMER_RECORDS_PROVIDER, MockCustomerRecordsProvider, LiveCustomerRecordsProvider),
   ],
-  exports: [CRM_PROVIDER, SHEETS_PROVIDER, GMAIL_PROVIDER, WHATSAPP_PROVIDER, CUSTOMER_RECORDS_PROVIDER, SheetsIntegrationService],
+  exports: [CRM_PROVIDER, SHEETS_PROVIDER, GMAIL_PROVIDER, WHATSAPP_PROVIDER, CUSTOMER_RECORDS_PROVIDER, SheetsIntegrationService, GoogleSheetsClient],
 })
 export class IntegrationsModule {}
