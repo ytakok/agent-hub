@@ -178,6 +178,8 @@ export class AuthService {
 
 /** Maps Firebase / API errors to i18n keys under `auth.errors.*`. */
 export function authErrorKey(e: unknown): string {
+  // Local development only: the UI shows a friendly message, the console shows Firebase's exact reason.
+  if (!environment.production) console.warn('[auth] sign-in failed:', e instanceof FirebaseError ? `${e.code} - ${e.message}` : e);
   const code =
     e instanceof FirebaseError
       ? e.code
