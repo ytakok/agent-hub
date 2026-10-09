@@ -475,5 +475,12 @@
       "rate_limited": "Google is limiting requests. Try again in a minute.",
       "unknown": "Couldn't read the sheet. Try again."
     }
+  },
+  "assistant": {
+    "title": "Agency assistant",
+    "subtitle": "Ask about leads, customers and policies",
+    "greeting": "Hi! How can I help?",
+    "newChat": "New conversation",
+    "placeholder": "Type your question…"
   }
 }

@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, ElementRef, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, afterNextRender, computed, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 import { TranslatePipe } from '@ngx-translate/core';
 import type { FeatureKey } from '@agency-hub/shared';
+import { AssistantChatService } from '../../core/assistant/assistant-chat.service';
 import { AuthService } from '../../core/auth/auth.service';
 import { LanguageService } from '../../core/i18n/language.service';
 import { TenantConfigService } from '../../core/tenant/tenant-config.service';
@@ -74,6 +75,11 @@ export class Shell {
   });
 
   constructor() {
+    // Staff assistant: only inside the signed-in app; removed again when the shell goes away (logout).
+    const assistant = inject(AssistantChatService);
+    afterNextRender(() => void assistant.mount());
+    inject(DestroyRef).onDestroy(() => assistant.unmount());
+
     // Close the mobile/tablet overlay nav after navigating.
     inject(Router)
       .events.pipe(filter((e) => e instanceof NavigationEnd), takeUntilDestroyed())

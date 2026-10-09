@@ -14,4 +14,5 @@ export const environment: Environment = {
     appId: 'demo-app',
   },
   appCheckSiteKey: '',
+  assistantChatUrl: '',
 };
