@@ -1,11 +1,12 @@
 import { httpResource } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
 import type { DashboardRange, DashboardSummary, DashboardWidgetKey } from '@agency-hub/shared';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
 import { LanguageService } from '../../core/i18n/language.service';
 import { TenantConfigService } from '../../core/tenant/tenant-config.service';
+import { UserSettingsService } from '../../core/user-settings/user-settings.service';
 import { RouterLink } from '@angular/router';
 import { RelativeTimePipe } from '../../shared/pipes/format.pipes';
 import { Icon } from '../../shared/ui/icon';
@@ -30,10 +31,12 @@ const RANGES: DashboardRange[] = ['7d', '30d', '90d'];
 export class DashboardPage {
   private readonly auth = inject(AuthService);
   private readonly tenantConfig = inject(TenantConfigService);
+  private readonly userSettings = inject(UserSettingsService);
   protected readonly language = inject(LanguageService);
   protected readonly ranges = RANGES;
 
-  protected readonly range = signal<DashboardRange>('30d');
+  /** Starts at the user's saved default; the buttons change it for this visit only. */
+  protected readonly range = linkedSignal<DashboardRange>(() => this.userSettings.settings()?.dashboard.defaultRange ?? '30d');
 
   protected readonly summary = httpResource<DashboardSummary>(() => ({
     url: `${environment.apiBaseUrl}/dashboard/summary`,
@@ -44,10 +47,11 @@ export class DashboardPage {
   protected readonly loading = computed(() => this.summary.isLoading());
   protected readonly currency = computed(() => this.data()?.currency ?? 'ILS');
 
-  /** Selected in Settings → Organization, in that order, minus widgets the plan does not include. */
-  protected readonly widgets = computed<DashboardWidgetKey[]>(() =>
-    visibleWidgets(this.tenantConfig.settings()?.dashboardWidgets, this.tenantConfig.features()),
-  );
+  /** Selected in Settings → Organization, in that order, minus widgets the plan does not include and widgets this user hid. */
+  protected readonly widgets = computed<DashboardWidgetKey[]>(() => {
+    const hidden = this.userSettings.settings()?.dashboard.hiddenWidgets ?? [];
+    return visibleWidgets(this.tenantConfig.settings()?.dashboardWidgets, this.tenantConfig.features()).filter((w) => !hidden.includes(w));
+  });
   /** Config loaded but nothing selected — show a pointer to Settings instead of an empty page. */
   protected readonly noWidgets = computed(() => !!this.tenantConfig.config() && this.widgets().length === 0);
 

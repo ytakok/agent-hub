@@ -8,7 +8,7 @@
 @if (message(); as m) {
   <div class="alert" [class.success]="m.type === 'success'" [class.error]="m.type === 'error'" role="status">
     {{ m.key | translate }}
-    @if (m.type === 'success' && m.section === 'org') {
+    @if (m.type === 'success' && (m.section === 'org' || m.section === 'prefs')) {
       <a routerLink="/app/dashboard">{{ 'settings.org.viewDashboard' | translate }}</a>
     }
   </div>
@@ -28,6 +28,50 @@
         <input id="phone" type="tel" class="input" formControlName="phone" autocomplete="tel" />
       </div>
       <button class="btn primary" type="submit" [disabled]="profileForm.invalid || busy() === 'profile'">{{ 'common.save' | translate }}</button>
+    </form>
+  </section>
+
+  <!-- My preferences (userSettings/{uid}) -->
+  <section class="panel">
+    <h2>{{ 'settings.prefs.title' | translate }}</h2>
+    <form [formGroup]="prefsForm" (ngSubmit)="savePrefs()">
+      <div class="two">
+        <div class="field">
+          <label for="prefLanguage">{{ 'settings.prefs.language' | translate }}</label>
+          <select id="prefLanguage" class="input" formControlName="language">
+            @for (l of language.supported(); track l) {
+              <option [value]="l">{{ languageLabels[l] }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label for="prefRange">{{ 'settings.prefs.defaultRange' | translate }}</label>
+          <select id="prefRange" class="input" formControlName="defaultRange">
+            @for (r of ranges; track r) {
+              <option [value]="r">{{ 'dashboard.ranges.' + r | translate }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <fieldset>
+        <legend>{{ 'settings.prefs.widgets' | translate }}</legend>
+        <p class="hint">{{ 'settings.prefs.widgetsHint' | translate }}</p>
+        <div class="checks">
+          @for (w of myWidgetOptions(); track w) {
+            <label>
+              <input
+                type="checkbox"
+                [checked]="!prefsForm.controls.hiddenWidgets.value.includes(w)"
+                (change)="toggleMyWidget(w, $any($event.target).checked)"
+              />
+              <span>{{ 'widgetNames.' + w | translate }}</span>
+            </label>
+          } @empty {
+            <p class="hint">{{ 'settings.prefs.noOrgWidgets' | translate }}</p>
+          }
+        </div>
+      </fieldset>
+      <button class="btn primary" type="submit" [disabled]="busy() === 'prefs'">{{ 'common.save' | translate }}</button>
     </form>
   </section>
 

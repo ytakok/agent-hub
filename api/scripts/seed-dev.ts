@@ -15,6 +15,7 @@ import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import type { FeatureFlagDefinition, Role, Tenant, TenantFeatureOverrides, TenantSettings, UserProfile } from '@agency-hub/shared';
 import { DEFAULT_FLAG_DEFINITIONS, DEFAULT_TENANT_SETTINGS } from '../src/feature-flags/flag-definitions.js';
+import { defaultUserSettings } from '../src/user-settings/user-settings.service.js';
 
 process.env['FIREBASE_AUTH_EMULATOR_HOST'] ??= '127.0.0.1:9099';
 process.env['FIRESTORE_EMULATOR_HOST'] ??= '127.0.0.1:8080';
@@ -107,11 +108,11 @@ async function main() {
       role: u.role,
       status: 'active',
       authProviders: ['password'],
-      preferences: { language: u.tenantId === 'acme-agency' ? 'en' : 'he' },
       createdAt: now,
       updatedAt: now,
     };
     await db.doc(`users/${record.uid}`).set(profile);
+    await db.doc(`userSettings/${record.uid}`).set({ ...defaultUserSettings(u.tenantId === 'acme-agency' ? 'en' : 'he'), updatedAt: now });
     await db.doc(`usernames/${u.username}`).set({ uid: record.uid });
     await db.doc(`tenants/${u.tenantId}/members/${record.uid}`).set({ role: u.role, joinedAt: now });
   }

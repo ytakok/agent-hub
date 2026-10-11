@@ -1,6 +1,6 @@
-@import (reference) 'tokens';
-@import (reference) 'breakpoints';
-@import (reference) 'mixins';
+@import (reference) '../../../styles/tokens.less';
+@import (reference) '../../../styles/breakpoints.less';
+@import (reference) '../../../styles/mixins.less';
 
 // ---------- Mobile (base) ----------
 
@@ -208,8 +208,9 @@ main {
   }
 }
 
+// Push the language switch to the far end of the top bar (right in LTR, left in RTL).
 ah-language-switch {
-    margin-right: auto;
+  margin-inline-start: auto;
 }
 
 // ---------- Tablet: icon rail, toggle expands as overlay ----------

@@ -148,7 +148,7 @@ npm run dev:no-emu     # terminal 2: API :3000 (watch) + web :4200
    Doing this before render avoids a flash of the wrong brand or wrong direction.
 2. **`AuthService`** subscribes to `onIdTokenChanged` and restores the Firebase session. `auth.ready()` resolves once that's known, and guards await it.
 3. **`TenantConfigService`** has an `effect()`: whenever `auth.tenantId()` changes, it loads `GET /api/tenants/current/config`. It stores the result in signals and re-applies branding from Firestore.
-4. **`App`** (root component) loads `/users/me` when a tenant is present and applies the user's saved language. It also saves language changes back with `PATCH /users/me`.
+4. **`App`** (root component) starts `UserSettingsService` (`core/user-settings/`). On sign-in it loads `GET /users/me/settings` (`userSettings/{uid}`) and applies the saved language; language switches and the Settings → My preferences card save with `PATCH /users/me/settings`. The dashboard uses its default range and hides the user's `hiddenWidgets`.
 
 ### 4.2 `core/` services
 
@@ -406,6 +406,7 @@ ThrottlerGuard → FirebaseAuthGuard → TenantGuard → RolesGuard → FeatureG
 | `POST /api/auth/login` | public, 5/min | `{ customToken }` |
 | `POST /api/users/bootstrap` | auth, no tenant | `UserProfile` |
 | `GET/PATCH /api/users/me` | auth | `UserProfile` |
+| `GET/PATCH /api/users/me/settings` | auth + tenant | `UserSettings` (own `userSettings/{uid}` only) |
 | `GET /api/tenants/current/config` | tenant | `TenantRuntimeConfig` |
 | `PATCH /api/tenants/current/settings` | owner/admin | `TenantRuntimeConfig` |
 | `PATCH /api/tenants/:id/features` | platform admin | `TenantRuntimeConfig` (`{overrides:{key: true\|false\|null}}`, null = clear) |

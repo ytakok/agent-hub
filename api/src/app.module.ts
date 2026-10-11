@@ -19,6 +19,7 @@ import { HealthModule } from './health/health.controller.js';
 import { IntegrationsModule } from './integrations/integrations.module.js';
 import { MessagesModule } from './messages/messages.controller.js';
 import { TenantsModule } from './tenants/tenants.module.js';
+import { UserSettingsModule } from './user-settings/user-settings.controller.js';
 import { UsersModule } from './users/users.module.js';
 
 @Module({
@@ -46,6 +47,7 @@ import { UsersModule } from './users/users.module.js';
     IntegrationsModule,
     AuthModule,
     UsersModule,
+    UserSettingsModule,
     TenantsModule,
     DashboardModule,
     CustomersModule,

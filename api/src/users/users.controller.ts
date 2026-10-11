@@ -21,7 +21,6 @@ class BootstrapUserDto implements BootstrapUserRequest {
 class UpdateProfileDto {
   @IsOptional() @IsString() @Length(2, 80) displayName?: string;
   @IsOptional() @Matches(/^\+?[0-9 -]{7,20}$/) phone?: string;
-  @IsOptional() @IsIn(LOCALES) language?: Locale;
 }
 
 @ApiTags('users')

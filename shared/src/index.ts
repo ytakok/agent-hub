@@ -25,7 +25,8 @@ export interface UserProfile {
   role: Role;
   status: 'active' | 'invited' | 'disabled';
   authProviders: string[];
-  preferences: { language: Locale; dashboardLayout?: string[] };
+  /** @deprecated Older profiles only. Preferences now live in `userSettings/{uid}` (see UserSettings). */
+  preferences?: { language: Locale; dashboardLayout?: string[] };
   createdAt: IsoDate;
   updatedAt: IsoDate;
   lastLoginAt?: IsoDate;
@@ -102,6 +103,22 @@ export interface TenantRuntimeConfig {
   tenant: Pick<Tenant, 'id' | 'name' | 'slug' | 'plan' | 'locales' | 'branding' | 'currency' | 'timezone'>;
   features: FeatureFlags;
   settings: TenantSettings;
+}
+
+/**
+ * Personal preferences: `userSettings/{uid}`. Read and written only through `/api/users/me/settings`.
+ * Organization settings decide which widgets exist; these only hide some of them for this user.
+ */
+export interface UserSettings {
+  language: Locale;
+  dashboard: { defaultRange: DashboardRange; hiddenWidgets: DashboardWidgetKey[] };
+  updatedAt?: IsoDate;
+}
+
+/** `PATCH /api/users/me/settings`: send only what changed; nested objects merge. */
+export interface UpdateUserSettingsRequest {
+  language?: Locale;
+  dashboard?: Partial<UserSettings['dashboard']>;
 }
 
 // ---------- Domain ----------

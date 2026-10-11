@@ -282,6 +282,14 @@
       "title": "Change password",
       "current": "Current password",
       "submit": "Update password"
+    },
+    "prefs": {
+      "title": "My preferences",
+      "language": "Language",
+      "defaultRange": "Default dashboard range",
+      "widgets": "My dashboard",
+      "widgetsHint": "Uncheck widgets to hide them on your dashboard only. Other people in the organization are not affected.",
+      "noOrgWidgets": "Your organization has no dashboard widgets turned on."
     }
   },
   "features": {

@@ -6,6 +6,7 @@ import type { BootstrapUserRequest, Locale, Role, Tenant, UserProfile } from '@a
 import type { RequestUser } from '../common/request-user.js';
 import { FIREBASE_AUTH, FIRESTORE } from '../firebase/firebase.module.js';
 import { DEFAULT_TENANT_SETTINGS } from '../feature-flags/flag-definitions.js';
+import { USER_SETTINGS_COLLECTION, defaultUserSettings } from '../user-settings/user-settings.service.js';
 
 export const DEFAULT_BRANDING: Tenant['branding'] = {
   logoUrl: '/tenants/demo-insurance/logo.svg',
@@ -27,11 +28,10 @@ export class UsersService {
     return snap.data() as UserProfile;
   }
 
-  async updateProfile(uid: string, patch: { displayName?: string; phone?: string; language?: Locale }): Promise<UserProfile> {
+  async updateProfile(uid: string, patch: { displayName?: string; phone?: string }): Promise<UserProfile> {
     const update: Record<string, unknown> = { updatedAt: new Date().toISOString() };
     if (patch.displayName !== undefined) update['displayName'] = patch.displayName;
     if (patch.phone !== undefined) update['phone'] = patch.phone;
-    if (patch.language !== undefined) update['preferences.language'] = patch.language;
     await this.db.doc(`users/${uid}`).update(update);
     return this.getProfile(uid);
   }
@@ -96,12 +96,12 @@ export class UsersService {
         role,
         status: 'active',
         authProviders: authUser.providerData.map((p) => p.providerId),
-        preferences: { language: dto.language },
         createdAt: now,
         updatedAt: now,
       };
       tx.set(usernameRef, { uid: user.uid });
       tx.set(this.db.doc(`users/${user.uid}`), profile);
+      tx.set(this.db.doc(`${USER_SETTINGS_COLLECTION}/${user.uid}`), { ...defaultUserSettings(dto.language), updatedAt: now });
       tx.set(this.db.doc(`tenants/${tenantId}/members/${user.uid}`), { role, joinedAt: now });
       return { tenantId, role };
     });

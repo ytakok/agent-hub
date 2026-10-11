@@ -4,7 +4,9 @@ Types live in `shared/src/index.ts`. All writes go through the API (Admin SDK). 
 
 ```
 users/{uid}                          UserProfile: email, username, displayName, tenantId, role, status,
-                                     authProviders[], preferences{language, dashboardLayout}, timestamps
+                                     authProviders[], timestamps (older docs: preferences{language}, legacy)
+userSettings/{uid}                   UserSettings: language, dashboard{defaultRange, hiddenWidgets[]}, updatedAt
+                                     (API: GET/PATCH /api/users/me/settings; client may read own doc only)
 usernames/{usernameLower}            { uid }: uniqueness + username login (server-only)
 
 featureFlags/{key}                   FeatureFlagDefinition: description, defaultEnabled, plans[]   (global)
