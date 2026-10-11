@@ -18,7 +18,7 @@ export class UserSettingsService {
   private readonly url = `${environment.apiBaseUrl}/users/me/settings`;
 
   /** Signed-in user with a tenant; a computed so hourly token refreshes (same uid) don't reload. */
-  private readonly uid = computed(() => (this.auth.tenantId() ? this.auth.user()?.uid : undefined));
+  private readonly uid = computed(() => (this.auth.activeTenantId() ? this.auth.user()?.uid : undefined));
 
   /** null until loaded (or when signed out); callers fall back to defaults. */
   readonly settings = signal<UserSettings | null>(null);
@@ -34,7 +34,7 @@ export class UserSettingsService {
 
     // Language switch in the top bar: follow the user across devices.
     this.language.onUserChange = (language) => {
-      if (this.auth.tenantId()) void this.update({ language }).catch(() => undefined);
+      if (this.auth.activeTenantId()) void this.update({ language }).catch(() => undefined);
     };
   }
 

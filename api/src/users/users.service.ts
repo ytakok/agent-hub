@@ -1,4 +1,4 @@
-import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { createHash } from 'node:crypto';
 import type { Auth } from 'firebase-admin/auth';
 import type { Firestore } from 'firebase-admin/firestore';
@@ -17,6 +17,8 @@ export const DEFAULT_BRANDING: Tenant['branding'] = {
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(
     @Inject(FIREBASE_AUTH) private readonly auth: Auth,
     @Inject(FIRESTORE) private readonly db: Firestore,
@@ -26,6 +28,35 @@ export class UsersService {
     const snap = await this.db.doc(`users/${uid}`).get();
     if (!snap.exists) throw new NotFoundException('Profile not found');
     return snap.data() as UserProfile;
+  }
+
+  /**
+   * Deleting a user in the Firebase console removes only the Auth record; the app's Firestore records stay and
+   * keep the username reserved. If the username's owner no longer exists in Firebase Auth, free it and remove
+   * that user's leftover profile records. The organization and its data are kept (they may have other members).
+   * Returns true when the username is free afterwards.
+   */
+  async releaseUsernameIfOrphaned(username: string): Promise<boolean> {
+    const ref = this.db.doc(`usernames/${username}`);
+    const snap = await ref.get();
+    if (!snap.exists) return true;
+    const uid = snap.get('uid') as string;
+    const owner = await this.auth.getUser(uid).catch((e: { code?: string }) => {
+      if (e.code === 'auth/user-not-found') return null;
+      throw e;
+    });
+    if (owner) return false;
+
+    const tenantId = (await this.db.doc(`users/${uid}`).get()).get('tenantId') as string | undefined;
+    const batch = this.db.batch();
+    batch.delete(ref);
+    batch.delete(this.db.doc(`users/${uid}`));
+    batch.delete(this.db.doc(`userSettings/${uid}`));
+    batch.delete(this.db.doc(`emailOtps/${uid}`));
+    if (tenantId) batch.delete(this.db.doc(`tenants/${tenantId}/members/${uid}`));
+    await batch.commit();
+    this.logger.log(`Released the username of deleted account ${uid}`);
+    return true;
   }
 
   async updateProfile(uid: string, patch: { displayName?: string; phone?: string }): Promise<UserProfile> {
@@ -47,6 +78,7 @@ export class UsersService {
     const email = authUser.email ?? '';
     const username = dto.username.trim().toLowerCase();
     const now = new Date().toISOString();
+    await this.releaseUsernameIfOrphaned(username);
 
     const { tenantId, role } = await this.db.runTransaction(async (tx) => {
       const usernameRef = this.db.doc(`usernames/${username}`);

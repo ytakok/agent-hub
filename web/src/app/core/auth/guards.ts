@@ -4,12 +4,13 @@ import type { FeatureKey, Role } from '@agency-hub/shared';
 import { TenantConfigService } from '../tenant/tenant-config.service';
 import { AuthService } from './auth.service';
 
-/** Signed in and linked to an organization. */
+/** Signed in, email verified and linked to an organization. */
 export const authGuard: CanActivateFn = async (_route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
   await auth.ready();
   if (!auth.isAuthenticated()) return router.createUrlTree(['/auth/login'], { queryParams: { returnUrl: state.url } });
+  if (!auth.emailVerified()) return router.createUrlTree(['/auth/verify-email']);
   if (auth.needsOnboarding()) return router.createUrlTree(['/auth/complete-profile']);
   return true;
 };
@@ -20,7 +21,22 @@ export const guestGuard: CanActivateFn = async () => {
   const router = inject(Router);
   await auth.ready();
   if (!auth.isAuthenticated()) return true;
-  return router.createUrlTree([auth.needsOnboarding() ? '/auth/complete-profile' : '/app/dashboard']);
+  return router.createUrlTree([nextStep(auth)]);
+};
+
+/** Where a signed-in user belongs: confirm email first, then create/join an organization, then the app. */
+function nextStep(auth: AuthService): string {
+  if (!auth.emailVerified()) return '/auth/verify-email';
+  return auth.needsOnboarding() ? '/auth/complete-profile' : '/app/dashboard';
+}
+
+/** The email-code page: only for signed-in users who haven't confirmed their email yet. */
+export const verifyEmailGuard: CanActivateFn = async () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  await auth.ready();
+  if (!auth.isAuthenticated()) return router.createUrlTree(['/auth/login']);
+  return !auth.emailVerified() || router.createUrlTree([nextStep(auth)]);
 };
 
 /** Signed in with Firebase but no organization yet. */
@@ -29,7 +45,7 @@ export const onboardingGuard: CanActivateFn = async () => {
   const router = inject(Router);
   await auth.ready();
   if (!auth.isAuthenticated()) return router.createUrlTree(['/auth/login']);
-  if (!auth.needsOnboarding()) return router.createUrlTree(['/app/dashboard']);
+  if (!auth.emailVerified() || !auth.needsOnboarding()) return router.createUrlTree([nextStep(auth)]);
   return true;
 };
 
@@ -55,7 +71,7 @@ export function featureGuard(...features: FeatureKey[]): CanMatchFn {
     const tenantConfig = inject(TenantConfigService);
     const router = inject(Router);
     await auth.ready();
-    if (!auth.tenantId()) return router.createUrlTree(['/auth/login']);
+    if (!auth.activeTenantId()) return router.createUrlTree(['/auth/login']);
     const cfg = await tenantConfig.load();
     return (!!cfg && features.every((f) => cfg.features[f])) || router.createUrlTree(['/app/dashboard']);
   };

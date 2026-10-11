@@ -49,6 +49,14 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Email verification codes (hashes only) are server-only. pendingSignups exist before any account does.
+    match /emailOtps/{uid} {
+      allow read, write: if false;
+    }
+    match /pendingSignups/{id} {
+      allow read, write: if false;
+    }
+
     // Username registry is server-only (prevents enumeration).
     match /usernames/{name} {
       allow read, write: if false;

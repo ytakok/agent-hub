@@ -26,7 +26,7 @@ export class TenantConfigService {
 
   constructor() {
     effect(() => {
-      const tenantId = this.auth.tenantId();
+      const tenantId = this.auth.activeTenantId();
       untracked(() => {
         this.loading = null;
         if (tenantId) void this.load();

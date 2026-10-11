@@ -8,6 +8,10 @@ users/{uid}                          UserProfile: email, username, displayName, 
 userSettings/{uid}                   UserSettings: language, dashboard{defaultRange, hiddenWidgets[]}, updatedAt
                                      (API: GET/PATCH /api/users/me/settings; client may read own doc only)
 usernames/{usernameLower}            { uid }: uniqueness + username login (server-only)
+emailOtps/{uid}                      { codeHash (sha256), expiresAt, sentAt, attempts }: signup email code (server-only;
+                                     deleted once verified)
+pendingSignups/{sha256(email)}       { email, codeHash, expiresAt, sentAt, attempts }: signup code BEFORE the Firebase
+                                     account exists (server-only; deleted when the account is created)
 
 featureFlags/{key}                   FeatureFlagDefinition: description, defaultEnabled, plans[]   (global)
 

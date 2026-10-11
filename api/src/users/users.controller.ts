@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { IsIn, IsOptional, IsString, Length, Matches } from 'class-validator';
 import type { BootstrapUserRequest, Locale, UserProfile } from '@agency-hub/shared';
-import { AllowNoTenant, CurrentUser } from '../common/decorators/index.js';
+import { AllowNoTenant, AllowUnverifiedEmail, CurrentUser } from '../common/decorators/index.js';
 import type { RequestUser } from '../common/request-user.js';
 import { UsersService } from './users.service.js';
 
@@ -31,6 +31,8 @@ export class UsersController {
 
   @Post('bootstrap')
   @AllowNoTenant()
+  // Signup creates the organization first, then verifies the email; everything else waits for the code.
+  @AllowUnverifiedEmail()
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
   bootstrap(@CurrentUser() user: RequestUser, @Body() dto: BootstrapUserDto): Promise<UserProfile> {
     return this.users.bootstrap(user, dto);

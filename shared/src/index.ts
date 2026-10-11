@@ -522,3 +522,53 @@ export interface ConnectSheetRequest {
   sheetName?: string;
   headerRow?: number;
 }
+
+// ---------- Email verification (one-time code) ----------
+
+/** `POST /api/auth/email-otp/send` and `/verify` responses. */
+export interface EmailOtpStatus {
+  verified: boolean;
+  /** Seconds until a new code can be requested. */
+  retryAfterSeconds?: number;
+  /** Lifetime of the code that was just sent. */
+  expiresInSeconds?: number;
+}
+
+export interface SendEmailOtpRequest {
+  language: Locale;
+}
+
+export interface VerifyEmailOtpRequest {
+  code: string;
+}
+
+/** Error messages the verify endpoint returns (400 / 429), mapped to translations by the web app. */
+export type EmailOtpError = 'otp_invalid' | 'otp_expired' | 'otp_too_many_attempts';
+
+/**
+ * Signup in two steps, so the Firebase account is created only after the email is proven:
+ * `POST /api/auth/signup/start` emails a code (no account yet), `POST /api/auth/signup/complete`
+ * checks it, creates the verified account + organization and returns a custom token to sign in with.
+ */
+export interface SignupStartRequest {
+  email: string;
+  username: string;
+  language: Locale;
+}
+
+export interface SignupCompleteRequest {
+  email: string;
+  code: string;
+  password: string;
+  displayName: string;
+  username: string;
+  companyName: string;
+  language: Locale;
+}
+
+export interface SignupCompleteResponse {
+  customToken: string;
+}
+
+/** Signup conflicts (409), mapped to translations by the web app. */
+export type SignupError = 'email_in_use' | 'username_taken' | 'weak_password';

@@ -37,6 +37,16 @@ export const envSchema = z.object({
   SHEETS_CACHE_SECONDS: z.coerce.number().int().min(0).max(3600).default(300),
   CORS_ORIGINS: csv.pipe(z.array(z.url())).default(['http://localhost:4200']),
   N8N_SECRET: z.string().min(32).optional(),
+  /**
+   * Outgoing email (signup verification codes). Any SMTP provider works: Gmail with an app password,
+   * Resend, SendGrid, Brevo… Without SMTP_HOST, development prints codes to the API console and production refuses to send.
+   */
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().default(587),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  /** Sender shown to users, e.g. `Agency Hub <no-reply@example.com>`. Defaults to SMTP_USER. */
+  MAIL_FROM: z.string().optional(),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
 });
 

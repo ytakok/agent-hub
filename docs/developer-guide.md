@@ -155,7 +155,7 @@ npm run dev:no-emu     # terminal 2: API :3000 (watch) + web :4200
 | Service / file | Responsibility | Key API |
 |---|---|---|
 | `firebase/firebase.service.ts` | Owns the Firebase app/auth instances; connects to the Auth emulator in dev; App Check in prod | `auth`, `getAppCheckToken()` |
-| `auth/auth.service.ts` | All auth flows + auth state as signals | `user()`, `claims()`, `tenantId()`, `role()`, `isPlatformAdmin()`, `needsOnboarding()`, `ready()`, `login()`, `loginWithGoogle()`, `signup()`, `bootstrap()`, `forgotPassword()`, `verifyResetCode()`, `confirmReset()`, `verifyEmail()`, `changePassword()`, `logout()` |
+| `auth/auth.service.ts` | All auth flows + auth state as signals | `user()`, `claims()`, `tenantId()`, `role()`, `isPlatformAdmin()`, `needsOnboarding()`, `ready()`, `login()`, `loginWithGoogle()`, `startSignup()`, `completeSignup()`, `bootstrap()`, `emailVerified()`, `sendEmailOtp()`, `verifyEmailOtp()`, `forgotPassword()`, `verifyResetCode()`, `confirmReset()`, `verifyEmail()`, `changePassword()`, `logout()` |
 | `auth/auth.service.ts` → `authErrorKey(e)` | Maps Firebase/HTTP errors to i18n keys `auth.errors.*` | use in every auth form `catch` |
 | `auth/guards.ts` | Functional guards | `authGuard`, `guestGuard`, `onboardingGuard`, `roleGuard(...roles)`, `featureGuard(...keys)` |
 | `api/auth.interceptor.ts` | Adds `Authorization`, `X-Firebase-AppCheck` and `Accept-Language` to **`/api` calls only**; on 401 it refreshes the token once, then logs out | automatic |
@@ -184,8 +184,9 @@ npm run dev:no-emu     # terminal 2: API :3000 (watch) + web :4200
 /auth                     AuthLayout (lazy children)
   login, signup, forgot-password   guestGuard
   action                           Firebase email links (?mode=resetPassword|verifyEmail&oobCode=…)
+  verify-email                     verifyEmailGuard (6-digit email code; only while unverified)
   complete-profile                 onboardingGuard
-/app                      authGuard + Shell (lazy)
+/app                      authGuard + Shell (lazy): signed in → email verified → has a tenant
   dashboard
   customers                canMatch: featureGuard('module.customers')
   messages                 canMatch: featureGuard('module.messages')
@@ -196,6 +197,8 @@ npm run dev:no-emu     # terminal 2: API :3000 (watch) + web :4200
 - **Lazy loading:** every page uses `loadComponent` and the auth area uses `loadChildren`, so each page is its own chunk.
 - **Route data binding:** `withComponentInputBinding()` is on, so query params map to `input()`s. For example, `LoginPage.returnUrl` and `AuthActionPage.mode/oobCode`.
 - **Guard order:** `canMatch` runs **before** the parent's `canActivate`. That's why `featureGuard` awaits `auth.ready()` itself (see [Gotchas](#9-gotchas-weve-already-hit)).
+- **Signup with an email code:** nothing is created in Firebase Auth until the email is proven. `POST /api/auth/signup/start` checks email + username are free and emails a 6-digit code (`pendingSignups/{sha256(email)}`); `POST /api/auth/signup/complete` checks the code, then creates the user (already `emailVerified`) + organization and returns a custom token the client signs in with. The password is sent once, with the code, and never stored.
+- **Unverified accounts** (older ones, or created directly through the Firebase API): `AuthService.emailVerified()` comes from the ID token's `email_verified`; every guard sends them to `/auth/verify-email` (code via `POST /api/auth/email-otp/send`, `/verify`), and the API rejects them too (`EmailVerifiedGuard`, 403 `email_not_verified`). Google accounts are already verified. Locally without `SMTP_HOST`, the code is printed in the API console; production needs the `SMTP_*` variables (see `api/.env.example`).
 - **Open redirects:** `LoginPage.safeReturnUrl()` only accepts `/app/...` paths. Keep that rule if you add redirects.
 
 ### 4.4 Calling the API
@@ -381,10 +384,10 @@ You'll touch the API whenever a screen needs new data.
 **Request pipeline** (global, registered in `app.module.ts`):
 
 ```
-ThrottlerGuard → FirebaseAuthGuard → TenantGuard → RolesGuard → FeatureGuard → controller
-                 (verifies token,     (needs tenantId   (@Roles,         (@RequireFeature)
-                  checks revocation,   claim unless      @PlatformAdminOnly)
-                  sets req.user)       @AllowNoTenant)
+ThrottlerGuard → FirebaseAuthGuard → EmailVerifiedGuard → TenantGuard → RolesGuard → FeatureGuard → controller
+                 (verifies token,     (email_verified    (needs tenantId   (@Roles,         (@RequireFeature)
+                  checks revocation,   unless             claim unless      @PlatformAdminOnly)
+                  sets req.user)       @AllowUnverifiedEmail) @AllowNoTenant)
 → AuditInterceptor (logs POST/PATCH/PUT/DELETE) → AllExceptionsFilter (uniform error JSON)
 ```
 
@@ -394,6 +397,7 @@ ThrottlerGuard → FirebaseAuthGuard → TenantGuard → RolesGuard → FeatureG
 |---|---|
 | `@Public()` | No auth (only `POST /auth/login` uses it) |
 | `@AllowNoTenant()` | Authenticated, but no tenant needed yet (bootstrap, `GET /users/me`) |
+| `@AllowUnverifiedEmail()` | Authenticated, email not confirmed yet (bootstrap, email-code send/verify) |
 | `@Roles('owner','admin')` | Tenant role check |
 | `@PlatformAdminOnly()` | Your operators only (custom claim `platformAdmin`) |
 | `@RequireFeature('module.messages')` | 403 if the tenant's flag is off |

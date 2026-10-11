@@ -7,12 +7,16 @@ export const ALLOW_NO_TENANT = 'allowNoTenant';
 export const ROLES = 'roles';
 export const REQUIRED_FEATURES = 'requiredFeatures';
 export const PLATFORM_ADMIN = 'platformAdmin';
+export const ALLOW_UNVERIFIED_EMAIL = 'allowUnverifiedEmail';
 
 /** Skips authentication entirely. */
 export const Public = () => SetMetadata(IS_PUBLIC, true);
 
 /** Authenticated, but the user may not belong to a tenant yet (signup bootstrap). */
 export const AllowNoTenant = () => SetMetadata(ALLOW_NO_TENANT, true);
+
+/** Authenticated, but the email may not be verified yet (signup bootstrap, sending and checking the email code). */
+export const AllowUnverifiedEmail = () => SetMetadata(ALLOW_UNVERIFIED_EMAIL, true);
 
 /** Restricts a route to the given tenant roles. */
 export const Roles = (...roles: Role[]) => SetMetadata(ROLES, roles);

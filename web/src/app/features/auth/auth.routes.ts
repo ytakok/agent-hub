@@ -1,5 +1,5 @@
 import type { Routes } from '@angular/router';
-import { guestGuard, onboardingGuard } from '../../core/auth/guards';
+import { guestGuard, onboardingGuard, verifyEmailGuard } from '../../core/auth/guards';
 import { AuthLayout } from './auth-layout';
 
 export const AUTH_ROUTES: Routes = [
@@ -17,6 +17,11 @@ export const AUTH_ROUTES: Routes = [
       },
       // Target of Firebase email links (set as the custom action URL in the Firebase console).
       { path: 'action', loadComponent: () => import('./auth-action.page').then((m) => m.AuthActionPage) },
+      {
+        path: 'verify-email',
+        canActivate: [verifyEmailGuard],
+        loadComponent: () => import('./verify-email.page').then((m) => m.VerifyEmailPage),
+      },
       {
         path: 'complete-profile',
         canActivate: [onboardingGuard],

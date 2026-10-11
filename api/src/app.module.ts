@@ -5,6 +5,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module.js';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter.js';
 import { FirebaseAuthGuard } from './common/guards/firebase-auth.guard.js';
+import { EmailVerifiedGuard } from './common/guards/email-verified.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
 import { TenantGuard } from './common/guards/tenant.guard.js';
 import { AuditInterceptor } from './common/interceptors/audit.interceptor.js';
@@ -15,7 +16,10 @@ import { DashboardModule } from './dashboard/dashboard.module.js';
 import { FeatureGuard } from './feature-flags/feature.guard.js';
 import { FeatureFlagsModule } from './feature-flags/feature-flags.module.js';
 import { FirebaseModule } from './firebase/firebase.module.js';
+import { MailerModule } from './email/mailer.js';
+import { EmailOtpModule } from './email-verification/email-otp.controller.js';
 import { HealthModule } from './health/health.controller.js';
+import { SignupModule } from './signup/signup.controller.js';
 import { IntegrationsModule } from './integrations/integrations.module.js';
 import { MessagesModule } from './messages/messages.controller.js';
 import { TenantsModule } from './tenants/tenants.module.js';
@@ -43,9 +47,12 @@ import { UsersModule } from './users/users.module.js';
     }),
     ThrottlerModule.forRoot([{ name: 'default', ttl: 60_000, limit: 120 }]),
     FirebaseModule,
+    MailerModule,
     FeatureFlagsModule,
     IntegrationsModule,
     AuthModule,
+    EmailOtpModule,
+    SignupModule,
     UsersModule,
     UserSettingsModule,
     TenantsModule,
@@ -56,9 +63,10 @@ import { UsersModule } from './users/users.module.js';
     HealthModule,
   ],
   providers: [
-    // Order matters: rate limit → authenticate → tenant → role → feature flag.
+    // Order matters: rate limit → authenticate → verified email → tenant → role → feature flag.
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: FirebaseAuthGuard },
+    { provide: APP_GUARD, useClass: EmailVerifiedGuard },
     { provide: APP_GUARD, useClass: TenantGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_GUARD, useExisting: FeatureGuard },

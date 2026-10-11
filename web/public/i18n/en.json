@@ -72,7 +72,9 @@
       "terms": "I agree to the Terms of Service and Privacy Policy.",
       "submit": "Create account",
       "haveAccount": "Already have an account?",
-      "loginLink": "Sign in"
+      "loginLink": "Sign in",
+      "verifyAndCreate": "Verify and create account",
+      "editDetails": "Back to edit details"
     },
     "forgot": {
       "title": "Reset your password",
@@ -89,7 +91,18 @@
     },
     "verify": {
       "done": "Your email is verified.",
-      "continue": "Continue"
+      "continue": "Continue",
+      "title": "Verify your email",
+      "subtitle": "We sent a 6-digit code to this address. Enter it to activate your account.",
+      "code": "Verification code",
+      "hint": "The code is valid for 10 minutes. Check your spam folder if you can't find it.",
+      "submit": "Verify",
+      "noCode": "Didn't get the code?",
+      "resend": "Send a new code",
+      "resendIn": "Send again in {{seconds}}s",
+      "sent": "A new code is on its way.",
+      "sendFailed": "We couldn't send the code right now. Please try again in a minute.",
+      "otherAccount": "Use a different account"
     },
     "onboarding": {
       "title": "Finish setting up",
@@ -110,7 +123,10 @@
       "linkInvalid": "This link is invalid or was already used.",
       "recentLogin": "Please sign in again to do this.",
       "usernameTaken": "This username is taken.",
-      "generic": "Something went wrong. Please try again."
+      "generic": "Something went wrong. Please try again.",
+      "otpInvalid": "That code is incorrect. Please try again.",
+      "otpExpired": "This code has expired. Send a new one.",
+      "otpTooManyAttempts": "Too many incorrect codes. Send a new one."
     }
   },
   "validation": {
