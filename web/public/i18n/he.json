@@ -191,7 +191,8 @@
     },
     "sheets": {
       "title": "Google Sheets",
-      "synced": "סונכרן"
+      "synced": "סונכרן",
+      "moreColumns": "עוד {{count}} עמודות בגיליון"
     },
     "activity": {
       "title": "פעילות אחרונה"

@@ -1,0 +1,92 @@
+{
+  "nodes": [
+    {
+      "id": "5a1d0c30-0001-4e2b-9c00-000000000001",
+      "name": "Is it an edit request?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ ($json.chatInput ?? '').toLowerCase() }}",
+              "rightValue": "\\b(update|change|edit|modify|delete|remove|add|create|insert|set|mark|rename|cancel|move|assign|close)\\b|(תשנה|תשני|תשנו|לשנות|שנה את|שני את|שנו את|תעדכן|תעדכני|תעדכנו|עדכן|עדכני|עדכנו|לעדכן|תמחק|תמחקי|תמחקו|מחק|מחקי|למחוק|תוסיף|תוסיפי|תוסיפו|הוסף|הוסיפי|להוסיף|תערוך|תערכי|ערוך|לערוך|תסמן|תסמני|סמן|לסמן|תסגור|לסגור|תבטל|לבטל|תעביר|העבר|להעביר|תשייך|לשייך)",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "5a1d0c30-0002-4e2b-9c00-000000000002",
+      "name": "Read-only reply",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        -120
+      ],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "r1",
+              "name": "output",
+              "value": "={{ /[\\u0590-\\u05FF]/.test($json.chatInput ?? '') ? 'אני יכול רק להציג מידע, לא לעדכן או לשנות אותו. כדי לבצע שינוי, עדכנו ישירות במערכת (Google Sheets / HubSpot) או פנו לנציג.' : 'I can only look up information; I can\\'t update or change it. To make a change, update it directly in Google Sheets / HubSpot or contact a team member.' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "5a1d0c30-0003-4e2b-9c00-000000000003",
+      "name": "How to connect",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        -380
+      ],
+      "parameters": {
+        "width": 460,
+        "height": 220,
+        "content": "## Read-only guard\n1. Delete the line **When chat message received → AI Agent**.\n2. Connect **When chat message received → Is it an edit request?**\n3. **true** → Read-only reply (already connected).\n4. **false** → **AI Agent**.\n5. Remove write tools (e.g. `upsert_contact`) from the agent, then Save and **Publish**."
+      }
+    }
+  ],
+  "connections": {
+    "Is it an edit request?": {
+      "main": [
+        [
+          {
+            "node": "Read-only reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {}
+}

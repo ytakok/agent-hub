@@ -1,0 +1,399 @@
+{
+  "name": "HubSpot CRM assistant (sample)",
+  "nodes": [
+    {
+      "id": "8f1c2a10-0001-4c5e-9a00-000000000001",
+      "name": "Test connection (click to run)",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -320
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8f1c2a10-0002-4c5e-9a00-000000000002",
+      "name": "List 10 companies",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        -320
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.hubapi.com/crm/v3/objects/companies",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "10"
+            },
+            {
+              "name": "properties",
+              "value": "name,domain,city,industry,phone"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "",
+          "name": "HubSpot App Token"
+        }
+      }
+    },
+    {
+      "id": "8f1c2a10-0003-4c5e-9a00-000000000003",
+      "name": "One row per company",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -320
+      ],
+      "parameters": {
+        "fieldToSplitOut": "results",
+        "options": {}
+      }
+    },
+    {
+      "id": "8f1c2a10-0004-4c5e-9a00-000000000004",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "6b0f6c2e-3c1d-4f7a-9d55-5e1b7c2a9f10",
+      "parameters": {
+        "options": {}
+      }
+    },
+    {
+      "id": "8f1c2a10-0005-4c5e-9a00-000000000005",
+      "name": "CRM Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        300,
+        0
+      ],
+      "parameters": {
+        "options": {
+          "systemMessage": "You are the CRM assistant of an insurance agency. You answer questions about companies, contacts and deals stored in HubSpot.\nAlways look data up with the tools; never invent records, amounts or dates.\n- To find an organization use search_companies; for a person (name, email, phone) use search_contacts; for opportunities use search_deals.\n- For \"everything about company X\": first search_companies, then call company_contacts and company_deals with its id.\n- If several records match, list them briefly and ask which one the user means.\n- Amounts are in the deal currency; dates are ISO in UTC, present them as day/month/year.\n- If nothing is found, say so and suggest another search term.\nAnswer in the language the user writes in (Hebrew or English). Be concise; use short bullet lists for records."
+        }
+      }
+    },
+    {
+      "id": "8f1c2a10-0006-4c5e-9a00-000000000006",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        80,
+        260
+      ],
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "credentials": {
+        "googlePalmApi": {
+          "id": "",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "id": "8f1c2a10-0007-4c5e-9a00-000000000007",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        260
+      ],
+      "parameters": {
+        "contextWindowLength": 10
+      }
+    },
+    {
+      "id": "8f1c2a10-0008-4c5e-9a00-000000000008",
+      "name": "search_companies",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        260
+      ],
+      "parameters": {
+        "toolDescription": "Search HubSpot companies by name, domain or phone (free text). Returns up to 10 companies with id, name, domain, phone, city, industry, size, revenue and lifecycle stage.",
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/companies/search",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ query: $fromAI('searchText', 'Company name, website domain or phone to search for', 'string'), limit: 10, properties: ['name', 'domain', 'phone', 'city', 'country', 'industry', 'numberofemployees', 'annualrevenue', 'lifecyclestage', 'hubspot_owner_id', 'createdate', 'hs_lastmodifieddate'] }) }}",
+        "options": {}
+      },
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "",
+          "name": "HubSpot App Token"
+        }
+      }
+    },
+    {
+      "id": "8f1c2a10-0009-4c5e-9a00-000000000009",
+      "name": "search_contacts",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        260
+      ],
+      "parameters": {
+        "toolDescription": "Search HubSpot contacts (people) by first/last name, email, phone or company name (free text). Returns up to 10 contacts with id, name, email, phones, company, job title, lifecycle stage and lead status.",
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts/search",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ query: $fromAI('searchText', 'Person name, email, phone or company name to search for', 'string'), limit: 10, properties: ['firstname', 'lastname', 'email', 'phone', 'mobilephone', 'company', 'jobtitle', 'lifecyclestage', 'hs_lead_status', 'hubspot_owner_id', 'createdate', 'lastmodifieddate'] }) }}",
+        "options": {}
+      },
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "",
+          "name": "HubSpot App Token"
+        }
+      }
+    },
+    {
+      "id": "8f1c2a10-0010-4c5e-9a00-000000000010",
+      "name": "search_deals",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        260
+      ],
+      "parameters": {
+        "toolDescription": "Search HubSpot deals by deal name (free text). Returns up to 10 deals with id, name, amount, stage, pipeline and close date.",
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/deals/search",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ query: $fromAI('searchText', 'Deal name or part of it', 'string'), limit: 10, properties: ['dealname', 'amount', 'dealstage', 'pipeline', 'closedate', 'hubspot_owner_id', 'createdate', 'hs_lastmodifieddate'], sorts: [{ propertyName: 'closedate', direction: 'DESCENDING' }] }) }}",
+        "options": {}
+      },
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "",
+          "name": "HubSpot App Token"
+        }
+      }
+    },
+    {
+      "id": "8f1c2a10-0011-4c5e-9a00-000000000011",
+      "name": "company_contacts",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        260
+      ],
+      "parameters": {
+        "toolDescription": "List the contacts (people) linked to one HubSpot company. Needs the company id from search_companies.",
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts/search",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ filterGroups: [{ filters: [{ propertyName: 'associatedcompanyid', operator: 'EQ', value: $fromAI('companyId', 'HubSpot company id: the numeric \"id\" field returned by search_companies', 'string') }] }], limit: 50, properties: ['firstname', 'lastname', 'email', 'phone', 'mobilephone', 'company', 'jobtitle', 'lifecyclestage', 'hs_lead_status', 'hubspot_owner_id', 'createdate', 'lastmodifieddate'] }) }}",
+        "options": {}
+      },
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "",
+          "name": "HubSpot App Token"
+        }
+      }
+    },
+    {
+      "id": "8f1c2a10-0012-4c5e-9a00-000000000012",
+      "name": "company_deals",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        260
+      ],
+      "parameters": {
+        "toolDescription": "List the deals linked to one HubSpot company, newest close date first. Needs the company id from search_companies.",
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/deals/search",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ filterGroups: [{ filters: [{ propertyName: 'associations.company', operator: 'EQ', value: $fromAI('companyId', 'HubSpot company id: the numeric \"id\" field returned by search_companies', 'string') }] }], limit: 50, properties: ['dealname', 'amount', 'dealstage', 'pipeline', 'closedate', 'hubspot_owner_id', 'createdate', 'hs_lastmodifieddate'], sorts: [{ propertyName: 'closedate', direction: 'DESCENDING' }] }) }}",
+        "options": {}
+      },
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "",
+          "name": "HubSpot App Token"
+        }
+      }
+    },
+    {
+      "id": "8f1c2a10-0013-4c5e-9a00-000000000013",
+      "name": "Setup notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -420,
+        -360
+      ],
+      "parameters": {
+        "width": 380,
+        "height": 520,
+        "content": "## HubSpot CRM assistant: setup\n1. **HubSpot:** create a private app with read scopes `crm.objects.companies.read`, `crm.objects.contacts.read`, `crm.objects.deals.read` and copy its access token.\n2. **n8n:** Credentials → Add → **HubSpot App Token** → paste the token. Select it in all HubSpot nodes (the 5 HTTP nodes).\n3. Select your **Gemini** credential in the model node.\n4. Click **Test workflow** on \"Test connection\" → you should see your companies.\n5. Open the chat and ask: *\"What do we know about <company>?\"*\n\nRead-only: no tool can change HubSpot data."
+      }
+    }
+  ],
+  "connections": {
+    "Test connection (click to run)": {
+      "main": [
+        [
+          {
+            "node": "List 10 companies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List 10 companies": {
+      "main": [
+        [
+          {
+            "node": "One row per company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "CRM Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "CRM Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "CRM Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_companies": {
+      "ai_tool": [
+        [
+          {
+            "node": "CRM Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_contacts": {
+      "ai_tool": [
+        [
+          {
+            "node": "CRM Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_deals": {
+      "ai_tool": [
+        [
+          {
+            "node": "CRM Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "company_contacts": {
+      "ai_tool": [
+        [
+          {
+            "node": "CRM Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "company_deals": {
+      "ai_tool": [
+        [
+          {
+            "node": "CRM Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

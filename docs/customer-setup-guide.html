@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agency Hub: Keys and Secrets Setup Guide</title>
+<style>
+  :root {
+    --ink: #0f172a;
+    --muted: #475569;
+    --line: #e2e8f0;
+    --brand: #1f5eff;
+    --brand-soft: #eef3ff;
+    --warn: #b45309;
+    --warn-soft: #fff7e6;
+    --ok: #047857;
+    --ok-soft: #e8f8f1;
+    --danger: #b91c1c;
+    --danger-soft: #fdecec;
+  }
+  @page { size: A4; margin: 16mm 15mm 18mm; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #fff;
+    color: var(--ink);
+    font: 10.5pt/1.5 "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  main { max-width: 180mm; margin: 0 auto; }
+  h1 { font-size: 22pt; line-height: 1.2; margin: 0 0 4pt; }
+  h2 {
+    font-size: 14pt;
+    margin: 0 0 8pt;
+    padding-block-end: 4pt;
+    border-block-end: 2px solid var(--brand);
+    break-after: avoid;
+  }
+  h3 { font-size: 11pt; margin: 12pt 0 4pt; break-after: avoid; }
+  p { margin: 0 0 6pt; }
+  a { color: var(--brand); text-decoration: none; }
+  code, .mono {
+    font-family: Consolas, "Cascadia Mono", monospace;
+    font-size: 9pt;
+    background: #f1f5f9;
+    border-radius: 3px;
+    padding: 0 3px;
+    overflow-wrap: anywhere;
+  }
+  ol, ul { margin: 0 0 6pt; padding-inline-start: 18pt; }
+  li { margin-block-end: 2pt; }
+  li::marker { color: var(--brand); font-weight: 600; }
+  .path { font-weight: 600; }
+  .path::before { content: ""; }
+  section { margin-block-end: 14pt; }
+  h2 { break-before: auto; }
+  ol, ul, table, .note, .warn, .tip { break-inside: auto; }
+  li, tr { break-inside: avoid; }
+  h3 + ol, h3 + p { break-before: avoid; }
+  .keep { break-inside: avoid; }
+
+  .cover {
+    border-radius: 10px;
+    background: linear-gradient(135deg, #0f2a5c, #1f5eff);
+    color: #fff;
+    padding: 18pt 20pt;
+    margin-block-end: 12pt;
+  }
+  .cover p { color: #dbe6ff; margin: 0; }
+  .cover .meta { margin-block-start: 8pt; font-size: 9pt; color: #b9cbff; }
+
+  table { inline-size: 100%; border-collapse: collapse; margin: 4pt 0 8pt; font-size: 9.5pt; }
+  th, td { text-align: start; vertical-align: top; padding: 4pt 6pt; border-block-end: 1px solid var(--line); }
+  th { background: #f8fafc; font-weight: 600; color: var(--muted); font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.03em; }
+  tr { break-inside: avoid; }
+
+  .badge {
+    display: inline-block;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 1pt 6pt;
+    white-space: nowrap;
+  }
+  .secret { background: var(--danger-soft); color: var(--danger); }
+  .public { background: var(--ok-soft); color: var(--ok); }
+  .who { background: var(--brand-soft); color: var(--brand); }
+
+  .note, .warn, .tip {
+    border-radius: 6px;
+    padding: 6pt 9pt;
+    margin: 6pt 0 8pt;
+    border-inline-start: 4px solid;
+    break-inside: avoid;
+  }
+  .note { background: var(--brand-soft); border-color: var(--brand); }
+  .warn { background: var(--warn-soft); border-color: var(--warn); }
+  .tip { background: var(--ok-soft); border-color: var(--ok); }
+  .note p:last-child, .warn p:last-child, .tip p:last-child { margin: 0; }
+
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8pt; }
+  .collect { margin: 4pt 0 0; }
+  .collect li { margin: 0; }
+  .toc { columns: 2; column-gap: 18pt; padding-inline-start: 16pt; margin-block-end: 0; }
+  .check { list-style: none; padding-inline-start: 0; }
+  .check li::before { content: "\2610"; margin-inline-end: 6pt; color: var(--brand); }
+  footer { color: var(--muted); font-size: 8.5pt; border-block-start: 1px solid var(--line); padding-block-start: 6pt; margin-block-start: 12pt; }
+</style>
+</head>
+<body>
+<main>
+
+<div class="cover">
+  <h1>Keys and Secrets Setup Guide</h1>
+  <p>How to create every account, key and secret Agency Hub needs, step by step, and how to hand them over safely.</p>
+  <p class="meta">Agency Hub · Platforms: Firebase, Google Cloud (Sheets), Gmail, n8n, hosting · Version 1.0, October 2026</p>
+</div>
+
+<section>
+  <h2>Before you start</h2>
+  <p>Agency Hub connects to a few outside services. Each one needs its own account and one or more keys. This guide shows where to click to create each key and what to send to the Agency Hub team.</p>
+  <ul>
+    <li><span class="badge secret">Secret</span> values work like passwords. Anyone who has them can read your data or send email as you.</li>
+    <li><span class="badge public">Not secret</span> values identify your project. They are safe to share because they are visible in the website anyway.</li>
+  </ul>
+  <div class="note">
+    <p><strong>If Agency Hub hosts the system for you,</strong> you only need two sections: <strong>section 3</strong> (share your Google Sheet) and <strong>section 4</strong> (an email address to send codes from). The Agency Hub team handles the rest.</p>
+  </div>
+  <h3>Contents</h3>
+  <ol class="toc">
+    <li>Safe-handling rules</li>
+    <li>Firebase (login and database)</li>
+    <li>Google Sheets (lead data)</li>
+    <li>Gmail (sending signup codes)</li>
+    <li>n8n (AI assistant and automations)</li>
+    <li>Hosting settings</li>
+    <li>Summary: where every value goes</li>
+    <li>Handover checklist</li>
+  </ol>
+</section>
+
+<section>
+  <h2>1. Safe-handling rules</h2>
+  <ul>
+    <li><strong>Never send secrets by email, WhatsApp, SMS or chat.</strong> Use a password manager's secure share (1Password, Bitwarden Send, LastPass) or a one-time secret link that expires after it is opened.</li>
+    <li><strong>Never put secrets in documents, screenshots or code.</strong> Key files (<code>.json</code>) go straight from your computer into the secure share, then get deleted from Downloads.</li>
+    <li><strong>One key per purpose.</strong> Don't reuse the same password or key in two places, so one can be replaced without breaking the other.</li>
+    <li><strong>Use a company account, not a personal one</strong>, so access doesn't leave with an employee. For example, <code>it@youragency.co.il</code>.</li>
+    <li><strong>If a secret leaks, replace it right away.</strong> Each section below says how. Then tell the Agency Hub team, so the new value can be installed.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="section-head"><h2>2. Firebase: login and database</h2></div>
+  <p>Firebase stores user accounts (email/password and Google login) and the agency's data. Create it with the company Google account at <a href="https://console.firebase.google.com">console.firebase.google.com</a>. The free Spark plan is enough to start.</p>
+
+  <h3>2.1 Create the project</h3>
+  <ol>
+    <li>Click <span class="path">Create a project</span>, give it a name (for example <code>youragency-hub</code>) and finish the wizard. Google Analytics is optional.</li>
+    <li>Open <span class="path">Build → Firestore Database → Create database</span>, choose <strong>production mode</strong> and a region near you (for example <code>europe-west1</code>).</li>
+  </ol>
+
+  <h3>2.2 Turn on login methods</h3>
+  <ol>
+    <li>Open <span class="path">Build → Authentication → Get started</span>.</li>
+    <li>Under <span class="path">Sign-in method</span>, enable <strong>Email/Password</strong> and <strong>Google</strong>. For Google, choose a support email and save.</li>
+    <li>Under <span class="path">Settings → Authorized domains</span>, add the website's address, for example <code>youragency.co.il</code> or <code>youragency.github.io</code>.</li>
+  </ol>
+
+  <h3>2.3 Web app settings <span class="badge public">Not secret</span></h3>
+  <ol>
+    <li>Open <span class="path">Project settings</span> (gear icon) → <span class="path">General</span> → <span class="path">Your apps</span> → the web icon <code>&lt;/&gt;</code>. Register an app named <code>web</code>. Hosting is not needed.</li>
+    <li>Copy the values from the <code>firebaseConfig</code> box that appears:
+      <ul class="collect">
+        <li><code>apiKey</code>, <code>authDomain</code>, <code>projectId</code>, <code>appId</code></li>
+      </ul>
+    </li>
+  </ol>
+  <div class="tip"><p>The Firebase <code>apiKey</code> only identifies the project, so it is not a password. Security comes from the login rules and the server.</p></div>
+
+  <h3>2.4 Server key (service account) <span class="badge secret">Secret</span></h3>
+  <ol>
+    <li>Open <span class="path">Project settings → Service accounts</span>.</li>
+    <li>Click <span class="path">Generate new private key</span> → <span class="path">Generate key</span>. A <code>.json</code> file downloads.</li>
+    <li>Send this file through a secure share (section 1), then delete it from your computer.</li>
+  </ol>
+  <div class="warn"><p><strong>This file gives full control of the Firebase project.</strong> If it leaks: in the same screen, open <span class="path">Manage service account permissions</span>, find the key under the service account's <span class="path">Keys</span> tab, delete it, and generate a new one.</p></div>
+</section>
+
+<section>
+  <h2>3. Google Sheets: lead data</h2>
+  <p>Agency Hub reads leads and customers from a Google Sheet. It uses a "reader" robot account (a <em>service account</em>) that can only read the sheets you share with it. It has no other access to your Google account.</p>
+
+  <h3>3a. If Agency Hub hosts the system (most customers)</h3>
+  <ol>
+    <li>Open your sheet in Google Sheets and click <span class="path">Share</span>.</li>
+    <li>Add the reader email address the Agency Hub team gives you (it ends in <code>.iam.gserviceaccount.com</code>) as <strong>Viewer</strong>. Untick "Notify people".</li>
+    <li>Send the team the sheet's link <span class="badge public">Not secret</span>. The link alone gives no access, because the sheet stays private.</li>
+  </ol>
+  <div class="tip"><p>To stop access at any time, remove the reader email from the sheet's <span class="path">Share</span> list.</p></div>
+
+  <h3>3b. If you run your own copy: create the reader account</h3>
+  <p>Use <a href="https://console.cloud.google.com">console.cloud.google.com</a>. The Firebase project from section 2 already appears there, so select it at the top.</p>
+  <ol>
+    <li><span class="path">APIs &amp; Services → Library</span> → search for <strong>Google Sheets API</strong> → <span class="path">Enable</span>.</li>
+    <li><span class="path">IAM &amp; Admin → Service Accounts → Create service account</span>. Name it <code>agency-hub-sheets</code>, click <span class="path">Create and continue</span>, <strong>skip the role step</strong> (no roles needed) and click <span class="path">Done</span>.</li>
+    <li>Open the new account → <span class="path">Keys → Add key → Create new key → JSON</span>. A <code>.json</code> file downloads <span class="badge secret">Secret</span>.</li>
+    <li>Copy the account's email (<code>agency-hub-sheets@…iam.gserviceaccount.com</code>) <span class="badge public">Not secret</span> and share each sheet with it as Viewer (as in 3a).</li>
+  </ol>
+  <div class="warn"><p>If <span class="path">Create new key</span> is blocked with a message about an organization policy, your Google Workspace administrator has turned off key creation. Ask them to allow it for this one project (policy <code>iam.disableServiceAccountKeyCreation</code>).</p></div>
+  <p><strong>Replace a leaked key:</strong> on the service account's <span class="path">Keys</span> tab, delete the old key and create a new one.</p>
+</section>
+
+<section>
+  <h2>4. Gmail: sending signup codes</h2>
+  <p>When someone signs up, Agency Hub emails them a 6-digit code. It needs an email account to send from, ideally a dedicated one such as <code>noreply.youragency@gmail.com</code>.</p>
+
+  <h3>Option A: Gmail or Google Workspace (simplest)</h3>
+  <ol>
+    <li>Sign in to Google <strong>as the sending account</strong>. If several accounts are signed in, check the profile picture in the corner, because an app password works only for the account that created it.</li>
+    <li>Turn on 2-Step Verification: <a href="https://myaccount.google.com/signinoptions/twosv">myaccount.google.com/signinoptions/twosv</a>.</li>
+    <li>Open <a href="https://myaccount.google.com/apppasswords">myaccount.google.com/apppasswords</a>, enter the name <code>Agency Hub</code> and click <span class="path">Create</span>.</li>
+    <li>Copy the 16-letter password <span class="badge secret">Secret</span>. Google shows it only once.</li>
+  </ol>
+  <table>
+    <tr><th>Setting</th><th>Value</th></tr>
+    <tr><td>Server (SMTP host)</td><td><code>smtp.gmail.com</code></td></tr>
+    <tr><td>Port</td><td><code>587</code></td></tr>
+    <tr><td>Username</td><td>the full sending address</td></tr>
+    <tr><td>Password</td><td>the 16-letter app password, <strong>not</strong> the normal Gmail password</td></tr>
+    <tr><td>Sender name</td><td>for example <code>Your Agency &lt;noreply.youragency@gmail.com&gt;</code></td></tr>
+  </table>
+  <div class="warn"><p><strong>"App passwords" missing?</strong> Either 2-Step Verification is off, or it's a Google Workspace account whose administrator disabled app passwords. Ask the administrator, or use option B.</p></div>
+  <p><strong>Replace a leaked password:</strong> delete it on the App passwords page and create a new one.</p>
+
+  <h3>Option B: an email-sending service</h3>
+  <p>Services like Brevo, Resend or SendGrid deliver more reliably at higher volume. Create an account, verify your domain as they instruct, then copy their <strong>SMTP host, port, username and password</strong> from the SMTP settings page. They use the same fields as the table above.</p>
+</section>
+
+<section>
+  <h2>5. n8n: AI assistant and automations</h2>
+  <p>n8n runs the workflows, including the chat assistant inside Agency Hub. Use n8n Cloud at <a href="https://n8n.io">n8n.io</a>, or your own server.</p>
+
+  <h3>5.1 Google Sheets connection inside n8n <span class="badge secret">Secret</span></h3>
+  <p><strong>On n8n Cloud:</strong> go to <span class="path">Credentials → Add credential → Google Sheets OAuth2 API</span>, click <span class="path">Sign in with Google</span>, choose the account that owns the sheets and allow access. No keys need to be copied.</p>
+  <p><strong>On your own n8n server</strong>, create a Google login client first:</p>
+  <ol>
+    <li>In <a href="https://console.cloud.google.com">Google Cloud console</a>, enable <strong>Google Sheets API</strong> and <strong>Google Drive API</strong> (<span class="path">APIs &amp; Services → Library</span>).</li>
+    <li><span class="path">APIs &amp; Services → OAuth consent screen</span>: choose <em>Internal</em> (Workspace) or <em>External</em>, fill in the app name and support email, and add yourself as a test user.</li>
+    <li><span class="path">APIs &amp; Services → Credentials → Create credentials → OAuth client ID → Web application</span>. Under <em>Authorized redirect URIs</em>, paste the <strong>OAuth Redirect URL</strong> shown in n8n's credential window.</li>
+    <li>Copy the <strong>Client ID</strong> and <strong>Client secret</strong> into the n8n credential, then click <span class="path">Sign in with Google</span>.</li>
+  </ol>
+
+  <h3>5.2 AI model key <span class="badge secret">Secret</span></h3>
+  <ol>
+    <li>Example with OpenAI: <a href="https://platform.openai.com/api-keys">platform.openai.com/api-keys</a> → <span class="path">Create new secret key</span> → copy it. It is shown only once.</li>
+    <li>In n8n: <span class="path">Credentials → Add credential → OpenAI</span> → paste the key.</li>
+    <li>Set a monthly spending limit under the provider's <span class="path">Billing → Limits</span>.</li>
+  </ol>
+
+  <h3>5.3 Chat link for the website <span class="badge public">Not secret</span></h3>
+  <ol>
+    <li>Open the assistant workflow and its <strong>Chat Trigger</strong> node.</li>
+    <li>Turn on <span class="path">Make Chat Publicly Available</span> and set <span class="path">Mode</span> to <strong>Embedded Chat</strong>.</li>
+    <li>In <span class="path">Allowed Origins (CORS)</span>, enter the website address, for example <code>https://youragency.co.il</code>.</li>
+    <li>Save, then <strong>activate / publish</strong> the workflow. The chat only works on the published version.</li>
+    <li>Copy the <strong>Chat URL</strong> (it looks like <code>https://…/webhook/…/chat</code>) and send it to the team.</li>
+  </ol>
+  <div class="note"><p>The chat link is visible inside the website, so it is not secret. Keep the workflow limited to reading what the assistant needs.</p></div>
+
+  <h3>5.4 Shared secret for future automations <span class="badge secret">Secret</span></h3>
+  <p>Later phases will let n8n send data to Agency Hub. Both sides then need the same long random value (<code>N8N_SECRET</code>, 32+ characters). Create one with a password manager's generator (64 characters, letters and numbers), then store it in the password manager. It will be pasted into both n8n and the server.</p>
+</section>
+
+<section>
+  <h2>6. Hosting settings</h2>
+  <p>This section applies only if you host Agency Hub yourself. The server (for example on Render, Cloud Run or a VPS) reads its keys from <strong>environment variables</strong>, which are set in the hosting dashboard and never written in code. On Render this is <span class="path">your service → Environment → Add environment variable</span>. Save, then redeploy.</p>
+  <table>
+    <tr><th>Variable</th><th>Value</th></tr>
+    <tr><td><code>NODE_ENV</code></td><td><code>production</code></td></tr>
+    <tr><td><code>FIREBASE_PROJECT_ID</code></td><td>project ID from 2.3</td></tr>
+    <tr><td><code>FIREBASE_WEB_API_KEY</code></td><td><code>apiKey</code> from 2.3</td></tr>
+    <tr><td><code>FIREBASE_SERVICE_ACCOUNT_JSON</code></td><td>entire contents of the file from 2.4 <span class="badge secret">Secret</span></td></tr>
+    <tr><td><code>SHEETS_SERVICE_ACCOUNT_JSON</code></td><td>entire contents of the file from 3b <span class="badge secret">Secret</span></td></tr>
+    <tr><td><code>CORS_ORIGINS</code></td><td>the website address, for example <code>https://youragency.co.il</code></td></tr>
+    <tr><td><code>SMTP_HOST</code>, <code>SMTP_PORT</code>, <code>SMTP_USER</code>, <code>MAIL_FROM</code></td><td>from section 4</td></tr>
+    <tr><td><code>SMTP_PASS</code></td><td>app password from section 4 <span class="badge secret">Secret</span></td></tr>
+    <tr><td><code>N8N_SECRET</code></td><td>from 5.4, when that feature is enabled <span class="badge secret">Secret</span></td></tr>
+  </table>
+  <div class="warn"><p>For the two <code>…_JSON</code> variables, paste the <strong>whole file content</strong>, from the first <code>{</code> to the last <code>}</code>. Pasting just the email address is a common mistake and won't work.</p></div>
+</section>
+
+<section>
+  <h2>7. Summary: where every value goes</h2>
+  <table>
+    <tr><th>Value</th><th>From</th><th>Type</th><th>Used by</th></tr>
+    <tr><td>Firebase web config (<code>apiKey</code>, <code>authDomain</code>, <code>projectId</code>, <code>appId</code>)</td><td>Firebase → Project settings → Your apps</td><td><span class="badge public">Not secret</span></td><td>Website build</td></tr>
+    <tr><td>Firebase service account file</td><td>Firebase → Project settings → Service accounts</td><td><span class="badge secret">Secret</span></td><td>Server</td></tr>
+    <tr><td>Authorized domain</td><td>Firebase → Authentication → Settings</td><td><span class="badge public">Not secret</span></td><td>Google login</td></tr>
+    <tr><td>Sheets reader file</td><td>Google Cloud → Service Accounts → Keys</td><td><span class="badge secret">Secret</span></td><td>Server</td></tr>
+    <tr><td>Sheets reader email</td><td>Google Cloud → Service Accounts</td><td><span class="badge public">Not secret</span></td><td>Share each sheet with it</td></tr>
+    <tr><td>Google Sheet link</td><td>Google Sheets address bar</td><td><span class="badge public">Not secret</span></td><td>Agency Hub settings</td></tr>
+    <tr><td>Email app password</td><td>Google Account → App passwords</td><td><span class="badge secret">Secret</span></td><td>Server (signup codes)</td></tr>
+    <tr><td>n8n Google credential</td><td>n8n → Credentials (Sign in with Google)</td><td><span class="badge secret">Secret</span></td><td>Stays inside n8n</td></tr>
+    <tr><td>Google OAuth Client ID + secret (own n8n server only)</td><td>Google Cloud → Credentials</td><td><span class="badge secret">Secret</span></td><td>Stays inside n8n</td></tr>
+    <tr><td>AI model API key</td><td>AI provider dashboard</td><td><span class="badge secret">Secret</span></td><td>Stays inside n8n</td></tr>
+    <tr><td>n8n chat URL</td><td>n8n → Chat Trigger node</td><td><span class="badge public">Not secret</span></td><td>Website build</td></tr>
+    <tr><td><code>N8N_SECRET</code></td><td>Password manager generator</td><td><span class="badge secret">Secret</span></td><td>Server and n8n</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>8. Handover checklist</h2>
+  <ul class="check">
+    <li>Firebase project created with the company account; Firestore in production mode</li>
+    <li>Email/Password and Google login enabled; website domain added to Authorized domains</li>
+    <li>Firebase web config sent (not secret)</li>
+    <li>Firebase service account file sent through a secure share, then deleted locally</li>
+    <li>Google Sheet shared with the reader email as Viewer; sheet link sent</li>
+    <li>Sending email chosen; 2-Step Verification on; app password sent through a secure share</li>
+    <li>n8n: Google Sheets credential connected; AI key added with a spending limit</li>
+    <li>n8n chat: public, Embedded mode, website in Allowed Origins, workflow published; chat URL sent</li>
+    <li>All secrets stored in the company password manager, nowhere else</li>
+  </ul>
+  <div class="tip"><p>Questions, or something looks different on screen? Platforms rename menus from time to time. Search the platform's help for the item name in bold, or contact the Agency Hub team. Never send a secret to ask the question.</p></div>
+</section>
+
+<footer>Agency Hub · Keys and Secrets Setup Guide · This guide contains no secrets and may be shared with customers.</footer>
+</main>
+</body>
+</html>

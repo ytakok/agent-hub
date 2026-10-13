@@ -1,0 +1,195 @@
+{
+  "name": "Error alerts (all workflows)",
+  "nodes": [
+    {
+      "id": "3c7e9a20-0001-4b1a-8e00-000000000001",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "3c7e9a20-0002-4b1a-8e00-000000000002",
+      "name": "Summarize error",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1",
+              "name": "Time",
+              "value": "={{ $now.setZone('Asia/Jerusalem').toFormat('yyyy-MM-dd HH:mm:ss') }}",
+              "type": "string"
+            },
+            {
+              "id": "f2",
+              "name": "Workflow",
+              "value": "={{ $json.workflow.name }}",
+              "type": "string"
+            },
+            {
+              "id": "f3",
+              "name": "Failed node",
+              "value": "={{ $json.execution?.lastNodeExecuted ?? $json.trigger?.error?.node?.name ?? 'Trigger' }}",
+              "type": "string"
+            },
+            {
+              "id": "f4",
+              "name": "Error",
+              "value": "={{ $json.execution?.error?.message ?? $json.trigger?.error?.message ?? 'Unknown error' }}",
+              "type": "string"
+            },
+            {
+              "id": "f5",
+              "name": "Details",
+              "value": "={{ $json.execution?.error?.description ?? $json.trigger?.error?.description ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "f6",
+              "name": "Mode",
+              "value": "={{ $json.execution?.mode ?? 'trigger' }}",
+              "type": "string"
+            },
+            {
+              "id": "f7",
+              "name": "Execution ID",
+              "value": "={{ $json.execution?.id ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "f8",
+              "name": "Execution URL",
+              "value": "={{ $json.execution?.url ?? '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "3c7e9a20-0003-4b1a-8e00-000000000003",
+      "name": "Log to Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        500,
+        -120
+      ],
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Errors"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "3c7e9a20-0004-4b1a-8e00-000000000004",
+      "name": "Email alert",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        500,
+        120
+      ],
+      "parameters": {
+        "sendTo": "you@example.com",
+        "subject": "=⚠️ n8n error: {{ $json.Workflow }} — {{ $json['Failed node'] }}",
+        "emailType": "html",
+        "message": "=<div style=\"font-family:Arial,sans-serif;font-size:14px\">\n<h2 style=\"color:#b91c1c;margin:0 0 12px\">n8n workflow failed</h2>\n<table cellpadding=\"6\" style=\"border-collapse:collapse\">\n<tr><td><b>Workflow</b></td><td>{{ $json.Workflow }}</td></tr>\n<tr><td><b>Failed node</b></td><td>{{ $json['Failed node'] }}</td></tr>\n<tr><td><b>Error</b></td><td>{{ $json.Error }}</td></tr>\n<tr><td><b>Details</b></td><td>{{ $json.Details }}</td></tr>\n<tr><td><b>Time</b></td><td>{{ $json.Time }} (Israel)</td></tr>\n<tr><td><b>Mode</b></td><td>{{ $json.Mode }}</td></tr>\n</table>\n{{ $json['Execution URL'] ? '<p><a href=\"' + $json['Execution URL'] + '\">Open the failed execution in n8n</a></p>' : '<p>The trigger itself failed, so there is no execution to open. Check the workflow\\'s trigger node and credentials.</p>' }}\n</div>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "id": "3c7e9a20-0005-4b1a-8e00-000000000005",
+      "name": "Setup notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        -200
+      ],
+      "parameters": {
+        "width": 400,
+        "height": 500,
+        "content": "## Error alerts: setup\n1. **Google Sheet:** create a sheet with a tab named `Errors` and this header row:\n`Time | Workflow | Failed node | Error | Details | Mode | Execution ID | Execution URL`\n   Paste its URL in **Log to Google Sheet** and pick your Google credential.\n2. **Email alert:** pick your Gmail credential and replace `you@example.com`.\n3. **Save** this workflow.\n4. In **each workflow to watch** (e.g. the chatbot): ⋯ → **Settings** → **Error workflow** → choose this one → Save.\n\nRuns only for **production** failures (chat from the website, schedules, webhooks), not for manual test runs in the editor.\n\nTest: open **Error Trigger** → *Fetch test event* / *Test step* to run it with sample data."
+      }
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Summarize error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize error": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Email alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

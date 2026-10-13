@@ -191,7 +191,8 @@
     },
     "sheets": {
       "title": "Google Sheets",
-      "synced": "Synced"
+      "synced": "Synced",
+      "moreColumns": "+{{count}} more columns in the sheet"
     },
     "activity": {
       "title": "Recent activity"
