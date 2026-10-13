@@ -255,7 +255,7 @@
     "mock": "נתוני דמו"
   },
   "customers": {
-    "title": "לקוחות",
+    "title": "לקוחות - hubspot CRM",
     "count": "{{count}} לקוחות"
   },
   "customerStatus": {
@@ -504,7 +504,7 @@
   "assistant": {
     "title": "העוזר של הסוכנות",
     "subtitle": "שאלו על לידים, לקוחות ופוליסות",
-    "greeting": "שלום! איך אפשר לעזור?",
+    "greeting": "שלום! שמי יוסי, איך אפשר לעזור?",
     "newChat": "שיחה חדשה",
     "placeholder": "הקלידו שאלה…"
   }

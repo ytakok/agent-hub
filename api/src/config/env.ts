@@ -48,6 +48,7 @@ export const envSchema = z.object({
   /** Sender shown to users, e.g. `Agency Hub <no-reply@example.com>`. Defaults to SMTP_USER. */
   MAIL_FROM: z.string().optional(),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
+  HUBSPOT_ACCESS_TOKEN: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

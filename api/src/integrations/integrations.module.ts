@@ -4,6 +4,7 @@ import { GoogleSheetsClient } from './google-sheets/google-sheets.client.js';
 import { SheetsAdminController, SheetsIntegrationController } from './google-sheets/sheets-integration.controller.js';
 import { SheetsIntegrationService } from './google-sheets/sheets-integration.service.js';
 import { TenantSheetsProvider } from './google-sheets/tenant-sheets.provider.js';
+import { HubSpotCrmProvider } from './live/hubspot-crm.provider.js';
 import {
   LiveCrmProvider,
   LiveCustomerRecordsProvider,
@@ -35,6 +36,7 @@ const implementations = [
   MockCrmProvider, MockSheetsProvider, MockGmailProvider, MockWhatsAppProvider,
   LiveCrmProvider, LiveSheetsProvider, LiveGmailProvider, LiveWhatsAppProvider,
   MockCustomerRecordsProvider, LiveCustomerRecordsProvider,
+  HubSpotCrmProvider,
 ];
 
 @Global()
@@ -43,7 +45,13 @@ const implementations = [
   providers: [
     MockDatasetService,
     ...implementations,
-    selectProvider(CRM_PROVIDER, MockCrmProvider, LiveCrmProvider),
+    // CRM: HubSpot when HUBSPOT_ACCESS_TOKEN is set, otherwise the usual mock/live switch by DATA_MODE.
+    {
+      provide: CRM_PROVIDER,
+      inject: [AppConfig, MockCrmProvider, LiveCrmProvider, HubSpotCrmProvider],
+      useFactory: (config: AppConfig, m: unknown, l: unknown, hubspot: unknown) =>
+        config.get('HUBSPOT_ACCESS_TOKEN') ? hubspot : config.isMock ? m : l,
+    },
     // Sheets is chosen per tenant (connected sheet → live), not by DATA_MODE alone.
     GoogleSheetsClient,
     SheetsIntegrationService,

@@ -255,7 +255,7 @@
     "mock": "Mock data"
   },
   "customers": {
-    "title": "Customers",
+    "title": "Customers hubspot(CRM)",
     "count": "{{count}} customers"
   },
   "customerStatus": {
@@ -504,7 +504,7 @@
   "assistant": {
     "title": "Agency assistant",
     "subtitle": "Ask about leads, customers and policies",
-    "greeting": "Hi! How can I help?",
+    "greeting": "Hi! my name is Yossi, How can I help?",
     "newChat": "New conversation",
     "placeholder": "Type your question…"
   }

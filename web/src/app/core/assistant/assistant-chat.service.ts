@@ -9,6 +9,7 @@ const CHAT_VERSION = '1.41.4';
 const CHAT_JS = `https://cdn.jsdelivr.net/npm/@n8n/chat@${CHAT_VERSION}/dist/chat.bundle.es.js`;
 const CHAT_CSS = `https://cdn.jsdelivr.net/npm/@n8n/chat@${CHAT_VERSION}/dist/style.css`;
 const STYLE_ID = 'n8n-chat-style';
+const CHAT_THEME_STYLE_ID = 'n8n-chat-theme-style';
 
 interface N8nChatApp {
   unmount(): void;
@@ -78,11 +79,19 @@ export class AssistantChatService {
   }
 
   private ensureStyles(): void {
-    if (this.document.getElementById(STYLE_ID)) return;
-    const link = this.document.createElement('link');
-    link.id = STYLE_ID;
-    link.rel = 'stylesheet';
-    link.href = CHAT_CSS;
-    this.document.head.appendChild(link);
+    if (!this.document.getElementById(STYLE_ID)) {
+      const link = this.document.createElement('link');
+      link.id = STYLE_ID;
+      link.rel = 'stylesheet';
+      link.href = CHAT_CSS;
+      this.document.head.appendChild(link);
+    }
+
+    if (this.document.getElementById(CHAT_THEME_STYLE_ID)) return;
+    const themeLink = this.document.createElement('link');
+    themeLink.id = CHAT_THEME_STYLE_ID;
+    themeLink.rel = 'stylesheet';
+    themeLink.href = new URL('assistant-chat.css', this.document.baseURI).toString();
+    this.document.head.appendChild(themeLink);
   }
 }
