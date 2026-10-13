@@ -1,0 +1,198 @@
+{
+  "name": "Gmail Invoices to Firebase",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "61f80cf0-4292-4d9e-aeeb-a80386403f7f",
+      "name": "Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": true,
+        "simple": false,
+        "filters": {
+          "q": "subject:invoice has:attachment filename:pdf",
+          "readStatus": "unread",
+          "sender": "ytakok@gmail.com"
+        },
+        "options": {
+          "dataPropertyAttachmentsPrefixName": "attachment_",
+          "downloadAttachments": true
+        }
+      },
+      "id": "ef469341-6bd2-4c17-b597-0aa25c1108ec",
+      "name": "Get Unread Invoice Emails",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "webhookId": "41e73814-d365-4b22-a70a-e10f7d3dd814",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bWKMc006dadIPFRz",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "attachment_0",
+        "options": {}
+      },
+      "id": "33d639ad-53b8-498e-882e-e929a0b17d36",
+      "name": "Extract from File",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const email = $('Get Unread Invoice Emails').item.json;\nconst pdfText = $json.text || '';\nconst subject = email.subject || '';\nconst emailBody = email.text || (email.html || '').replace(/<[^>]+>/g, ' ');\nconst content = subject + '\\n' + pdfText + '\\n' + emailBody;\n\n// Invoice number: \"Invoice #123\", \"Invoice No: 123\", \"Invoice number INV-123\", \"Inv. 123\"\nlet invoiceNumber = null;\nconst invMatch = content.match(/inv(?:oice)?\\.?\\s*(?:number|num|no\\.?|#|:)?\\s*[:#]?\\s*([A-Z0-9][A-Z0-9\\-\\/]{1,30})/i);\nif (invMatch) invoiceNumber = invMatch[1];\n\n// Amount: look near amount/total/due keywords first, then any currency value\nlet amount = null;\nlet currency = null;\nconst amtRegex = /(?:total|amount|sum|due|balance)[^0-9$€£₪]{0,30}([$€£₪])?\\s*([0-9][0-9.,\\s]*[0-9]|[0-9])\\s*(USD|EUR|GBP|ILS|NIS)?/i;\nconst anyCurrency = /([$€£₪])\\s*([0-9][0-9.,]*[0-9]|[0-9])|([0-9][0-9.,]*[0-9])\\s*(USD|EUR|GBP|ILS|NIS)/i;\nlet m = content.match(amtRegex);\nlet raw = null;\nif (m) { raw = m[2]; currency = m[1] || m[3] || null; }\nelse {\n  const a = content.match(anyCurrency);\n  if (a) { raw = a[2] || a[3]; currency = a[1] || a[4] || null; }\n}\nif (raw) {\n  let s = raw.replace(/\\s/g, '');\n  const lastComma = s.lastIndexOf(',');\n  const lastDot = s.lastIndexOf('.');\n  if (lastComma > lastDot) {\n    // European format 3.400,00 or 1250,50\n    s = s.replace(/\\./g, '').replace(',', '.');\n  } else {\n    s = s.replace(/,/g, '');\n  }\n  const n = parseFloat(s);\n  amount = isNaN(n) ? null : n;\n}\nconst symbolMap = { '$': 'USD', '€': 'EUR', '£': 'GBP', '₪': 'ILS', 'NIS': 'ILS' };\nif (currency) currency = symbolMap[currency.toUpperCase()] || symbolMap[currency] || currency.toUpperCase();\n\nconst sender = (email.from && email.from.value && email.from.value[0] && email.from.value[0].address) || '';\n\nreturn {\n  json: {\n    messageId: email.id,\n    invoiceNumber: invoiceNumber,\n    amount: amount,\n    currency: currency,\n    subject: subject,\n    sender: sender,\n    receivedAt: email.date || null,\n    processedAt: new Date().toISOString(),\n    parsed: Boolean(invoiceNumber && amount !== null),\n  },\n};"
+      },
+      "id": "0c56bcb4-9b89-412e-b620-bc6fe2b15729",
+      "name": "Extract Invoice Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "projectId": "sample-app-5fff2-default-rtdb",
+        "operation": "update",
+        "path": "=invoices/{{ $json.messageId }}",
+        "attributes": "messageId,invoiceNumber,amount,currency,subject,sender,receivedAt,processedAt,parsed"
+      },
+      "id": "7f1ae474-848f-4116-8455-4ff2a2f94d02",
+      "name": "Save to Firebase",
+      "type": "n8n-nodes-base.googleFirebaseRealtimeDatabase",
+      "typeVersion": 1,
+      "position": [
+        896,
+        0
+      ],
+      "credentials": {
+        "googleFirebaseRealtimeDatabaseOAuth2Api": {
+          "id": "FxPPOVKc2f8wSCGa",
+          "name": "Google Firebase Realtime Database account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "markAsRead",
+        "messageId": "={{ $('Extract Invoice Data').item.json.messageId }}"
+      },
+      "id": "095e6c3f-2704-4f60-a92c-9a728a60b9df",
+      "name": "Mark Email as Read",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1120,
+        0
+      ],
+      "webhookId": "94f2eaad-eafa-4a65-a426-09e7986a0b7a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bWKMc006dadIPFRz",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Every Hour": {
+      "main": [
+        [
+          {
+            "node": "Get Unread Invoice Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Unread Invoice Emails": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Extract Invoice Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Invoice Data": {
+      "main": [
+        [
+          {
+            "node": "Save to Firebase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Firebase": {
+      "main": [
+        [
+          {
+            "node": "Mark Email as Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "ac5fc712-2306-40d2-831d-c897d14ca476",
+  "meta": {
+    "instanceId": "8a8c95ce2bd927a5f2038a2d188b8ab7fafd8ea551cc2f76794bbde0baa2050c"
+  },
+  "nodeGroups": [],
+  "id": "etriShdt0zjfLiHV",
+  "tags": []
+}

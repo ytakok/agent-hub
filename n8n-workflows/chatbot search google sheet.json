@@ -1,0 +1,256 @@
+{
+  "name": "chatbot search google sheet",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {
+          "allowedOrigins": "https://ytakok.github.io, http://localhost:4200"
+        }
+      },
+      "id": "e01cdcae-4073-41c4-9979-1a266017e58a",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -1216,
+        48
+      ],
+      "webhookId": "446e48f9-570a-416a-be34-394c3c540779"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Call only ONE tool per step and wait for its result before calling another.\n\nLookups:\n- When the user asks for a person's details, or any lookup, and doesn't say where, NEVER ask where to search. Search both sources: first call list_contacts, then call \"Get row(s) in sheet in Google Sheets\", then match the name in each result.\n- Show what you found and say which source it came from (CRM or leads sheet). If the person is in both, show both. If in neither, say you didn't find them.\n- Only search a single source if the user names it.\n\nAdding or updating:\n- Requests to add or update a person are about the CRM unless the user explicitly mentions the Google Sheet. Handle them with upsert_contact.\n- The Google Sheet is read-only. If the user explicitly asks to change it, explain briefly, in your own words, that it is read-only."
+        }
+      },
+      "id": "422c8abd-7185-45af-8afa-6690855ddc9b",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -720,
+        16
+      ]
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "id": "fae4d0ea-8626-45f9-982f-eb4fb4c72125",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -912,
+        256
+      ],
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "de3eb3ee-79a3-4044-9a15-7ed76d2f9161",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -784,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Get row(s) inReturns all leads from the agency's \"לידים מהאתר\" Google Sheet.\nColumns: name (customer name), phone, product (insurance type in Hebrew, e.g. ביטוח דירה, ביטוח רכב, ביטוח בריאות), remarks, date.\nUse it for ANY question about leads, customers, phone numbers or insurance products - for example \"leads interested in home insurance\". sheet in Google Sheets\n\n",
+        "documentId": {
+          "__rl": true,
+          "value": "=https://docs.google.com/spreadsheets/d/14vZ9mvSilBcQLq5kd0_chg0G1IaS-8Wjs7dfyFtjZs8/edit?gid=2033572020#gid=2033572020",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2033572020,
+          "mode": "list",
+          "cachedResultName": "Untitled",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14vZ9mvSilBcQLq5kd0_chg0G1IaS-8Wjs7dfyFtjZs8/edit#gid=2033572020"
+        },
+        "options": {}
+      },
+      "id": "312ac493-5011-4edd-9d0a-868eb467623f",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -528,
+        272
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "UGdLAWwNQULf7Kwo",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "List HubSpot CRM contacts (customers) with name, email, phone, company",
+        "authentication": "oAuth2",
+        "operation": "getAll",
+        "additionalFields": {
+          "propertiesCollection": {
+            "propertiesValues": {
+              "properties": [
+                "firstname",
+                "lastname",
+                "email",
+                "phone",
+                "company"
+              ],
+              "propertyMode": "valueOnly"
+            }
+          }
+        }
+      },
+      "id": "432c5876-8974-406d-9329-6fefdc99848c",
+      "name": "list_contacts",
+      "type": "n8n-nodes-base.hubspotTool",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        256
+      ],
+      "credentials": {
+        "hubspotOAuth2Api": {
+          "id": "rIczG6XykZG9FaBS",
+          "name": "HubSpot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create a new HubSpot contact, or update an existing one matched by email. Email is required - ask the user for it if missing. Only fill the other fields when the user provided them.",
+        "authentication": "oAuth2",
+        "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('email', 'Contact email address (required, used to find an existing contact)') }}",
+        "additionalFields": {
+          "companyName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('companyName', 'Contact company name, if provided') }}",
+          "firstName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('firstName', 'Contact first name, if provided') }}",
+          "lastName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('lastName', 'Contact last name, if provided') }}",
+          "phoneNumber": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('phoneNumber', 'Contact phone number, if provided') }}"
+        },
+        "options": {
+          "resolveData": true
+        }
+      },
+      "id": "c30f3eac-4f04-4d43-86b4-38e90f8e9fe3",
+      "name": "upsert_contact",
+      "type": "n8n-nodes-base.hubspotTool",
+      "typeVersion": 2.2,
+      "position": [
+        -112,
+        240
+      ],
+      "credentials": {
+        "hubspotOAuth2Api": {
+          "id": "rIczG6XykZG9FaBS",
+          "name": "HubSpot account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "list_contacts": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "upsert_contact": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "FvryNTuN90q45uUN",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "d030ba91-51d2-4b8d-b46d-59fb02189225",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8a8c95ce2bd927a5f2038a2d188b8ab7fafd8ea551cc2f76794bbde0baa2050c"
+  },
+  "nodeGroups": [],
+  "id": "pUijxiVuyNCiRAjN",
+  "tags": []
+}

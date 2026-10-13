@@ -11,26 +11,37 @@ Other docs:
 
 ## Contents
 
-1. [The 2-minute mental model](#1-the-2-minute-mental-model)
-2. [Repository layout](#2-repository-layout)
-3. [Running and debugging](#3-running-and-debugging)
-4. [Frontend architecture](#4-frontend-architecture)
-   - 4.1 Bootstrap sequence
-   - 4.2 `core/` services
-   - 4.3 Routing and guards
-   - 4.4 Calling the API
-   - 4.5 Feature flags in the UI
-   - 4.6 Styling: LESS, tokens, theming
-   - 4.7 RTL / LTR
-   - 4.8 i18n
-   - 4.9 Shared UI building blocks
-   - 4.10 Pages and dashboard widgets
-5. [Backend essentials (for frontend devs)](#5-backend-essentials-for-frontend-devs)
-6. [Recipes](#6-recipes)
-7. [Testing](#7-testing)
-8. [Conventions checklist](#8-conventions-checklist)
-9. [Gotchas we've already hit](#9-gotchas-weve-already-hit)
-10. [Roadmap](#10-roadmap)
+- [Agency Hub: Developer Guide](#agency-hub-developer-guide)
+  - [Contents](#contents)
+  - [1. The 2-minute mental model](#1-the-2-minute-mental-model)
+  - [2. Repository layout](#2-repository-layout)
+  - [3. Running and debugging](#3-running-and-debugging)
+  - [4. Frontend architecture](#4-frontend-architecture)
+    - [4.1 Bootstrap sequence](#41-bootstrap-sequence)
+    - [4.2 `core/` services](#42-core-services)
+    - [4.3 Routing and guards](#43-routing-and-guards)
+    - [4.4 Calling the API](#44-calling-the-api)
+    - [4.5 Feature flags in the UI](#45-feature-flags-in-the-ui)
+    - [4.6 Styling: LESS, tokens, theming](#46-styling-less-tokens-theming)
+    - [4.7 RTL / LTR](#47-rtl--ltr)
+    - [4.8 i18n](#48-i18n)
+    - [4.9 Shared UI building blocks](#49-shared-ui-building-blocks)
+    - [4.10 Pages and dashboard widgets](#410-pages-and-dashboard-widgets)
+  - [5. Backend essentials (for frontend devs)](#5-backend-essentials-for-frontend-devs)
+  - [6. Recipes](#6-recipes)
+    - [6.1 Add a new page (e.g. "Policies")](#61-add-a-new-page-eg-policies)
+    - [6.2 Add an API endpoint for a page](#62-add-an-api-endpoint-for-a-page)
+    - [6.3 Add a feature flag](#63-add-a-feature-flag)
+    - [6.4 Add a dashboard widget](#64-add-a-dashboard-widget)
+    - [6.5 Add a new company (tenant) brand](#65-add-a-new-company-tenant-brand)
+    - [6.6 Add a language (e.g. Arabic)](#66-add-a-language-eg-arabic)
+    - [6.7 Add a form](#67-add-a-form)
+    - [6.8 Restrict something by role](#68-restrict-something-by-role)
+  - [7. Testing](#7-testing)
+  - [8. Conventions checklist](#8-conventions-checklist)
+  - [9. Gotchas we've already hit](#9-gotchas-weve-already-hit)
+  - [10. Roadmap](#10-roadmap)
+  - [start the up locally](#start-the-up-locally)
 
 ---
 
@@ -613,3 +624,21 @@ Ordered by what unblocks the most:
    - Optional MFA.
    - Cloud Run (API) and Firebase Hosting (web) with `/api` rewrites.
    - CI that runs `npm test` and `npm run build`.
+
+
+
+## start the up locally
+Terminal 1: start the Firebase emulators
+
+npm run emulators
+
+
+Terminal 2: seed the demo data
+This starts Auth on :9099, Firestore on :8080 and the Emulator UI on :4000. Leave it running.
+
+npm run seed
+
+Terminal 3: start the API and the web app
+Run this once each time you start the emulators, because the emulator data is in-memory and disappears when you stop it.
+
+npm run dev:no-emu
