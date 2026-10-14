@@ -72,7 +72,9 @@
       "terms": "I agree to the Terms of Service and Privacy Policy.",
       "submit": "Create account",
       "haveAccount": "Already have an account?",
-      "loginLink": "Sign in"
+      "loginLink": "Sign in",
+      "verifyAndCreate": "Verify and create account",
+      "editDetails": "Back to edit details"
     },
     "forgot": {
       "title": "Reset your password",
@@ -89,7 +91,18 @@
     },
     "verify": {
       "done": "Your email is verified.",
-      "continue": "Continue"
+      "continue": "Continue",
+      "title": "Verify your email",
+      "subtitle": "We sent a 6-digit code to this address. Enter it to activate your account.",
+      "code": "Verification code",
+      "hint": "The code is valid for 10 minutes. Check your spam folder if you can't find it.",
+      "submit": "Verify",
+      "noCode": "Didn't get the code?",
+      "resend": "Send a new code",
+      "resendIn": "Send again in {{seconds}}s",
+      "sent": "A new code is on its way.",
+      "sendFailed": "We couldn't send the code right now. Please try again in a minute.",
+      "otherAccount": "Use a different account"
     },
     "onboarding": {
       "title": "Finish setting up",
@@ -110,7 +123,10 @@
       "linkInvalid": "This link is invalid or was already used.",
       "recentLogin": "Please sign in again to do this.",
       "usernameTaken": "This username is taken.",
-      "generic": "Something went wrong. Please try again."
+      "generic": "Something went wrong. Please try again.",
+      "otpInvalid": "That code is incorrect. Please try again.",
+      "otpExpired": "This code has expired. Send a new one.",
+      "otpTooManyAttempts": "Too many incorrect codes. Send a new one."
     }
   },
   "validation": {
@@ -175,7 +191,8 @@
     },
     "sheets": {
       "title": "Google Sheets",
-      "synced": "Synced"
+      "synced": "Synced",
+      "moreColumns": "+{{count}} more columns in the sheet"
     },
     "activity": {
       "title": "Recent activity"
@@ -238,7 +255,7 @@
     "mock": "Mock data"
   },
   "customers": {
-    "title": "Customers",
+    "title": "Customers hubspot(CRM)",
     "count": "{{count}} customers"
   },
   "customerStatus": {
@@ -282,6 +299,14 @@
       "title": "Change password",
       "current": "Current password",
       "submit": "Update password"
+    },
+    "prefs": {
+      "title": "My preferences",
+      "language": "Language",
+      "defaultRange": "Default dashboard range",
+      "widgets": "My dashboard",
+      "widgetsHint": "Uncheck widgets to hide them on your dashboard only. Other people in the organization are not affected.",
+      "noOrgWidgets": "Your organization has no dashboard widgets turned on."
     }
   },
   "features": {
@@ -479,7 +504,7 @@
   "assistant": {
     "title": "Agency assistant",
     "subtitle": "Ask about leads, customers and policies",
-    "greeting": "Hi! How can I help?",
+    "greeting": "Hi! my name is Yossi, How can I help?",
     "newChat": "New conversation",
     "placeholder": "Type your question…"
   }
