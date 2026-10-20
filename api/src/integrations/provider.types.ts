@@ -11,10 +11,10 @@ import type {
   DataSource,
   IntegrationHealth,
   Lead,
-  LeadStage,
   Locale,
   Message,
   Paginated,
+  PipelineStage,
   Policy,
   SheetRecord,
 } from '@agency-hub/shared';
@@ -37,7 +37,7 @@ export interface PageQuery {
 }
 
 export interface CrmProvider extends IntegrationProvider {
-  getPipeline(ctx: ProviderContext, since: Date): Promise<{ stage: LeadStage; count: number; value: number }[]>;
+  getPipeline(ctx: ProviderContext, since: Date): Promise<PipelineStage[]>;
   getRecentLeads(ctx: ProviderContext, limit: number): Promise<Lead[]>;
   countNewLeads(ctx: ProviderContext, from: Date, to: Date): Promise<number>;
   listCustomers(ctx: ProviderContext, query: PageQuery): Promise<Paginated<Customer>>;

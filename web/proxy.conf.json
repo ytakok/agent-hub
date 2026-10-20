@@ -5,11 +5,19 @@
     "changeOrigin": false
   },
   "/assistant-chat": {
-    "target": "https://inteliaiconsultancy.app.n8n.cloud",
+    "target": "https://n8n.34-71-188-154.sslip.io",
     "secure": true,
     "changeOrigin": true,
     "pathRewrite": {
       "^/assistant-chat": "/webhook/446e48f9-570a-416a-be34-394c3c540779/chat"
+    }
+  },
+  "/ah-connections": {
+    "target": "https://n8n.34-71-188-154.sslip.io",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/ah-connections": "/webhook/ah-connections"
     }
   }
 }

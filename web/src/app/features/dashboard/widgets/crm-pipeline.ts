@@ -23,7 +23,7 @@ import { blockState, dataOf } from './block-state';
           @for (lead of d.recentLeads.slice(0, 4); track lead.id) {
             <li>
               <span class="name">{{ lead.name }}</span>
-              <span class="badge">{{ 'stages.' + lead.stage | translate }}</span>
+              <span class="badge">{{ lead.stageLabel ?? ('stages.' + lead.stage | translate) }}</span>
               <span class="value">{{ lead.value | money: language.intlLocale() : currency() }}</span>
               <time class="time">{{ lead.createdAt | relTime: language.intlLocale() }}</time>
             </li>
@@ -85,7 +85,8 @@ export class CrmPipeline {
         type: 'category',
         inverse: true,
         position: rtl ? 'right' : 'left',
-        data: pipeline.map((p) => this.translate.instant(`stages.${p.stage}`)),
+        // Real CRM stage names (e.g. HubSpot deal stages) when the source provides them.
+        data: pipeline.map((p) => p.label ?? this.translate.instant(`stages.${p.stage}`)),
         axisLabel: { color: muted },
         axisTick: { show: false },
       },

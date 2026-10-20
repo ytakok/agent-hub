@@ -22,7 +22,8 @@
     "account": "תפריט חשבון",
     "main": "ניווט ראשי",
     "toggle": "פתיחה/סגירה של הניווט",
-    "skipToContent": "דילוג לתוכן"
+    "skipToContent": "דילוג לתוכן",
+    "connections": "חיבורים"
   },
   "roles": {
     "owner": "בעלים",
@@ -507,5 +508,73 @@
     "greeting": "שלום! שמי יוסי, איך אפשר לעזור?",
     "newChat": "שיחה חדשה",
     "placeholder": "הקלידו שאלה…"
+  },
+  "connections": {
+    "title": "חיבורים",
+    "subtitle": "מחברים את החשבונות פעם אחת, ואנחנו מגדירים את כל השאר ברקע.",
+    "refresh": "רענון",
+    "notConfigured": "חיבורים אינם זמינים בסביבה הזו (connectionsApiUrl ריק).",
+    "updated": "עודכן",
+    "state": {
+      "connected": "מחובר",
+      "notConnected": "לא מחובר"
+    },
+    "waiting": "ממתין לאישור…",
+    "signInWithGoogle": "התחברות עם Google",
+    "reconnect": "חיבור מחדש",
+    "addKey": "הוספת מפתח",
+    "replaceKey": "החלפת מפתח",
+    "saveKey": "בדיקה ושמירה",
+    "testing": "בודק…",
+    "cancel": "ביטול",
+    "disconnect": "ניתוק",
+    "connected": "{{name}} מחובר.",
+    "timeout": "עדיין לא התקבל אישור. אם סיימתם בחלון הקופץ, לחצו על רענון.",
+    "keyPrivacy": "המפתח נשלח פעם אחת ב-HTTPS ונשמר מוצפן. הוא לא יוצג כאן שוב.",
+    "footnote": "עבור Google ייפתח חלון קופץ. אשרו שם את הגישה וחזרו לכאן. ייתכן שהחלון יציג \"Connection successful\" — אפשר לסגור אותו.",
+    "fields": {
+      "appToken": "טוקן גישה של Private app",
+      "apiKey": "מפתח API"
+    },
+    "providers": {
+      "gmail": {
+        "name": "Gmail",
+        "description": "שליחה וקריאה של מיילים מתיבת הדואר"
+      },
+      "googleSheets": {
+        "name": "Google Sheets",
+        "description": "קריאה ועדכון של הגיליונות שלכם"
+      },
+      "firebase": {
+        "name": "Firebase Realtime Database",
+        "description": "קריאה וכתיבה של נתוני Firebase"
+      },
+      "hubspot": {
+        "name": "HubSpot",
+        "description": "אנשי קשר, חברות ועסקאות",
+        "howTo": "ב-HubSpot: Settings ← Integrations ← Private apps ← Create a private app, ואז העתיקו את ה-access token."
+      },
+      "gemini": {
+        "name": "Google Gemini",
+        "description": "יכולות AI",
+        "howTo": "צרו מפתח ב-aistudio.google.com ← Get API key והדביקו אותו כאן."
+      }
+    },
+    "errors": {
+      "unauthenticated": "יש להתחבר מחדש.",
+      "invalid_token": "פג תוקף ההתחברות. יש להתחבר מחדש.",
+      "no_tenant": "החשבון שלכם עדיין לא משויך לארגון.",
+      "forbidden": "רק מנהלי הארגון יכולים לנהל חיבורים.",
+      "unknown_provider": "השירות הזה אינו נתמך.",
+      "oauth_client_missing": "ההתחברות עם Google עדיין לא הוגדרה בשרת.",
+      "oauth_url_failed": "לא הצלחנו להתחיל את ההתחברות. נסו שוב.",
+      "missing_field": "יש למלא את המפתח.",
+      "test_failed": "המפתח לא עבד. בדקו אותו ונסו שוב.",
+      "network": "אין חיבור לשרת. בדקו את החיבור לאינטרנט.",
+      "server_error": "משהו השתבש אצלנו. נסו שוב.",
+      "unknown": "משהו השתבש. נסו שוב.",
+      "service_unavailable": "שירות החיבורים אינו זמין כרגע. ודאו שה-workflow ‏\"AgencyHub · Connections API\" ב-n8n פעיל, ואז לחצו על רענון.",
+      "not_configured": "שירות החיבורים עדיין לא הוגדר במלואו."
+    }
   }
 }

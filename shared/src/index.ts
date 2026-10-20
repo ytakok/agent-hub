@@ -162,8 +162,11 @@ export interface Lead {
   name: string;
   phone: string;
   source: string;
-  productInterest: PolicyType;
+  /** Optional: CRMs such as HubSpot deals don't carry a product. */
+  productInterest?: PolicyType;
   stage: LeadStage;
+  /** The CRM's own stage name (e.g. a HubSpot deal stage label). Shown instead of the translated `stage` when set. */
+  stageLabel?: string;
   value: number;
   assignedTo?: string;
   createdAt: IsoDate;
@@ -235,12 +238,22 @@ export interface IntegrationHealth {
   itemsLastSync?: number;
 }
 
+/** One bar in the CRM pipeline chart. */
+export interface PipelineStage {
+  /** Normalized bucket — drives KPIs (won/lost are excluded from open pipeline value). */
+  stage: LeadStage;
+  /** The CRM's own stage name, in board order. Falls back to the translated `stage` when absent. */
+  label?: string;
+  count: number;
+  value: number;
+}
+
 export interface DashboardSummary {
   range: DashboardRange;
   generatedAt: IsoDate;
   currency: string;
   kpis: Kpi[];
-  crm: SourceBlock<{ pipeline: { stage: LeadStage; count: number; value: number }[]; recentLeads: Lead[] }>;
+  crm: SourceBlock<{ pipeline: PipelineStage[]; recentLeads: Lead[] }>;
   sheets: SourceBlock<{ sheetName: string; columns: string[]; rows: SheetRecord[] }>;
   gmail: SourceBlock<{ unread: number; messages: Message[] }>;
   whatsapp: SourceBlock<{ pending: number; overdue: number; messages: Message[] }>;

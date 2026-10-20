@@ -48,7 +48,10 @@ export const envSchema = z.object({
   /** Sender shown to users, e.g. `Agency Hub <no-reply@example.com>`. Defaults to SMTP_USER. */
   MAIL_FROM: z.string().optional(),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
+  /** HubSpot private-app token. Scopes: crm.objects.contacts.read, crm.objects.deals.read. */
   HUBSPOT_ACCESS_TOKEN: z.string().optional(),
+  /** Deal pipeline shown in the CRM widget. Defaults to HubSpot's `default` pipeline (or the first one). */
+  HUBSPOT_DEAL_PIPELINE_ID: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

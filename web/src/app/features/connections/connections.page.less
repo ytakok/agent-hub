@@ -1,0 +1,137 @@
+@import (reference) '../../../styles/tokens.less';
+@import (reference) '../../../styles/breakpoints.less';
+@import (reference) '../../../styles/mixins.less';
+
+:host {
+  display: block;
+}
+
+.alert {
+  margin-block-end: @space-4;
+}
+
+.list {
+  display: grid;
+  gap: @space-3;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  .card();
+  padding: @space-4;
+}
+
+// Mobile: icon + text, then status + actions underneath. Wider: one line like a credential list.
+.main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'tile text'
+    'status status'
+    'actions actions';
+  gap: @space-3;
+  align-items: center;
+}
+
+.from(@md, {
+  .main {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    grid-template-areas: 'tile text status actions';
+  }
+});
+
+.tile {
+  grid-area: tile;
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: @radius-sm;
+  color: var(--tile);
+  background: color-mix(in srgb, var(--tile) 12%, transparent);
+}
+
+.text {
+  grid-area: text;
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+
+  strong {
+    font-weight: 600;
+  }
+}
+
+.muted {
+  color: @color-muted;
+  font-size: @font-sm;
+}
+
+.status {
+  grid-area: status;
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+  }
+}
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  gap: @space-2;
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-2;
+  }
+
+  .danger {
+    color: @color-danger;
+  }
+}
+
+.key-form {
+  margin-block-start: @space-4;
+  padding-block-start: @space-4;
+  border-block-start: 1px solid @color-border;
+  max-inline-size: 560px;
+
+  > .muted {
+    margin-block-end: @space-3;
+  }
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: @space-2;
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: @space-1;
+  margin-block-start: @space-3;
+  color: @color-muted;
+  font-size: @font-xs;
+}
+
+.footnote {
+  display: flex;
+  align-items: flex-start;
+  gap: @space-2;
+  margin-block-start: @space-5;
+  color: @color-muted;
+  font-size: @font-sm;
+
+  ah-icon {
+    flex: none;
+    margin-block-start: 2px;
+  }
+}

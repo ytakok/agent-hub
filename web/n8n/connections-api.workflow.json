@@ -1,0 +1,101 @@
+{
+  "name": "AgencyHub · Connections API",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ah-connections",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "https://ytakok.github.io,http://localhost:4200"
+        }
+      },
+      "id": "d03aeedb-b6b4-441a-a33d-a3ed61a20b08",
+      "name": "POST /ah-connections",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "ah-connections"
+    },
+    {
+      "parameters": {
+        "jsCode": "// AgencyHub · Connections API — the code inside the \"Handle request\" Code node.\n// (Readable copy only — connections-api.workflow.json already contains this code. Edit it in n8n.)\n//\n// One POST endpoint: { action: 'status' | 'start' | 'saveKey' | 'disconnect', provider?, fields? }\n// Header: Authorization: Bearer <Firebase ID token>\n//\n// The customer never logs into n8n:\n//  - OAuth services: we create the credential through the n8n public API, ask n8n for its Google/HubSpot\n//    consent URL, and the customer approves it in a popup. n8n's own callback stores and refreshes the tokens.\n//  - API-key services: we create the credential with the pasted key and test it before keeping it.\n\n// ─── CONFIG — fill these in (move secrets to n8n Variables or env vars when you can) ─────────────────────────\nconst C = {\n  n8nBaseUrl: 'https://n8n.34-71-188-154.sslip.io',\n  /** Settings → n8n API → Create API key (owner/admin user). */\n  n8nApiKey: 'PASTE_N8N_API_KEY',\n  /**\n   * An n8n login (owner or a dedicated admin user, MFA off). Only used to ask n8n for the OAuth consent URL\n   * — n8n doesn't expose that through its public API. Must be the same user as the API key above.\n   */\n  n8nLoginEmail: 'PASTE_N8N_LOGIN_EMAIL',\n  n8nLoginPassword: 'PASTE_N8N_LOGIN_PASSWORD',\n  /** Firebase console → Project settings → Web API key (public value, same one the Angular app uses). */\n  firebaseWebApiKey: 'PASTE_FIREBASE_WEB_API_KEY',\n  /** Google Cloud OAuth client (Web application). Redirect URI: <n8nBaseUrl>/rest/oauth2-credential/callback */\n  google: { clientId: 'PASTE_GOOGLE_CLIENT_ID', clientSecret: 'PASTE_GOOGLE_CLIENT_SECRET' },\n  /** Roles allowed to manage connections. Empty = any signed-in member of the organization. */\n  allowedRoles: [],\n};\n\n// Add a service = add one entry here (and one in the Angular PROVIDERS list).\nconst P = {\n  gmail: { label: 'Gmail', kind: 'oauth', type: 'gmailOAuth2', client: 'google' },\n  googleSheets: { label: 'Google Sheets', kind: 'oauth', type: 'googleSheetsOAuth2Api', client: 'google' },\n  firebase: { label: 'Firebase Realtime DB', kind: 'oauth', type: 'googleFirebaseRealtimeDatabaseOAuth2Api', client: 'google' },\n  hubspot: { label: 'HubSpot', kind: 'apiKey', type: 'hubspotAppToken', fields: ['appToken'] },\n  gemini: {\n    label: 'Google Gemini',\n    kind: 'apiKey',\n    type: 'googlePalmApi',\n    fields: ['apiKey'],\n    defaults: { host: 'https://generativelanguage.googleapis.com' },\n  },\n  // HubSpot via OAuth instead of a private-app token (needs a HubSpot public app):\n  // hubspot: { label: 'HubSpot', kind: 'oauth', type: 'hubspotOAuth2Api', client: 'hubspot' },  + C.hubspot = { clientId, clientSecret }\n};\n\n// ─── plumbing ─────────────────────────────────────────────────────────────────────────────────────────────\nconst req = $input.first().json;\nconst body = req.body || {};\nconst reply = (status, payload) => [{ json: { status, body: payload } }];\nconst fail = (status, error, detail) => reply(status, { ok: false, error, ...(detail ? { detail: String(detail).slice(0, 300) } : {}) });\n\nconst http = (opts) =>\n  this.helpers.httpRequest({ json: true, ...opts, returnFullResponse: true, ignoreHttpStatusErrors: true });\n\n/** n8n public API (stable, documented). */\nconst api = (method, path, payload) =>\n  http({ method, url: `${C.n8nBaseUrl}/api/v1${path}`, headers: { 'X-N8N-API-KEY': C.n8nApiKey }, body: payload });\n\n/** n8n internal REST, used only for the OAuth consent URL and the \"is it connected yet\" check. */\nconst BROWSER_ID = 'agencyhub-connections-api';\nconst store = $getWorkflowStaticData('global');\nconst login = async () => {\n  const r = await http({\n    method: 'POST',\n    url: `${C.n8nBaseUrl}/rest/login`,\n    headers: { 'browser-id': BROWSER_ID },\n    body: { emailOrLdapLoginId: C.n8nLoginEmail, password: C.n8nLoginPassword },\n  });\n  if (r.statusCode !== 200) throw new Error(`n8n login failed (${r.statusCode})`);\n  const cookie = []\n    .concat(r.headers['set-cookie'] || [])\n    .map((c) => c.split(';')[0])\n    .find((c) => c.startsWith('n8n-auth='));\n  if (!cookie) throw new Error('n8n login returned no session cookie');\n  store.n8nCookie = cookie; // reused across executions so we don't hit the login rate limit\n};\nconst rest = async (method, path, payload, retry = true) => {\n  if (!store.n8nCookie) await login();\n  const r = await http({\n    method,\n    url: `${C.n8nBaseUrl}/rest${path}`,\n    headers: { cookie: store.n8nCookie, 'browser-id': BROWSER_ID },\n    body: payload,\n  });\n  if (r.statusCode === 401 && retry) {\n    store.n8nCookie = null;\n    return rest(method, path, payload, false);\n  }\n  return r;\n};\n\ntry {\n  // ─── 1. Who is calling? Verify the Firebase ID token and read the tenant from its custom claims ─────────\n  const authz = String(req.headers?.authorization || '');\n  const idToken = authz.startsWith('Bearer ') ? authz.slice(7) : '';\n  if (!idToken) return fail(401, 'unauthenticated');\n\n  const lookup = await http({\n    method: 'POST',\n    url: `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(C.firebaseWebApiKey)}`,\n    body: { idToken },\n  });\n  const user = lookup.body?.users?.[0];\n  if (lookup.statusCode !== 200 || !user) return fail(401, 'invalid_token');\n\n  let claims = {};\n  try {\n    claims = JSON.parse(user.customAttributes || '{}');\n  } catch {\n    claims = {};\n  }\n  const tenantId = typeof claims.tenantId === 'string' ? claims.tenantId : '';\n  if (!tenantId) return fail(403, 'no_tenant');\n  if (C.allowedRoles.length && !C.allowedRoles.includes(claims.role) && claims.platformAdmin !== true) {\n    return fail(403, 'forbidden');\n  }\n\n  // Setup check: tell the page exactly which CONFIG values are still placeholders.\n  const missing = Object.entries({\n    n8nApiKey: C.n8nApiKey,\n    n8nLoginEmail: C.n8nLoginEmail,\n    n8nLoginPassword: C.n8nLoginPassword,\n    'google.clientId': C.google.clientId,\n    'google.clientSecret': C.google.clientSecret,\n  })\n    .filter(([, v]) => !v || String(v).startsWith('PASTE_'))\n    .map(([k]) => k);\n  if (missing.length) return fail(503, 'not_configured', `Missing in CONFIG: ${missing.join(', ')}`);\n\n  // ─── 2. This tenant's credentials (named \"<Service> · <tenantId>\") ──────────────────────────────────────\n  const credName = (id) => `${P[id].label} · ${tenantId}`;\n  const listCreds = async () => {\n    const all = [];\n    let cursor = null;\n    do {\n      const r = await api('GET', `/credentials?limit=250${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`);\n      if (r.statusCode !== 200) throw new Error(`n8n API: list credentials failed (${r.statusCode}) ${JSON.stringify(r.body)}`);\n      all.push(...(r.body.data || []));\n      cursor = r.body.nextCursor;\n    } while (cursor);\n    return all;\n  };\n  const mine = (creds, id) => creds.filter((c) => c.name === credName(id) && c.type === P[id].type);\n  const hasTokens = async (credId) => {\n    const r = await rest('GET', `/credentials/${credId}?includeData=true`);\n    return r.statusCode === 200 && Boolean(r.body?.data?.data?.oauthTokenData);\n  };\n  const createCred = async (id, data) => {\n    const r = await api('POST', '/credentials', { name: credName(id), type: P[id].type, data });\n    if (r.statusCode >= 300) throw new Error(`n8n API: create credential failed (${r.statusCode}) ${JSON.stringify(r.body)}`);\n    return r.body.id;\n  };\n\n  const action = body.action;\n  const providerId = body.provider;\n  const provider = providerId ? P[providerId] : null;\n  if (action !== 'status' && !provider) return fail(400, 'unknown_provider');\n\n  // ─── 3. Actions ─────────────────────────────────────────────────────────────────────────────────────────\n  if (action === 'status') {\n    const creds = await listCreds();\n    const providers = {};\n    for (const id of Object.keys(P)) {\n      const c = mine(creds, id)[0];\n      const connected = !c ? false : P[id].kind === 'apiKey' ? true : await hasTokens(c.id);\n      providers[id] = { connected, credentialId: c?.id ?? null, updatedAt: c?.updatedAt ?? null };\n    }\n    return reply(200, { ok: true, tenantId, providers });\n  }\n\n  if (action === 'start') {\n    if (provider.kind !== 'oauth') return fail(400, 'not_oauth');\n    const client = C[provider.client];\n    if (!client?.clientId || client.clientId.startsWith('PASTE_')) return fail(500, 'oauth_client_missing');\n\n    const existing = mine(await listCreds(), providerId)[0];\n    const credId = existing?.id ?? (await createCred(providerId, { clientId: client.clientId, clientSecret: client.clientSecret }));\n\n    const r = await rest('GET', `/oauth2-credential/auth?id=${encodeURIComponent(credId)}`);\n    const url = r.body?.data;\n    if (r.statusCode !== 200 || typeof url !== 'string') {\n      return fail(502, 'oauth_url_failed', `${r.statusCode} ${JSON.stringify(r.body)}`);\n    }\n    return reply(200, { ok: true, url, credentialId: credId });\n  }\n\n  if (action === 'saveKey') {\n    if (provider.kind !== 'apiKey') return fail(400, 'not_api_key');\n    const fields = body.fields || {};\n    const data = { ...(provider.defaults || {}) };\n    for (const f of provider.fields) {\n      const v = typeof fields[f] === 'string' ? fields[f].trim() : '';\n      if (!v || v.length > 4096) return fail(400, 'missing_field', f);\n      data[f] = v;\n    }\n\n    const old = mine(await listCreds(), providerId);\n    const credId = await createCred(providerId, data);\n\n    // Test before keeping it. Older n8n versions don't have this endpoint (404) — then we skip the test.\n    const test = await api('POST', `/credentials/${credId}/test`);\n    if (test.statusCode === 200 && test.body?.status === 'Error') {\n      await api('DELETE', `/credentials/${credId}`);\n      return fail(422, 'test_failed', test.body.message);\n    }\n    for (const c of old) await api('DELETE', `/credentials/${c.id}`); // replaced\n    return reply(200, { ok: true, credentialId: credId, tested: test.statusCode === 200 });\n  }\n\n  if (action === 'disconnect') {\n    for (const c of mine(await listCreds(), providerId)) await api('DELETE', `/credentials/${c.id}`);\n    return reply(200, { ok: true });\n  }\n\n  return fail(400, 'unknown_action');\n} catch (e) {\n  return fail(500, 'server_error', e?.message ?? e);\n}\n"
+      },
+      "id": "29bc45b7-276f-4ebe-b959-b0fe4e9be04d",
+      "name": "Handle request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "responseCode": "={{ $json.status }}"
+        }
+      },
+      "id": "6b80a0a0-6e97-45c9-927d-9e66c3ee5334",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## AgencyHub · Connections API\nCalled by the Angular **Connections** page.\n\n1. Fill in `CONFIG` at the top of **Handle request**.\n2. Set `N8N_SKIP_AUTH_ON_OAUTH_CALLBACK=true` on the n8n server and restart.\n3. Add `<n8n url>/rest/oauth2-credential/callback` as a redirect URI on your Google OAuth client.\n4. Activate this workflow.\n\nExecution saving is off for this workflow so pasted API keys never land in the Executions list.",
+        "height": 300,
+        "width": 420
+      },
+      "id": "aec588a8-9c9d-4cce-b15e-b883a8ebdf10",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "POST /ah-connections": {
+      "main": [
+        [
+          {
+            "node": "Handle request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle request": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveDataErrorExecution": "none",
+    "saveManualExecutions": false,
+    "saveExecutionProgress": false
+  },
+  "pinData": {}
+}

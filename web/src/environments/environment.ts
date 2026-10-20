@@ -12,5 +12,6 @@ export const environment: Environment = {
   defaultTenant: 'demo-insurance',
   firebase: firebaseConfig,
   appCheckSiteKey: '',
-  assistantChatUrl: 'https://inteliaiconsultancy.app.n8n.cloud/webhook/446e48f9-570a-416a-be34-394c3c540779/chat',
+  assistantChatUrl: 'https://n8n.34-71-188-154.sslip.io/webhook/446e48f9-570a-416a-be34-394c3c540779/chat',
+  connectionsApiUrl: 'https://n8n.34-71-188-154.sslip.io/webhook/ah-connections',
 };

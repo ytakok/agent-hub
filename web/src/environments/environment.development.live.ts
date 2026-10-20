@@ -11,4 +11,6 @@ export const environment: Environment = {
   appCheckSiteKey: '',
   // Same-origin path, forwarded to the n8n chat webhook by proxy.conf.json (avoids n8n CORS in local dev).
   assistantChatUrl: '/assistant-chat',
+  // Same-origin path, forwarded to the n8n Connections API webhook by proxy.conf.json.
+  connectionsApiUrl: '/ah-connections',
 };

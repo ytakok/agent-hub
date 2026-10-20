@@ -1,0 +1,110 @@
+<header class="page-header">
+  <div>
+    <h1>{{ 'connections.title' | translate }}</h1>
+    <p>{{ 'connections.subtitle' | translate }}</p>
+  </div>
+  @if (configured) {
+    <button type="button" class="btn ghost" (click)="refresh()" [disabled]="loading()">
+      <ah-icon name="refresh" [size]="18" /> {{ 'connections.refresh' | translate }}
+    </button>
+  }
+</header>
+
+@if (!configured) {
+  <div class="alert info">{{ 'connections.notConfigured' | translate }}</div>
+} @else {
+  @if (notice(); as n) {
+    <div class="alert" [class.success]="n.type === 'success'" [class.error]="n.type === 'error'" [class.info]="n.type === 'info'" role="status">
+      {{ n.key | translate: { name: (n.params?.['name'] ?? '' | translate) } }}
+      @if (n.detail) {
+        <br /><small class="ltr-text">{{ n.detail }}</small>
+      }
+    </div>
+  }
+
+  <ul class="list" [attr.aria-busy]="loading()">
+    @for (p of providers; track p.id) {
+      @let s = state(p.id);
+      <li class="row" [class.open]="openForm() === p.id">
+        <div class="main">
+          <span class="tile" [style.--tile]="p.color"><ah-icon [name]="p.icon" [size]="22" /></span>
+
+          <div class="text">
+            <strong>{{ 'connections.providers.' + p.id + '.name' | translate }}</strong>
+            <span class="muted">
+              {{ 'connections.providers.' + p.id + '.description' | translate }}
+              @if (s?.connected && s?.updatedAt) {
+                · {{ 'connections.updated' | translate }} {{ s!.updatedAt! | relTime: language.intlLocale() }}
+              }
+            </span>
+          </div>
+
+          <div class="status">
+            @if (waiting() === p.id) {
+              <span class="badge primary">{{ 'connections.waiting' | translate }}</span>
+            } @else if (loading() && !s) {
+              <span class="badge">{{ 'common.loading' | translate }}</span>
+            } @else if (s?.connected) {
+              <span class="badge success"><ah-icon name="check" [size]="14" /> {{ 'connections.state.connected' | translate }}</span>
+            } @else {
+              <span class="badge">{{ 'connections.state.notConnected' | translate }}</span>
+            }
+          </div>
+
+          <div class="actions">
+            @if (waiting() === p.id) {
+              <button type="button" class="btn ghost" (click)="stopWaiting()">{{ 'connections.cancel' | translate }}</button>
+            } @else if (p.kind === 'oauth') {
+              <button type="button" class="btn" [class.primary]="!s?.connected" [class.ghost]="s?.connected" (click)="connectOAuth(p)" [disabled]="busy() !== null || waiting() !== null">
+                @if (busy() === p.id) {
+                  {{ 'common.pleaseWait' | translate }}
+                } @else {
+                  <ah-icon name="google" [size]="18" />
+                  {{ (s?.connected ? 'connections.reconnect' : 'connections.signInWithGoogle') | translate }}
+                }
+              </button>
+            } @else {
+              <button type="button" class="btn" [class.primary]="!s?.connected" [class.ghost]="s?.connected" (click)="toggleForm(p.id)" [attr.aria-expanded]="openForm() === p.id" [disabled]="busy() !== null">
+                <ah-icon name="key" [size]="18" />
+                {{ (s?.connected ? 'connections.replaceKey' : 'connections.addKey') | translate }}
+              </button>
+            }
+            @if (s?.connected && waiting() !== p.id) {
+              <button type="button" class="btn ghost danger" (click)="disconnect(p)" [disabled]="busy() !== null">{{ 'connections.disconnect' | translate }}</button>
+            }
+          </div>
+        </div>
+
+        @if (p.kind === 'apiKey' && openForm() === p.id) {
+          <form class="key-form" (ngSubmit)="saveKey(p)" autocomplete="off">
+            <p class="muted">{{ 'connections.providers.' + p.id + '.howTo' | translate }}</p>
+            @for (f of p.fields; track f.name) {
+              <div class="field">
+                <label [for]="p.id + '-' + f.name">{{ 'connections.fields.' + f.name | translate }}</label>
+                <input
+                  [id]="p.id + '-' + f.name"
+                  class="input ltr"
+                  type="password"
+                  autocomplete="new-password"
+                  spellcheck="false"
+                  [name]="f.name"
+                  [placeholder]="f.placeholder"
+                  [(ngModel)]="values[p.id][f.name]"
+                />
+              </div>
+            }
+            <div class="form-actions">
+              <button class="btn primary" type="submit" [disabled]="busy() !== null">
+                {{ (busy() === p.id ? 'connections.testing' : 'connections.saveKey') | translate }}
+              </button>
+              <button class="btn ghost" type="button" (click)="toggleForm(p.id)">{{ 'connections.cancel' | translate }}</button>
+            </div>
+            <p class="hint"><ah-icon name="lock" [size]="14" /> {{ 'connections.keyPrivacy' | translate }}</p>
+          </form>
+        }
+      </li>
+    }
+  </ul>
+
+  <p class="footnote"><ah-icon name="shield" [size]="16" /> {{ 'connections.footnote' | translate }}</p>
+}

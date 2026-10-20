@@ -9,4 +9,6 @@ export interface Environment {
   appCheckSiteKey: string;
   /** n8n chat webhook for the in-app staff assistant (shown only after login). Empty = off. */
   assistantChatUrl: string;
+  /** n8n "AgencyHub · Connections API" webhook (n8n/connections-api.workflow.json). Empty = Connections page off. */
+  connectionsApiUrl: string;
 }

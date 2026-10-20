@@ -37,6 +37,11 @@ export const routes: Routes = [
         loadComponent: () => import('./features/messages/messages.page').then((m) => m.MessagesPage),
       },
       {
+        path: 'connections',
+        title: 'Connections',
+        loadComponent: () => import('./features/connections/connections.page').then((m) => m.ConnectionsPage),
+      },
+      {
         path: 'settings',
         title: 'Settings',
         loadComponent: () => import('./features/settings/settings.page').then((m) => m.SettingsPage),

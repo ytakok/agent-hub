@@ -15,4 +15,5 @@ export const environment: Environment = {
   },
   appCheckSiteKey: '',
   assistantChatUrl: '',
+  connectionsApiUrl: '',
 };

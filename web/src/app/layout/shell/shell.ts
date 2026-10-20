@@ -25,6 +25,7 @@ const NAV: NavItem[] = [
   { path: '/app/dashboard', label: 'nav.dashboard', icon: 'home' },
   { path: '/app/customers', label: 'nav.customers', icon: 'users', feature: 'module.customers' },
   { path: '/app/messages', label: 'nav.messages', icon: 'inbox', feature: 'module.messages' },
+  { path: '/app/connections', label: 'nav.connections', icon: 'plug' },
   { path: '/app/settings', label: 'nav.settings', icon: 'settings' },
 ];
 
