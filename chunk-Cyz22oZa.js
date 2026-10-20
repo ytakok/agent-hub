@@ -1,0 +1,1 @@
+import{R as K,Sr as y,Zn as so,ft as U,nt as Q}from"./chunk-CNr1aMCJ.js";function d(t,l){let n=Q(K(t)),e;return y(U).onDestroy(()=>clearTimeout(e)),so(()=>{let m=t();clearTimeout(e),e=setTimeout(()=>n.set(m),l)}),n.asReadonly()}export{d as t};

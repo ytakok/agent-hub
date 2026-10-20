@@ -22,7 +22,8 @@
     "account": "Account menu",
     "main": "Main navigation",
     "toggle": "Toggle navigation",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "connections": "Connections"
   },
   "roles": {
     "owner": "Owner",
@@ -507,5 +508,71 @@
     "greeting": "Hi! my name is Yossi, How can I help?",
     "newChat": "New conversation",
     "placeholder": "Type your question…"
+  },
+  "connections": {
+    "title": "Connections",
+    "subtitle": "Connect your accounts once. We set up everything in the background.",
+    "refresh": "Refresh",
+    "notConfigured": "Connections aren't available in this environment (connectionsApiUrl is empty).",
+    "updated": "updated",
+    "state": {
+      "connected": "Connected",
+      "notConnected": "Not connected"
+    },
+    "waiting": "Waiting for approval…",
+    "signInWithGoogle": "Sign in with Google",
+    "reconnect": "Reconnect",
+    "addKey": "Add key",
+    "replaceKey": "Replace key",
+    "saveKey": "Check and save",
+    "testing": "Checking…",
+    "cancel": "Cancel",
+    "disconnect": "Disconnect",
+    "connected": "{{name}} is connected.",
+    "timeout": "We didn't get the approval yet. If you finished in the popup, press Refresh.",
+    "keyPrivacy": "The key is sent once over HTTPS and stored encrypted. You won't see it again here.",
+    "footnote": "A popup opens for Google. Approve the access there and come back. The popup may say \"Connection successful\" — you can close it.",
+    "fields": {
+      "appToken": "Private app access token",
+      "apiKey": "API key"
+    },
+    "providers": {
+      "gmail": {
+        "name": "Gmail",
+        "description": "Send and read email from your mailbox"
+      },
+      "googleSheets": {
+        "name": "Google Sheets",
+        "description": "Read and update your spreadsheets"
+      },
+      "firebase": {
+        "name": "Firebase Realtime Database",
+        "description": "Read and write your Firebase data"
+      },
+      "hubspot": {
+        "name": "HubSpot",
+        "description": "Contacts, companies and deals",
+        "howTo": "In HubSpot: Settings → Integrations → Private apps → Create a private app, then copy its access token."
+      },
+      "gemini": {
+        "name": "Google Gemini",
+        "description": "AI features",
+        "howTo": "Create a key at aistudio.google.com → Get API key, then paste it here."
+      }
+    },
+    "errors": {
+      "unauthenticated": "Please sign in again.",
+      "invalid_token": "Your session expired. Please sign in again.",
+      "no_tenant": "Your account isn't linked to an organization yet.",
+      "forbidden": "Only organization admins can manage connections.",
+      "unknown_provider": "This service isn't supported.",
+      "oauth_client_missing": "The Google sign-in isn't set up on the server yet.",
+      "oauth_url_failed": "Couldn't start the sign-in. Try again.",
+      "missing_field": "Please fill in the key.",
+      "test_failed": "That key didn't work. Check it and try again.",
+      "network": "Can't reach the server. Check your connection.",
+      "server_error": "Something went wrong on our side. Try again.",
+      "unknown": "Something went wrong. Try again."
+    }
   }
 }
