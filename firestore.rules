@@ -62,6 +62,73 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // ---- SMB Automation website (repo: SMB-automation) ----
+    // Public, unauthenticated, create-only writes from the marketing site.
+    // Keep in sync with SMB-automation/firestore.rules.
+    match /errorLogs/{logId} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'tenantId', 'message', 'name', 'stack', 'source', 'url',
+          'lang', 'userAgent', 'appVersion', 'extra', 'createdAt'
+        ])
+        && request.resource.data.tenantId is string
+        && request.resource.data.tenantId.size() <= 64
+        && request.resource.data.message is string
+        && request.resource.data.message.size() <= 1000
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 200
+        && request.resource.data.stack is string
+        && request.resource.data.stack.size() <= 4000
+        && request.resource.data.source in ['global', 'http', 'manual']
+        && request.resource.data.url is string
+        && request.resource.data.url.size() <= 2048
+        && request.resource.data.lang is string
+        && request.resource.data.lang.size() <= 20
+        && request.resource.data.userAgent is string
+        && request.resource.data.userAgent.size() <= 300
+        && request.resource.data.appVersion is string
+        && (request.resource.data.extra == null
+          || (request.resource.data.extra is map
+            && request.resource.data.extra.keys().hasOnly(['status'])
+            && request.resource.data.extra.status is number))
+        && request.resource.data.createdAt == request.time;
+      allow read, update, delete: if false;
+    }
+
+    // Contact-page requests: anyone may create a validated request; nobody can read
+    // them from the client. Read them in the Firebase console or with the Admin SDK.
+    match /contacts/{contactId} {
+      allow create: if request.resource.data.keys().hasOnly([
+          'tenantId', 'fullName', 'email', 'phone', 'message',
+          'lang', 'pageUrl', 'status', 'createdAt'
+        ])
+        && request.resource.data.keys().hasAll([
+          'tenantId', 'fullName', 'email', 'phone', 'message',
+          'lang', 'pageUrl', 'status', 'createdAt'
+        ])
+        && request.resource.data.tenantId is string
+        && request.resource.data.tenantId.size() > 0
+        && request.resource.data.tenantId.size() <= 64
+        && request.resource.data.fullName is string
+        && request.resource.data.fullName.size() >= 2
+        && request.resource.data.fullName.size() <= 100
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 254
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+[.][^@\\s]+$')
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() >= 7
+        && request.resource.data.phone.size() <= 25
+        && request.resource.data.phone.matches('^[+]?[0-9 ().-]+$')
+        && request.resource.data.message is string
+        && request.resource.data.message.size() <= 2000
+        && request.resource.data.lang is string
+        && request.resource.data.lang.size() <= 20
+        && request.resource.data.pageUrl is string
+        && request.resource.data.pageUrl.size() <= 2048
+        && request.resource.data.status == 'new'
+        && request.resource.data.createdAt == request.time;
+      allow read, update, delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
