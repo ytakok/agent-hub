@@ -22,7 +22,8 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "seed": "tsx scripts/seed-dev.ts",
     "sheets:connect": "node dist/cli/connect-sheet.js",
-    "platform-admin": "node dist/cli/platform-admin.js"
+    "platform-admin": "node dist/cli/platform-admin.js",
+    "n8n:credentials": "node dist/cli/n8n-credentials.js"
   },
   "dependencies": {
     "@agency-hub/shared": "*",

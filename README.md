@@ -78,6 +78,7 @@ The normal `npm run dev` flow remains emulator-only. Keep `.env.local` files out
 | `npm test` | API (vitest) + web (vitest) unit tests |
 | `npm run build` | Production builds of both apps |
 | `npm run lint` | oxlint on the API |
+| `npm run n8n:credentials -w api -- --customer "Acme" --file sheet.txt [--apply]` | Create a customer's n8n credentials from their connection sheet (preview unless `--apply`) |
 
 API docs (dev only): http://localhost:3000/api/docs
 
@@ -113,6 +114,22 @@ Effective flags = code defaults (`api/src/feature-flags/flag-definitions.ts`), t
 3. Set `DATA_MODE=live`.
 
 The next phase adds `POST /api/ingest/:source` (HMAC-signed) so n8n can own the connectors and push normalized data.
+
+### Importing customer credentials into n8n
+
+Customers fill in the SMB Automation `/connect` page and send back a "connection sheet" (through a one-time
+secret link). A platform admin turns it into n8n credentials, either with the CLI above or with
+`POST /api/n8n-credentials/preview` then `POST /api/n8n-credentials/import` (body: `{ customerName, sheet }`).
+
+- Needs `N8N_BASE_URL` and `N8N_API_KEY` in `api/.env` (n8n → Settings → n8n API).
+- Creates WhatsApp (API + Trigger), Google (Gmail, Sheets, Calendar, Drive), Microsoft (Outlook, Excel,
+  OneDrive, Teams), HubSpot, Pipedrive and Gemini credentials named `<customer> – <app>`.
+- Google and Microsoft still need one **Sign in** click in n8n with the customer's account; the result lists
+  the links. Key-based credentials (WhatsApp, HubSpot, Pipedrive, Gemini) work right away.
+- The sheet's secrets pass through only: never stored in Firestore, logged or returned (preview masks them).
+- n8n's API can't list credentials on every version, so importing twice creates duplicates.
+- The sheet format comes from `src/app/features/connect/connect-apps.ts` in SMB-automation; keep the labels in
+  sync with `api/src/n8n-credentials/credential-plan.ts`.
 
 ## Production checklist
 

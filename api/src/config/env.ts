@@ -37,6 +37,10 @@ export const envSchema = z.object({
   SHEETS_CACHE_SECONDS: z.coerce.number().int().min(0).max(3600).default(300),
   CORS_ORIGINS: csv.pipe(z.array(z.url())).default(['http://localhost:4200']),
   N8N_SECRET: z.string().min(32).optional(),
+  /** n8n instance the credential importer writes to, e.g. https://n8n.example.com (no /api/v1). */
+  N8N_BASE_URL: z.url().optional(),
+  /** n8n public API key (n8n → Settings → n8n API). Can create credentials, so keep it server-side only. */
+  N8N_API_KEY: z.string().min(20).optional(),
   /**
    * Outgoing email (signup verification codes). Any SMTP provider works: Gmail with an app password,
    * Resend, SendGrid, Brevo… Without SMTP_HOST, development prints codes to the API console and production refuses to send.

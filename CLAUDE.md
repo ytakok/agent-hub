@@ -22,6 +22,8 @@ This is a multi-tenant SaaS dashboard for insurance agencies and SMBs. It uses n
 - **API pipeline:** throttler → auth → tenant → roles → feature guard, then the audit interceptor (`api/src/app.module.ts`)
 - **Web core:** `web/src/app/core/` (auth, theme, i18n, tenant config + flags, interceptor)
 - **Seed (emulator only):** `api/scripts/seed-dev.ts`
+- **n8n credential importer:** `api/src/n8n-credentials/` (platform admin only). Secrets from the customer's
+  connection sheet pass straight to the n8n API and are never stored, logged or returned.
 
 ## Commands
 `npm run dev` · `npm run seed` · `npm test` · `npm run build`

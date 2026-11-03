@@ -22,6 +22,7 @@ import { HealthModule } from './health/health.controller.js';
 import { SignupModule } from './signup/signup.controller.js';
 import { IntegrationsModule } from './integrations/integrations.module.js';
 import { MessagesModule } from './messages/messages.controller.js';
+import { N8nCredentialsModule } from './n8n-credentials/n8n-credentials.controller.js';
 import { TenantsModule } from './tenants/tenants.module.js';
 import { UserSettingsModule } from './user-settings/user-settings.controller.js';
 import { UsersModule } from './users/users.module.js';
@@ -34,7 +35,7 @@ import { UsersModule } from './users/users.module.js';
         level: process.env['LOG_LEVEL'] ?? 'info',
         // Never log credentials or tokens.
         redact: {
-          paths: ['req.headers.authorization', 'req.headers.cookie', 'req.body.password', 'res.headers["set-cookie"]', '*.customToken', '*.idToken'],
+          paths: ['req.headers.authorization', 'req.headers.cookie', 'req.body.password', 'req.body.sheet', 'res.headers["set-cookie"]', '*.customToken', '*.idToken'],
           censor: '[redacted]',
         },
         transport: process.env['NODE_ENV'] === 'production' ? undefined : { target: 'pino-pretty', options: { singleLine: true } },
@@ -60,6 +61,7 @@ import { UsersModule } from './users/users.module.js';
     CustomersModule,
     Customer360Module,
     MessagesModule,
+    N8nCredentialsModule,
     HealthModule,
   ],
   providers: [
